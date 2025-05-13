@@ -499,39 +499,7 @@
         let currentSuggestionIndex = -1;
         let suggestions = [];
 
-        // Startpage-focused search suggestions
-        const allSuggestions = [
-            'gmail',
-            'github',
-            'reddit',
-            'weather',
-            'maps',
-            'translate',
-            'calculator',
-            'timer',
-            'calendar',
-            'news',
-            'amazon',
-            'netflix',
-            'spotify',
-            'twitter',
-            'instagram',
-            'facebook',
-            'linkedin',
-            'stackoverflow',
-            'youtube',
-            'google drive',
-            'dropbox',
-            'outlook',
-            'slack',
-            'discord',
-            'wikipedia',
-            'imdb',
-            'twitch',
-            'pinterest',
-            'zoom',
-            'teams'
-        ];
+        // We'll get suggestions dynamically from search
 
         // Show search overlay when typing
         document.addEventListener('keydown', (event) => {
@@ -621,41 +589,9 @@
         }
 
         function showSuggestions(query) {
-            if (query.length === 0) {
-                hideSuggestions();
-                return;
-            }
-
-            // Filter suggestions based on query
-            suggestions = allSuggestions.filter(suggestion => 
-                suggestion.toLowerCase().includes(query.toLowerCase())
-            );
-
-            if (suggestions.length === 0) {
-                hideSuggestions();
-                return;
-            }
-
-            searchSuggestions.innerHTML = '';
-            suggestions.forEach((suggestion, index) => {
-                const suggestionElement = document.createElement('div');
-                suggestionElement.className = 'suggestion-item';
-                
-                // Add icon for site shortcuts
-                if (siteShortcuts[suggestion.toLowerCase()]) {
-                    suggestionElement.innerHTML = `<span style="margin-right: 8px; opacity: 0.7;">🌐</span>${suggestion}`;
-                } else {
-                    suggestionElement.textContent = suggestion;
-                }
-                
-                suggestionElement.addEventListener('click', () => {
-                    selectSuggestion(suggestion);
-                });
-                searchSuggestions.appendChild(suggestionElement);
-            });
-
-            showSuggestionsBox();
-            currentSuggestionIndex = -1;
+            // For now, we'll disable suggestions until we can properly fetch them from Startpage
+            hideSuggestions();
+            return;
         }
 
         function hideSuggestions() {
