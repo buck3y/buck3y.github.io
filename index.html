@@ -128,7 +128,7 @@
 
     /* Main content layout */
     main {
-      align-items: flex-start;
+      align-items: center;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -144,7 +144,7 @@
     .categories-container {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: calc(var(--space-3) * 1.5);
+      gap: calc(var(--space-3) * 0.8);
       width: 100%;
       max-width: 90rem;
       margin: 0 auto;
@@ -225,15 +225,15 @@
     }
 
     .commands {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
       gap: calc(var(--space-2) * 0.6);
       list-style: none;
-      margin: 0;
-      padding: 0 0 0 var(--space-1);
+      margin: 0 auto;
+      padding: 0;
       width: 100%;
       margin-bottom: calc(var(--space-1) * 0.15);
-      justify-items: start;
+      justify-content: center;
       max-width: 60rem;
     }
 
@@ -406,14 +406,24 @@
       content: '⚡';
     }
 
-    /* Pastebin */
-    .icon-pastebin {
-      background: linear-gradient(45deg, #2E8B57, #3CB371);
+    /* Catbox */
+    .icon-catbox {
+      background: linear-gradient(45deg, #FF6B35, #FF8C5A);
       font-size: 1.8rem;
       color: white;
     }
-    .icon-pastebin::before {
-      content: '📋';
+    .icon-catbox::before {
+      content: '🐱';
+    }
+
+    /* BuzzHeavier */
+    .icon-buzzheavier {
+      background: linear-gradient(45deg, #FF4444, #CC2222);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-buzzheavier::before {
+      content: '🔥';
     }
 
     /* IP Location */
@@ -526,14 +536,14 @@
       content: '🌐';
     }
 
-    /* AdGuard */
-    .icon-adguard {
-      background: linear-gradient(45deg, #66BB6A, #4CAF50);
+    /* uBlock Origin */
+    .icon-ublock {
+      background: linear-gradient(45deg, #C41E3A, #8C1538);
       font-size: 1.8rem;
       color: white;
     }
-    .icon-adguard::before {
-      content: '🛡️';
+    .icon-ublock::before {
+      content: '🚫';
     }
 
     /* GitHub */
@@ -952,14 +962,13 @@
         { name: 'YouTube', url: 'https://youtube.com', iconClass: 'icon-youtube' },
         { name: 'YT Music', url: 'https://music.youtube.com', iconClass: 'icon-ytmusic' },
         { name: 'Jellyfin', url: 'https://tv.room300.net', iconClass: 'icon-jellyfin' },
-        { name: 'Jukebox', url: 'https://jukebox.chooch.net', iconClass: 'icon-jukebox' },
-        { name: 'Reddit', url: 'https://reddit.com', iconClass: 'icon-reddit' }
+        { name: 'Jukebox', url: 'https://jukebox.chooch.net', iconClass: 'icon-jukebox' }
       ],
       files: [
-        { name: 'Drive', url: 'https://drive.chooch.net', iconClass: 'icon-drive' },
-        { name: 'Photos', url: 'https://photos.chooch.net', iconClass: 'icon-photos' },
-        { name: 'Notebook', url: 'https://notebook.chooch.net', iconClass: 'icon-notebook' },
-        { name: 'Pastebin', url: 'https://pastebin.com/', iconClass: 'icon-pastebin' }
+        { name: 'Pastebin', url: 'https://pastebin.com/', iconClass: 'icon-pastebin' },
+        { name: 'Catbox', url: 'https://catbox.moe/', iconClass: 'icon-catbox' },
+        { name: 'LitterBox', url: 'https://litterbox.catbox.moe/', iconClass: 'icon-litterbox' },
+        { name: 'BuzzHeavier', url: 'https://buzzheavier.com/', iconClass: 'icon-buzzheavier' }
       ],
       tools: [
         { name: 'IP Location', url: 'https://ipleak.net/', iconClass: 'icon-iplocation' },
@@ -976,7 +985,8 @@
       security: [
         { name: 'Bitwarden', url: 'https://bitwarden.com/', iconClass: 'icon-bitwarden' },
         { name: 'ProtonMail', url: 'https://proton.me/mail', iconClass: 'icon-protonmail' },
-        { name: 'AdGuard', url: 'https://adguard.com/', iconClass: 'icon-adguard' }
+        { name: 'AdGuard', url: 'https://adguard.com/', iconClass: 'icon-adguard' },
+        { name: 'uBlock Origin', url: 'https://ublockorigin.com/', iconClass: 'icon-ublock' }
       ],
       devtools: [
         { name: 'GitHub', url: 'https://github.com/', iconClass: 'icon-github' },
@@ -987,7 +997,8 @@
       research: [
         { name: 'LibGen', url: 'https://libgen.is/', iconClass: 'icon-libgen' },
         { name: 'Udemy', url: 'https://udemy.com/', iconClass: 'icon-udemy' },
-        { name: 'FMHY', url: 'https://fmhy.net/', iconClass: 'icon-fmhy' }
+        { name: 'FMHY', url: 'https://fmhy.net/', iconClass: 'icon-fmhy' },
+        { name: 'Coursera', url: 'https://coursera.org/', iconClass: 'icon-coursera' }
       ]
     };
 
@@ -1161,11 +1172,6 @@
           }, 3000);
         }
       });
-      
-      // Add some nostalgic comments
-      console.log('Room300 - Where legends were made 🎮');
-      console.log('FMS Class of 2024 🎓');
-      console.log('Best times with the best friends 👬');
     });
   </script>
 
