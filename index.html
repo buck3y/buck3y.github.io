@@ -3,34 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS • System Terminal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>NEXUS • Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --color-primary: #00ff41;
             --color-secondary: #00ffff;
-            --color-accent: #ff0080;
-            --color-warning: #ffaa00;
-            --color-error: #ff4444;
-            --color-background: #0f0f0f;
+            --color-background: #0a0a0a;
             --color-background-dark: #000000;
-            --color-background-card: rgba(30, 30, 40, 0.8);
-            --color-background-widget: rgba(20, 20, 30, 0.9);
+            --color-background-card: rgba(0, 20, 0, 0.8);
             --color-text: #ffffff;
             --color-text-dim: #888888;
-            --color-text-bright: #00ff41;
+            --color-text-highlight: #70ff00;
             --color-border: rgba(0, 255, 65, 0.3);
             --color-border-hover: var(--color-primary);
-            --color-purple: #8844ff;
-            --color-purple-dark: #4422aa;
-            --font-family: 'Fira Code', monospace;
-            --font-size-base: 14px;
-            --font-size-large: 18px;
-            --font-size-title: 24px;
-            --space-small: 8px;
-            --space-medium: 16px;
-            --space-large: 24px;
-            --border-radius: 8px;
+            --color-glow: rgba(0, 255, 65, 0.1);
+            --font-family: 'JetBrains Mono', monospace;
+            --font-size-base: clamp(14px, 1.2vw, 16px);
+            --font-size-large: clamp(18px, 2vw, 24px);
+            --font-size-title: clamp(24px, 3vw, 36px);
+            --space-small: 0.5rem;
+            --space-medium: 1rem;
+            --space-large: 2rem;
+            --border-radius: 10px;
             --transition-speed: 0.2s;
         }
 
@@ -43,316 +38,297 @@
         body {
             font-family: var(--font-family);
             font-size: var(--font-size-base);
-            background: linear-gradient(45deg, var(--color-background), var(--color-purple-dark));
+            background: var(--color-background);
             color: var(--color-text);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* ASCII Art Background */
-        .ascii-bg {
+        /* Matrix rain effect */
+        .matrix-effect {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            pointer-events: none;
+            z-index: -2;
             opacity: 0.05;
-            font-family: monospace;
-            font-size: 10px;
-            white-space: pre;
-            overflow: hidden;
-            color: var(--color-primary);
         }
 
-        /* System bars */
-        .system-bar {
-            background: var(--color-background-dark);
-            border-bottom: 1px solid var(--color-border);
-            padding: var(--space-small) var(--space-medium);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .matrix-rain {
+            position: absolute;
+            font-size: 0.8rem;
+            color: var(--color-primary);
+            animation: matrixFall linear infinite;
+        }
+
+        @keyframes matrixFall {
+            0% { transform: translateY(-100vh); }
+            100% { transform: translateY(100vh); }
+        }
+
+        /* Fog effect */
+        .fog {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            z-index: 100;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at top, rgba(100, 100, 100, 0.03), transparent),
+                radial-gradient(ellipse at bottom, rgba(50, 50, 50, 0.02), transparent);
+            z-index: -1;
+            animation: fogMove 30s linear infinite;
         }
 
-        .system-info {
-            display: flex;
-            gap: var(--space-large);
-            font-size: 12px;
+        @keyframes fogMove {
+            0% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            100% { transform: translateX(-10px); }
         }
 
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-small);
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        .status-dot.green { background: var(--color-primary); }
-        .status-dot.yellow { background: var(--color-warning); }
-        .status-dot.red { background: var(--color-error); }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        /* Main container */
-        .main-container {
-            margin-top: 40px;
-            padding: var(--space-medium);
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: var(--space-medium);
-            min-height: calc(100vh - 40px);
-        }
-
-        /* Terminal header */
-        .terminal-header {
-            background: var(--color-background-card);
-            border: 1px solid var(--color-border);
-            border-radius: var(--border-radius);
-            padding: var(--space-medium);
+        /* Header */
+        .header {
             text-align: center;
-            margin-bottom: var(--space-medium);
-            backdrop-filter: blur(10px);
+            padding: var(--space-large) var(--space-medium);
+            margin-bottom: var(--space-large);
         }
 
-        .terminal-title {
-            color: var(--color-primary);
+        .title {
             font-size: var(--font-size-title);
+            color: var(--color-primary);
             font-weight: 700;
-            margin-bottom: var(--space-small);
+            margin-bottom: var(--space-medium);
             text-shadow: 0 0 20px var(--color-primary);
+            animation: glow 3s ease-in-out infinite alternate;
         }
 
-        .terminal-subtitle {
+        @keyframes glow {
+            from { text-shadow: 0 0 20px var(--color-primary); }
+            to { text-shadow: 0 0 30px var(--color-primary), 0 0 40px var(--color-primary); }
+        }
+
+        .subtitle {
             color: var(--color-secondary);
             font-size: var(--font-size-base);
             opacity: 0.8;
+            margin-bottom: var(--space-small);
         }
 
-        /* Left panel - main content */
-        .left-panel {
+        .clock {
+            color: var(--color-text-highlight);
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        /* Layout modes */
+        .view-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
             display: flex;
-            flex-direction: column;
-            gap: var(--space-medium);
+            gap: var(--space-small);
         }
 
-        /* Command sections */
-        .command-section {
-            background: var(--color-background-card);
+        .toggle-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--color-background-dark);
             border: 1px solid var(--color-border);
-            border-radius: var(--border-radius);
-            padding: var(--space-medium);
-            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            color: var(--color-primary);
         }
 
-        .section-header {
-            display: flex;
-            justify-content: between;
-            align-items: center;
-            margin-bottom: var(--space-medium);
-            padding-bottom: var(--space-small);
-            border-bottom: 1px solid var(--color-border);
+        .toggle-btn:hover,
+        .toggle-btn.active {
+            background: var(--color-primary);
+            color: var(--color-background-dark);
+            transform: scale(1.1);
+        }
+
+        /* Grid view */
+        .grid-view {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--space-medium);
+        }
+
+        .section {
+            margin-bottom: var(--space-large);
         }
 
         .section-title {
             color: var(--color-primary);
-            font-size: var(--font-size-large);
-            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: var(--space-medium);
+            text-align: center;
+            position: relative;
         }
 
-        .section-count {
-            color: var(--color-text-dim);
-            font-size: 12px;
+        .section-title::before,
+        .section-title::after {
+            content: '==';
+            position: absolute;
+            top: 0;
+            color: var(--color-secondary);
         }
 
-        /* Command grid */
-        .command-grid {
+        .section-title::before { left: -3rem; }
+        .section-title::after { right: -3rem; }
+
+        .section-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: var(--space-small);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-medium);
         }
 
-        .command-item {
-            background: rgba(0, 0, 0, 0.3);
+        @media (min-width: 1200px) {
+            .section-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
+        .hub-card {
+            background: var(--color-background-card);
             border: 1px solid var(--color-border);
             border-radius: var(--border-radius);
             padding: var(--space-medium);
             text-decoration: none;
             color: var(--color-text);
             transition: all var(--transition-speed);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-small);
+            min-height: 120px;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(5px);
         }
 
-        .command-item:hover {
-            border-color: var(--color-primary);
-            background: rgba(0, 255, 65, 0.1);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 255, 65, 0.2);
+        .hub-card:hover {
+            border-color: var(--color-border-hover);
+            background: var(--color-glow);
+            transform: translateY(-3px);
+            box-shadow: 0 3px 15px var(--color-glow);
         }
 
-        .command-icon {
-            font-size: 24px;
+        .hub-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--color-glow), transparent);
+            transition: left 0.5s;
+        }
+
+        .hub-card:hover::before {
+            left: 100%;
+        }
+
+        .card-icon {
+            font-size: 2rem;
             margin-bottom: var(--space-small);
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        .card-desc {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        .card-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            box-shadow: 0 0 10px var(--color-primary);
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Command view */
+        .command-view {
+            display: none;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 var(--space-medium);
+        }
+
+        .command-view.active {
             display: block;
         }
 
-        .command-name {
-            font-size: var(--font-size-base);
-            font-weight: 600;
-            color: var(--color-primary);
-            margin-bottom: 4px;
-        }
-
-        .command-desc {
-            font-size: 12px;
-            color: var(--color-text-dim);
-        }
-
-        /* Right panel - widgets */
-        .right-panel {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-medium);
-        }
-
-        .widget {
-            background: var(--color-background-widget);
+        .command-list {
+            list-style: none;
+            padding: var(--space-small);
+            background: var(--color-background-dark);
             border: 1px solid var(--color-border);
             border-radius: var(--border-radius);
-            padding: var(--space-medium);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(5px);
         }
 
-        .widget-title {
-            color: var(--color-primary);
-            font-size: var(--font-size-base);
-            font-weight: 600;
-            margin-bottom: var(--space-medium);
+        .command-item {
             display: flex;
             align-items: center;
-            gap: var(--space-small);
-        }
-
-        /* System info widget */
-        .system-info-widget {
-            font-size: 12px;
-        }
-
-        .info-line {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--space-small);
-            padding: 4px 0;
-            border-bottom: 1px dotted var(--color-border);
-        }
-
-        .info-label {
-            color: var(--color-text-dim);
-        }
-
-        .info-value {
-            color: var(--color-text-bright);
-            font-weight: 600;
-        }
-
-        /* Graph widget */
-        .graph-widget {
-            height: 150px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .graph-container {
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: var(--border-radius);
-            position: relative;
-        }
-
-        .graph-bars {
-            display: flex;
-            align-items: end;
-            height: 100%;
+            gap: var(--space-medium);
             padding: var(--space-small);
-            gap: 2px;
+            margin-bottom: var(--space-small);
+            text-decoration: none;
+            color: var(--color-text);
+            transition: all var(--transition-speed);
+            border-radius: 5px;
         }
 
-        .graph-bar {
+        .command-item:hover {
+            background: var(--color-glow);
+            color: var(--color-primary);
+            transform: translateX(5px);
+        }
+
+        .command-key {
+            color: var(--color-text-highlight);
+            font-weight: 600;
+            min-width: 4ch;
+            text-align: center;
+        }
+
+        .command-name {
             flex: 1;
-            background: linear-gradient(to top, var(--color-accent), var(--color-primary));
-            border-radius: 2px;
-            transition: height 0.5s ease;
+            color: var(--color-text);
+            transition: color var(--transition-speed);
         }
 
-        /* Terminal output */
-        .terminal-output {
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid var(--color-border);
-            border-radius: var(--border-radius);
-            padding: var(--space-medium);
-            font-family: 'Fira Code', monospace;
-            font-size: 12px;
-            line-height: 1.4;
-            overflow-y: auto;
-            max-height: 200px;
-        }
-
-        .terminal-line {
-            margin-bottom: 4px;
-        }
-
-        .terminal-prompt {
+        .command-item:hover .command-name {
             color: var(--color-primary);
         }
 
-        .terminal-command {
-            color: var(--color-secondary);
-        }
-
-        .terminal-output-text {
-            color: var(--color-text);
-        }
-
-        /* Quick access widget */
-        .quick-access {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-small);
-        }
-
-        .quick-btn {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--color-border);
-            border-radius: var(--border-radius);
-            padding: var(--space-small);
-            text-align: center;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-        }
-
-        .quick-btn:hover {
-            border-color: var(--color-primary);
-            background: rgba(0, 255, 65, 0.1);
-        }
-
-        /* Search overlay */
+        /* Search functionality */
         .search-overlay {
             position: fixed;
             top: 0;
@@ -360,7 +336,6 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -382,632 +357,465 @@
             padding: var(--space-large);
             width: 90%;
             max-width: 600px;
-            box-shadow: 0 0 30px var(--color-primary);
+            box-shadow: 0 0 30px var(--color-glow);
+        }
+
+        .search-title {
+            text-align: center;
+            color: var(--color-primary);
+            font-size: 1.2rem;
+            margin-bottom: var(--space-medium);
+        }
+
+        .search-box {
+            display: flex;
+            background: var(--color-glow);
+            border-radius: 25px;
+            padding: 15px;
+            border: 1px solid var(--color-border-hover);
         }
 
         .search-input {
-            width: 100%;
-            padding: var(--space-medium);
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--color-border);
-            border-radius: var(--border-radius);
-            color: var(--color-text);
-            font-family: var(--font-family);
-            font-size: var(--font-size-base);
+            flex: 1;
+            background: transparent;
+            border: none;
             outline: none;
+            color: var(--color-primary);
+            font-size: 1.1rem;
+            font-family: var(--font-family);
         }
 
-        .search-input:focus {
-            border-color: var(--color-primary);
-            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        .search-input::placeholder {
+            color: var(--color-text-dim);
+        }
+
+        .search-suggestions {
+            margin-top: var(--space-medium);
+        }
+
+        .suggestion {
+            padding: var(--space-small);
+            color: var(--color-text);
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all var(--transition-speed);
+        }
+
+        .suggestion:hover {
+            background: var(--color-glow);
+            color: var(--color-primary);
+        }
+
+        /* Instructions */
+        .instructions {
+            position: fixed;
+            bottom: var(--space-medium);
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--color-text-dim);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        /* Special effects */
+        .smoke-effect {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(200, 255, 200, 0.6) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(30px);
+            pointer-events: none;
+            animation: smokeRise 3s ease-out forwards;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+
+        @keyframes smokeRise {
+            0% {
+                transform: translate(-50%, -50%) scale(0.1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translate(-50%, -60%) scale(1);
+                opacity: 0.4;
+            }
+            100% {
+                transform: translate(-50%, -200%) scale(2);
+                opacity: 0;
+            }
         }
 
         /* Responsive design */
-        @media (max-width: 1024px) {
-            .main-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .right-panel {
-                order: -1;
-            }
-        }
-
         @media (max-width: 768px) {
-            .command-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            .section-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             }
             
-            .system-info {
-                gap: var(--space-small);
+            .section-title::before,
+            .section-title::after {
+                display: none;
+            }
+            
+            .hub-card {
+                min-height: 100px;
+                padding: var(--space-small);
             }
         }
 
-        /* Animations */
-        @keyframes matrix-flow {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100vh); }
-        }
-
-        .matrix-char {
-            color: var(--color-primary);
-            opacity: 0.3;
-            animation: matrix-flow linear infinite;
+        /* Animation performance */
+        @media (prefers-reduced-motion: reduce) {
+            .glow,
+            .fog,
+            .matrix-rain,
+            .pulse {
+                animation: none;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- ASCII Background -->
-    <div class="ascii-bg" id="asciiBg"></div>
+    <!-- Matrix rain effect -->
+    <div class="matrix-effect" id="matrixEffect"></div>
     
-    <!-- System Bar -->
-    <div class="system-bar">
-        <div class="system-info">
-            <div class="info-item">
-                <div class="status-dot green"></div>
-                <span>System: Online</span>
-            </div>
-            <div class="info-item">
-                <div class="status-dot green"></div>
-                <span>Network: Connected</span>
-            </div>
-            <div class="info-item">
-                <div class="status-dot yellow"></div>
-                <span id="loadInfo">Load: 1.2</span>
-            </div>
-        </div>
-        <div class="system-time" id="systemTime"></div>
+    <!-- Fog effect -->
+    <div class="fog"></div>
+    
+    <!-- View toggle controls -->
+    <div class="view-toggle">
+        <div class="toggle-btn active" id="gridToggle" title="Grid View">⊞</div>
+        <div class="toggle-btn" id="commandToggle" title="Command View">⌘</div>
+        <div class="toggle-btn" id="searchToggle" title="Search">🔍</div>
     </div>
     
-    <!-- Main Container -->
-    <div class="main-container">
-        <!-- Left Panel -->
-        <div class="left-panel">
-            <!-- Terminal Header -->
-            <div class="terminal-header">
-                <div class="terminal-title">NEXUS TERMINAL</div>
-                <div class="terminal-subtitle">[ SYSTEM ACCESS GRANTED ]</div>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="title">NEXUS</h1>
+        <div class="subtitle">[ DIGITAL COMMAND CENTER ]</div>
+        <div class="clock" id="clock"></div>
+    </header>
+    
+    <!-- Grid View -->
+    <div class="grid-view active" id="gridView">
+        <!-- Email & Communication -->
+        <section class="section">
+            <h2 class="section-title">Email & Communications</h2>
+            <div class="section-grid">
+                <a href="https://mail.tutanota.com" class="hub-card" target="_blank">
+                    <div class="card-status"></div>
+                    <div class="card-icon">📬</div>
+                    <div class="card-title">Tutanota</div>
+                    <div class="card-desc">secure mail</div>
+                </a>
+                <a href="https://zemail.me/" class="hub-card" target="_blank">
+                    <div class="card-status"></div>
+                    <div class="card-icon">📧</div>
+                    <div class="card-title">Temp Mail</div>
+                    <div class="card-desc">disposable mail</div>
+                </a>
+                <a href="https://webmail.disroot.org/" class="hub-card" target="_blank">
+                    <div class="card-status"></div>
+                    <div class="card-icon">📮</div>
+                    <div class="card-title">Disroot</div>
+                    <div class="card-desc">privacy mail</div>
+                </a>
             </div>
-            
-            <!-- Communication Section -->
-            <div class="command-section">
-                <div class="section-header">
-                    <div class="section-title">&gt; Communications</div>
-                    <div class="section-count">[3 services]</div>
-                </div>
-                <div class="command-grid">
-                    <a href="https://mail.tutanota.com" class="command-item" target="_blank">
-                        <span class="command-icon">📬</span>
-                        <div class="command-name">tutanota</div>
-                        <div class="command-desc">secure email</div>
-                    </a>
-                    <a href="https://zemail.me/" class="command-item" target="_blank">
-                        <span class="command-icon">📧</span>
-                        <div class="command-name">temp-mail</div>
-                        <div class="command-desc">disposable inbox</div>
-                    </a>
-                    <a href="https://webmail.disroot.org/" class="command-item" target="_blank">
-                        <span class="command-icon">📮</span>
-                        <div class="command-name">disroot</div>
-                        <div class="command-desc">privacy mail</div>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- File Systems Section -->
-            <div class="command-section">
-                <div class="section-header">
-                    <div class="section-title">&gt; File Systems</div>
-                    <div class="section-count">[4 services]</div>
-                </div>
-                <div class="command-grid">
-                    <a href="#" class="command-item">
-                        <span class="command-icon">📂</span>
-                        <div class="command-name">drive</div>
-                        <div class="command-desc">cloud storage</div>
-                    </a>
-                    <a href="#" class="command-item">
-                        <span class="command-icon">🗑️</span>
-                        <div class="command-name">bin</div>
-                        <div class="command-desc">file storage</div>
-                    </a>
-                    <a href="#" class="command-item">
-                        <span class="command-icon">📔</span>
-                        <div class="command-name">notebook</div>
-                        <div class="command-desc">notes & docs</div>
-                    </a>
-                    <a href="#" class="command-item">
-                        <span class="command-icon">📷</span>
-                        <div class="command-name">photos</div>
-                        <div class="command-desc">gallery</div>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Media Systems Section -->
-            <div class="command-section">
-                <div class="section-header">
-                    <div class="section-title">&gt; Media Systems</div>
-                    <div class="section-count">[4 services]</div>
-                </div>
-                <div class="command-grid">
-                    <a href="#" class="command-item">
-                        <span class="command-icon">📺</span>
-                        <div class="command-name">jellyfin</div>
-                        <div class="command-desc">media server</div>
-                    </a>
-                    <a href="#" class="command-item">
-                        <span class="command-icon">🎵</span>
-                        <div class="command-name">jukebox</div>
-                        <div class="command-desc">music player</div>
-                    </a>
-                    <a href="https://music.youtube.com" class="command-item" target="_blank">
-                        <span class="command-icon">🎼</span>
-                        <div class="command-name">yt-music</div>
-                        <div class="command-desc">streaming</div>
-                    </a>
-                    <a href="https://youtube.com" class="command-item" target="_blank">
-                        <span class="command-icon">📻</span>
-                        <div class="command-name">youtube</div>
-                        <div class="command-desc">videos</div>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Network Tools Section -->
-            <div class="command-section">
-                <div class="section-header">
-                    <div class="section-title">&gt; Network Tools</div>
-                    <div class="section-count">[6 services]</div>
-                </div>
-                <div class="command-grid">
-                    <a href="#" class="command-item">
-                        <span class="command-icon">📡</span>
-                        <div class="command-name">seedbox</div>
-                        <div class="command-desc">torrent client</div>
-                    </a>
-                    <a href="#" class="command-item">
-                        <span class="command-icon">🎧</span>
-                        <div class="command-name">soulseek</div>
-                        <div class="command-desc">music sharing</div>
-                    </a>
-                    <a href="https://real-debrid.com/" class="command-item" target="_blank">
-                        <span class="command-icon">🗄️</span>
-                        <div class="command-name">debrid</div>
-                        <div class="command-desc">premium dl</div>
-                    </a>
-                    <a href="https://real-debrid.com/speedtest" class="command-item" target="_blank">
-                        <span class="command-icon">🪛</span>
-                        <div class="command-name">speedtest</div>
-                        <div class="command-desc">network test</div>
-                    </a>
-                    <a href="https://ipleak.net/" class="command-item" target="_blank">
-                        <span class="command-icon">📍</span>
-                        <div class="command-name">ip-location</div>
-                        <div class="command-desc">network info</div>
-                    </a>
-                    <a href="#" class="command-item">
-                        <span class="command-icon">🛜</span>
-                        <div class="command-name">rss</div>
-                        <div class="command-desc">news feeds</div>
-                    </a>
-                </div>
-            </div>
-        </div>
+        </section>
         
-        <!-- Right Panel - Widgets -->
-        <div class="right-panel">
-            <!-- System Info Widget -->
-            <div class="widget">
-                <div class="widget-title">
-                    <span>📊</span>
-                    System Info
-                </div>
-                <div class="system-info-widget">
-                    <div class="info-line">
-                        <span class="info-label">Uptime</span>
-                        <span class="info-value" id="uptime">2d 4h 23m</span>
-                    </div>
-                    <div class="info-line">
-                        <span class="info-label">CPU Usage</span>
-                        <span class="info-value" id="cpuUsage">47%</span>
-                    </div>
-                    <div class="info-line">
-                        <span class="info-label">Memory</span>
-                        <span class="info-value" id="memUsage">8.2/16 GB</span>
-                    </div>
-                    <div class="info-line">
-                        <span class="info-label">Disk</span>
-                        <span class="info-value" id="diskUsage">243/512 GB</span>
-                    </div>
-                    <div class="info-line">
-                        <span class="info-label">Network</span>
-                        <span class="info-value" id="networkSpeed">↓ 234 Mbps</span>
-                    </div>
-                </div>
+        <!-- File Management & Storage -->
+        <section class="section">
+            <h2 class="section-title">File Management & Storage</h2>
+            <div class="section-grid">
+                <a href="#" class="hub-card">
+                    <div class="card-status"></div>
+                    <div class="card-icon">📂</div>
+                    <div class="card-title">Drive</div>
+                    <div class="card-desc">cloud storage</div>
+                </a>
+                <a href="#" class="hub-card">
+                    <div class="card-status"></div>
+                    <div class="card-icon">🗑️</div>
+                    <div class="card-title">Bin</div>
+                    <div class="card-desc">file storage</div>
+                </a>
+                <a href="#" class="hub-card">
+                    <div class="card-status"></div>
+                    <div class="card-icon">📔</div>
+                    <div class="card-title">Notebook</div>
+                    <div class="card-desc">notes & docs</div>
+                </a>
+                <a href="#" class="hub-card">
+                    <div class="card-status"></div>
+                    <div class="card-icon">📷</div>
+                    <div class="card-title">Photos</div>
+                    <div class="card-desc">image gallery</div>
+                </a>
             </div>
-            
-            <!-- Graph Widget -->
-            <div class="widget">
-                <div class="widget-title">
-                    <span>📈</span>
-                    Performance
-                </div>
-                <div class="graph-widget">
-                    <div class="graph-container">
-                        <div class="graph-bars" id="performanceGraph"></div>
-                    </div>
-                </div>
+        </section>
+        
+        <!-- Media & Entertainment -->
+        <section class="section">
+            <h2 class="section-title">Media & Entertainment</h2>
+            <div class="section-grid">
+                <a href="#" class="hub-card">
+                    <div class="card-status"></div>
+                    <div class="card-icon">📺</div>
+                    <div class="card-title">Jellyfin</div>
+                    <div class="card-desc">media server</div>
+                </a>
+                <a href="#" class="hub-card">
+                    <div class="card-status"></div>
+                    <div class="card-icon">🎵</div>
+                    <div class="card-title">Jukebox</div>
+                    <div class="card-desc">music player</div>
+                </a>
+                <a href="https://music.youtube.com" class="hub-card" target="_blank">
+                    <div class="card-status"></div>
+                    <div class="card-icon">🎼</div>
+                    <div class="card-title">YT Music</div>
+                    <div class="card-desc">streaming</div>
+                </a>
+                <a href="https://youtube.com" class="hub-card" target="_blank">
+                    <div class="card-status"></div>
+                    <div class="card-icon">📻</div>
+                    <div class="card-title">YouTube</div>
+                    <div class="card-desc">videos</div>
+                </a>
             </div>
-            
-            <!-- Terminal Output Widget -->
-            <div class="widget">
-                <div class="widget-title">
-                    <span>💻</span>
-                    Terminal
-                </div>
-                <div class="terminal-output" id="terminalOutput">
-                    <div class="terminal-line">
-                        <span class="terminal-prompt">root@nexus:~$</span>
-                        <span class="terminal-command">systemctl status</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-output-text">● system.slice - System Slice</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-output-text">   Loaded: loaded</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-output-text">   Active: active since boot</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-prompt">root@nexus:~$</span>
-                        <span class="terminal-command">cat /proc/version</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-output-text">Linux version 5.19.0-nexus</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-prompt">root@nexus:~$</span>
-                        <span class="terminal-command" id="typingCommand"></span>
-                    </div>
-                </div>
+        </section>
+        
+        <!-- P2P & Downloads -->
+        <section class="section">
+            <h2 class="section-title">P2P & Downloads</h2>
+            <div class="section-grid">
+                <a href="#" class="hub-card">
+                    <div class="card-status"></div>
+                    <div class="card-icon">📡</div>
+                    <div class="card-title">Seedbox</div>
+                    <div class="card-desc">torrents</div>
+                </a>
+                <a href="#" class="hub-card">
+                    <div class="card-status"></div>
+                    <div class="card-icon">🎧</div>
+                    <div class="card-title">Soulseek</div>
+                    <div class="card-desc">music sharing</div>
+                </a>
+                <a href="https://real-debrid.com/" class="hub-card" target="_blank">
+                    <div class="card-status"></div>
+                    <div class="card-icon">🗄️</div>
+                    <div class="card-title">Debrid</div>
+                    <div class="card-desc">premium dl</div>
+                </a>
             </div>
-            
-            <!-- Quick Access Widget -->
-            <div class="widget">
-                <div class="widget-title">
-                    <span>⚡</span>
-                    Quick Access
-                </div>
-                <div class="quick-access">
-                    <div class="quick-btn" onclick="toggleSearch()">
-                        <div>🔍</div>
-                        <div style="font-size: 10px;">Search</div>
-                    </div>
-                    <div class="quick-btn" onclick="restartSystem()">
-                        <div>🔄</div>
-                        <div style="font-size: 10px;">Restart</div>
-                    </div>
-                    <div class="quick-btn" onclick="adminPanel()">
-                        <div>⚙️</div>
-                        <div style="font-size: 10px;">Admin</div>
-                    </div>
-                </div>
+        </section>
+        
+        <!-- Tools & Utilities -->
+        <section class="section">
+            <h2 class="section-title">Tools & Utilities</h2>
+            <div class="section-grid">
+                <a href="https://real-debrid.com/speedtest" class="hub-card" target="_blank">
+                    <div class="card-status"></div>
+                    <div class="card-icon">🪛</div>
+                    <div class="card-title">Speedtest</div>
+                    <div class="card-desc">network test</div>
+                </a>
+                <a href="https://ipleak.net/" class="hub-card" target="_blank">
+                    <div class="card-status"></div>
+                    <div class="card-icon">📍</div>
+                    <div class="card-title">IP Location</div>
+                    <div class="card-desc">network info</div>
+                </a>
+                <a href="#" class="hub-card">
+                    <div class="card-status"></div>
+                    <div class="card-icon">🛜</div>
+                    <div class="card-title">RSS</div>
+                    <div class="card-desc">news feeds</div>
+                </a>
+                <a href="#" class="hub-card">
+                    <div class="card-status"></div>
+                    <div class="card-icon">🧑‍💻</div>
+                    <div class="card-title">Admin</div>
+                    <div class="card-desc">control panel</div>
+                </a>
             </div>
-        </div>
+        </section>
+    </div>
+    
+    <!-- Command View -->
+    <div class="command-view" id="commandView">
+        <nav class="command-list" id="commandList">
+            <!-- Commands will be populated by JavaScript -->
+        </nav>
     </div>
     
     <!-- Search Overlay -->
     <div class="search-overlay" id="searchOverlay">
         <div class="search-container">
-            <div class="widget-title" style="margin-bottom: 16px; justify-content: center;">
-                <span>🔍</span>
-                NEXUS SEARCH
+            <div class="search-title">[ NEXUS SEARCH ]</div>
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Type to search or command...">
             </div>
-            <input type="text" class="search-input" id="searchInput" placeholder="Type command or search...">
-            <div style="margin-top: 16px; text-align: center; font-size: 12px; color: #888;">
-                Press ESC to close • Enter to search
+            <div class="search-suggestions" id="searchSuggestions"></div>
+            <div style="margin-top: 1rem; text-align: center; font-size: 0.8rem; color: #888;">
+                Press Escape to close
             </div>
         </div>
     </div>
     
+    <div class="instructions">
+        Type to search • ESC to close • S for smoke • Click icons to toggle views
+    </div>
+    
     <script>
-        // System state
-        const system = {
-            bootTime: Date.now(),
-            cpuValues: [],
-            memValues: [],
-            networkValues: []
+        // Configuration
+        const CONFIG = {
+            defaultSearchTemplate: 'https://www.startpage.com/sp/search?query={}&abp=1',
+            matrixColumns: 100,
+            matrixUpdateInterval: 100,
+            clockUpdateInterval: 1000,
         };
         
-        // Commands for typing effect
-        const commands = [
-            'htop',
-            'ps aux | grep nexus',
-            'df -h',
-            'netstat -tuln',
-            'curl -s https://ipinfo.io',
-            'lsof -i :80',
-            'who'
-        ];
-        let currentCommand = 0;
-        let typeIndex = 0;
+        // Commands mapping
+        const COMMANDS = new Map([
+            ['📬', { name: 'Tutanota', url: 'https://mail.tutanota.com' }],
+            ['📧', { name: 'Temp Mail', url: 'https://zemail.me/' }],
+            ['📮', { name: 'Disroot', url: 'https://webmail.disroot.org/' }],
+            ['📂', { name: 'Drive', url: '#' }],
+            ['🗑️', { name: 'Bin', url: '#' }],
+            ['📔', { name: 'Notebook', url: '#' }],
+            ['📷', { name: 'Photos', url: '#' }],
+            ['📺', { name: 'Jellyfin', url: '#' }],
+            ['🎵', { name: 'Jukebox', url: '#' }],
+            ['🎼', { name: 'YT Music', url: 'https://music.youtube.com' }],
+            ['📻', { name: 'YouTube', url: 'https://youtube.com' }],
+            ['📡', { name: 'Seedbox', url: '#' }],
+            ['🎧', { name: 'Soulseek', url: '#' }],
+            ['🗄️', { name: 'Debrid', url: 'https://real-debrid.com/' }],
+            ['🪛', { name: 'Speedtest', url: 'https://real-debrid.com/speedtest' }],
+            ['📍', { name: 'IP Location', url: 'https://ipleak.net/' }],
+            ['🛜', { name: 'RSS', url: '#' }],
+            ['🧑‍💻', { name: 'Admin', url: '#' }],
+        ]);
         
-        // Initialize ASCII background
-        function initASCIIBackground() {
-            const asciiBg = document.getElementById('asciiBg');
-            const skull = `
-                  ██████╗ █████╗ ███████╗██╗   ██╗██╗   ██╗███████╗
-                 ██╔════╝██╔══██╗██╔════╝██║   ██║██║   ██║██╔════╝
-                 ██║     ███████║███████╗██║   ██║██║   ██║███████╗
-                 ██║     ██╔══██║╚════██║██║   ██║██║   ██║╚════██║
-                 ╚██████╗██║  ██║███████║╚██████╔╝╚██████╔╝███████║
-                  ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝  ╚═════╝ ╚══════╝
-            `;
-            asciiBg.textContent = skull;
-        }
-        
-        // Update system time
-        function updateSystemTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            document.getElementById('systemTime').textContent = timeString;
-        }
-        
-        // Update system info
-        function updateSystemInfo() {
-            // Simulate system load
-            const load = (Math.random() * 3).toFixed(1);
-            document.getElementById('loadInfo').textContent = `Load: ${load}`;
+        class DigitalNexus {
+            constructor() {
+                this.currentView = 'grid';
+                this.searchActive = false;
+                this.init();
+            }
             
-            // Update detailed info (if elements exist)
-            if (document.getElementById('cpuUsage')) {
-                const cpu = Math.floor(Math.random() * 100);
-                const mem = Math.floor(Math.random() * 16);
-                const disk = 243 + Math.floor(Math.random() * 50);
-                const network = Math.floor(Math.random() * 500);
+            init() {
+                this.setupMatrix();
+                this.setupClock();
+                this.setupCommands();
+                this.setupEventListeners();
+                this.checkSpecialTime();
+            }
+            
+            setupMatrix() {
+                const matrixEffect = document.getElementById('matrixEffect');
+                const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZアカサタナハマヤラワ';
                 
-                document.getElementById('cpuUsage').textContent = `${cpu}%`;
-                document.getElementById('memUsage').textContent = `${mem}/16 GB`;
-                document.getElementById('diskUsage').textContent = `${disk}/512 GB`;
-                document.getElementById('networkSpeed').textContent = `↓ ${network} Mbps`;
-                
-                // Update graph data
-                system.cpuValues.push(cpu);
-                if (system.cpuValues.length > 30) system.cpuValues.shift();
-                updatePerformanceGraph();
-            }
-        }
-        
-        // Update performance graph
-        function updatePerformanceGraph() {
-            const graphBars = document.getElementById('performanceGraph');
-            if (!graphBars) return;
-            
-            graphBars.innerHTML = '';
-            system.cpuValues.forEach(value => {
-                const bar = document.createElement('div');
-                bar.className = 'graph-bar';
-                bar.style.height = `${value}%`;
-                graphBars.appendChild(bar);
-            });
-        }
-        
-        // Typing effect for terminal
-        function typeCommand() {
-            const commandElement = document.getElementById('typingCommand');
-            if (!commandElement) return;
-            
-            const currentCmd = commands[currentCommand];
-            if (typeIndex < currentCmd.length) {
-                commandElement.textContent = currentCmd.substring(0, typeIndex + 1);
-                typeIndex++;
-                setTimeout(typeCommand, 100);
-            } else {
-                setTimeout(() => {
-                    typeIndex = 0;
-                    currentCommand = (currentCommand + 1) % commands.length;
-                    commandElement.textContent = '';
-                    setTimeout(typeCommand, 1000);
-                }, 2000);
-            }
-        }
-        
-        // Search functionality
-        function toggleSearch() {
-            const overlay = document.getElementById('searchOverlay');
-            const input = document.getElementById('searchInput');
-            
-            if (overlay.classList.contains('active')) {
-                overlay.classList.remove('active');
-                input.value = '';
-            } else {
-                overlay.classList.add('active');
-                input.focus();
-            }
-        }
-        
-        // Quick access functions
-        function restartSystem() {
-            const overlay = document.createElement('div');
-            overlay.className = 'search-overlay active';
-            overlay.innerHTML = `
-                <div class="search-container" style="text-align: center;">
-                    <div style="color: var(--color-warning); font-size: 24px; margin-bottom: 16px;">⚠️</div>
-                    <div style="color: var(--color-text); margin-bottom: 16px;">System Restart Initiated</div>
-                    <div style="color: var(--color-text-dim); font-size: 12px;">This is just a simulation...</div>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-            setTimeout(() => overlay.remove(), 3000);
-        }
-        
-        function adminPanel() {
-            window.open('#admin', '_blank');
-        }
-        
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            // Open search with any letter
-            if (!document.getElementById('searchOverlay').classList.contains('active')) {
-                if (/^[a-zA-Z]$/.test(e.key)) {
-                    toggleSearch();
-                    document.getElementById('searchInput').value = e.key;
+                for (let i = 0; i < CONFIG.matrixColumns; i++) {
+                    const column = document.createElement('div');
+                    column.className = 'matrix-rain';
+                    column.style.left = `${(i * 100) / CONFIG.matrixColumns}%`;
+                    column.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                    column.style.animationDelay = `${Math.random() * 2}s`;
+                    
+                    const length = Math.floor(Math.random() * 15) + 5;
+                    let text = '';
+                    for (let j = 0; j < length; j++) {
+                        text += chars[Math.floor(Math.random() * chars.length)] + '<br>';
+                    }
+                    column.innerHTML = text;
+                    
+                    matrixEffect.appendChild(column);
                 }
             }
             
-            // Close search with ESC
-            if (e.key === 'Escape') {
-                if (document.getElementById('searchOverlay').classList.contains('active')) {
-                    toggleSearch();
-                }
-            }
-            
-            // Search with Enter
-            if (e.key === 'Enter' && document.getElementById('searchOverlay').classList.contains('active')) {
-                const query = document.getElementById('searchInput').value.trim();
-                if (query) {
-                    const searchUrl = `https://www.startpage.com/sp/search?query=${encodeURIComponent(query)}`;
-                    window.open(searchUrl, '_blank');
-                    toggleSearch();
-                }
-            }
-        });
-        
-        // Update uptime display
-        function updateUptime() {
-            const uptimeElement = document.getElementById('uptime');
-            if (!uptimeElement) return;
-            
-            const now = Date.now();
-            const uptimeMs = now - system.bootTime;
-            const days = Math.floor(uptimeMs / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((uptimeMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((uptimeMs % (1000 * 60 * 60)) / (1000 * 60));
-            
-            uptimeElement.textContent = `${days}d ${hours}h ${minutes}m`;
-        }
-        
-        // Matrix rain effect
-        function createMatrixRain() {
-            const chars = '0123456789ABCDEF';
-            for (let i = 0; i < 5; i++) {
-                const span = document.createElement('span');
-                span.className = 'matrix-char';
-                span.textContent = chars[Math.floor(Math.random() * chars.length)];
-                span.style.position = 'fixed';
-                span.style.left = Math.random() * 100 + '%';
-                span.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                span.style.fontSize = Math.random() * 20 + 10 + 'px';
-                document.body.appendChild(span);
+            setupClock() {
+                const updateClock = () => {
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('en-US', {
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                    const dateString = now.toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    
+                    const is420 = timeString === '04:20:00' || timeString === '16:20:00';
+                    const statusText = is420 ? '420 TIME! 🌿💨' : 'STATUS: ONLINE';
+                    
+                    document.getElementById('clock').textContent = 
+                        `${timeString} :: ${dateString} - ${statusText}`;
+                    
+                    if (is420) {
+                        this.createSmokeEffect();
+                    }
+                };
                 
-                setTimeout(() => span.remove(), 5000);
+                updateClock();
+                setInterval(updateClock, CONFIG.clockUpdateInterval);
             }
-        }
-        
-        // 420 easter egg
-        function check420() {
-            const now = new Date();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
             
-            if ((hours === 4 || hours === 16) && minutes === 20) {
-                // Create smoke effect
-                const smoke = document.createElement('div');
-                smoke.innerHTML = '💨 4:20 - It\'s time! 🌿';
-                smoke.style.cssText = `
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background: rgba(0, 255, 65, 0.1);
-                    padding: 20px;
-                    border: 1px solid var(--color-primary);
-                    border-radius: 8px;
-                    color: var(--color-primary);
-                    font-size: 18px;
-                    z-index: 2000;
-                    animation: smokeEffect 3s ease forwards;
-                `;
+            setupCommands() {
+                const commandList = document.getElementById('commandList');
+                commandList.innerHTML = '';
                 
-                // Add CSS for smoke animation
-                if (!document.getElementById('smokeStyle')) {
-                    const style = document.createElement('style');
-                    style.id = 'smokeStyle';
-                    style.textContent = `
-                        @keyframes smokeEffect {
-                            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-                            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-                            100% { opacity: 0; transform: translate(-50%, -50%) scale(1) translateY(-50px); }
-                        }
+                for (const [key, { name, url }] of COMMANDS.entries()) {
+                    const item = document.createElement('a');
+                    item.className = 'command-item';
+                    item.href = url;
+                    item.innerHTML = `
+                        <span class="command-key">${key}</span>
+                        <span class="command-name">${name}</span>
                     `;
-                    document.head.appendChild(style);
+                    commandList.appendChild(item);
                 }
-                
-                document.body.appendChild(smoke);
-                setTimeout(() => smoke.remove(), 3000);
             }
-        }
-        
-        // Initialize everything
-        document.addEventListener('DOMContentLoaded', () => {
-            initASCIIBackground();
-            typeCommand();
             
-            // Set up intervals
-            setInterval(updateSystemTime, 1000);
-            setInterval(updateSystemInfo, 2000);
-            setInterval(updateUptime, 60000);
-            setInterval(createMatrixRain, 1000);
-            setInterval(check420, 60000);
-            
-            // Initial updates
-            updateSystemTime();
-            updateSystemInfo();
-            updateUptime();
-            
-            // Click outside search to close
-            document.getElementById('searchOverlay').addEventListener('click', (e) => {
-                if (e.target === e.currentTarget) {
-                    toggleSearch();
-                }
-            });
-        });
-        
-        // Add some dynamic terminal commands
-        setInterval(() => {
-            const terminalOutput = document.getElementById('terminalOutput');
-            if (terminalOutput) {
-                const commands = ['ps aux', 'netstat -i', 'free -h', 'uptime', 'who'];
-                const randomCmd = commands[Math.floor(Math.random() * commands.length)];
+            setupEventListeners() {
+                // View toggles
+                document.getElementById('gridToggle').addEventListener('click', () => this.switchView('grid'));
+                document.getElementById('commandToggle').addEventListener('click', () => this.switchView('command'));
+                document.getElementById('searchToggle').addEventListener('click', () => this.toggleSearch());
                 
-                const newLine = document.createElement('div');
-                newLine.className = 'terminal-line';
-                newLine.innerHTML = `
-                    <span class="terminal-prompt">root@nexus:~$</span>
-                    <span class="terminal-command">${randomCmd}</span>
-                `;
+                // Search functionality
+                document.getElementById('searchInput').addEventListener('input', this.handleSearch.bind(this));
+                document.getElementById('searchOverlay').addEventListener('click', (e) => {
+                    if (e.target === e.currentTarget) this.toggleSearch();
+                });
                 
-                // Add before the typing command line
-                const typingLine = terminalOutput.lastElementChild;
-                terminalOutput.insertBefore(newLine, typingLine);
+                // Keyboard shortcuts
+                document.addEventListener('keydown', this.handleKeydown.bind(this));
                 
-                // Keep only last 15 lines
-                const lines = terminalOutput.children;
-                if (lines.length > 15) {
-                    terminalOutput.removeChild(lines[0]);
-                }
-                
-                // Scroll to bottom
-                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+                // Special smoke effect trigger
+                document.addEventListener('keypress', (e) => {
+                    if (e.key.toLowerCase() === 's' && !this.searchActive) {
+                        this.createSmokeEffect();
+                    }
+                });
             }
-        }, 5000);
-    </script>
-</body>
-</html>
+            
+            switchView(view) {
+                // Update view
+                document.getElementById('gridView').classList.toggle('active', view === 'grid');
+                document.getElementById('commandView').classList.toggle('active', view === 'command');
+                
+                // Update buttons
+                document.getElementById('gridToggle').classList.toggle('active', view === 'grid');
+                document.getElementById('commandToggle').classList.toggle('active', view === 'command');
+                
+                this.currentView = view;
+            }
+            
+            toggleSearch() {
+                this.searchActive = !this
