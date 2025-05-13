@@ -16,204 +16,50 @@
             background: #080808;
             color: #ffffff;
             min-height: 100vh;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
             position: relative;
         }
-        /* Ultra-dense fog machine effects */
+        
+        /* Simplified fog effects */
         .fog-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: -2;
             overflow: hidden;
         }
+        
         .fog-layer {
             position: absolute;
             width: 100%;
             height: 100%;
             background: radial-gradient(ellipse at center, 
-                rgba(220, 220, 220, 0.3) 0%, 
-                rgba(180, 180, 180, 0.25) 10%, 
-                rgba(150, 150, 150, 0.2) 20%, 
-                rgba(120, 120, 120, 0.15) 30%, 
-                rgba(100, 100, 100, 0.12) 40%, 
-                rgba(70, 70, 70, 0.08) 60%, 
-                rgba(30, 30, 30, 0.04) 80%, 
+                rgba(220, 220, 220, 0.1) 0%, 
+                rgba(180, 180, 180, 0.08) 20%, 
+                rgba(120, 120, 120, 0.05) 40%, 
+                rgba(50, 50, 50, 0.02) 70%, 
                 transparent 100%);
-            animation: fogMove1 20s linear infinite;
+            animation: fogMove 30s linear infinite;
         }
+        
         .fog-layer:nth-child(2) {
-            animation: fogMove2 18s linear infinite reverse;
-            background: radial-gradient(ellipse at center, 
-                rgba(200, 200, 200, 0.28) 0%, 
-                rgba(160, 160, 160, 0.22) 15%, 
-                rgba(120, 120, 120, 0.18) 30%, 
-                rgba(80, 80, 80, 0.12) 50%, 
-                rgba(50, 50, 50, 0.08) 75%, 
-                transparent 100%);
+            animation: fogMove 25s linear infinite reverse;
+            animation-delay: -8s;
         }
+        
         .fog-layer:nth-child(3) {
-            animation: fogMove3 22s linear infinite;
-            background: radial-gradient(ellipse at center, 
-                rgba(180, 180, 180, 0.32) 0%, 
-                rgba(140, 140, 140, 0.26) 12%, 
-                rgba(110, 110, 110, 0.2) 25%, 
-                rgba(70, 70, 70, 0.15) 40%, 
-                rgba(40, 40, 40, 0.1) 60%, 
-                transparent 100%);
+            animation: fogMove 35s linear infinite;
+            animation-delay: -15s;
         }
-        .fog-layer:nth-child(4) {
-            animation: fogMove4 25s linear infinite reverse;
-            background: radial-gradient(ellipse at center, 
-                rgba(240, 240, 240, 0.25) 0%, 
-                rgba(190, 190, 190, 0.2) 20%, 
-                rgba(140, 140, 140, 0.16) 35%, 
-                rgba(90, 90, 90, 0.12) 55%, 
-                rgba(60, 60, 60, 0.08) 75%, 
-                transparent 100%);
+        
+        @keyframes fogMove {
+            0% { transform: translateX(-100%) translateY(-20%) scale(1); }
+            100% { transform: translateX(100%) translateY(20%) scale(1.5); }
         }
-        .fog-layer:nth-child(5) {
-            animation: fogMove5 15s linear infinite;
-            background: radial-gradient(ellipse at center, 
-                rgba(210, 210, 210, 0.35) 0%, 
-                rgba(170, 170, 170, 0.28) 8%, 
-                rgba(130, 130, 130, 0.22) 18%, 
-                rgba(100, 100, 100, 0.18) 30%, 
-                rgba(60, 60, 60, 0.12) 45%, 
-                rgba(30, 30, 30, 0.06) 70%, 
-                transparent 100%);
-        }
-        .fog-layer:nth-child(6) {
-            animation: fogMove6 28s linear infinite reverse;
-            background: radial-gradient(ellipse at center, 
-                rgba(160, 160, 160, 0.4) 0%, 
-                rgba(130, 130, 130, 0.32) 5%, 
-                rgba(100, 100, 100, 0.25) 12%, 
-                rgba(80, 80, 80, 0.2) 25%, 
-                rgba(50, 50, 50, 0.15) 40%, 
-                rgba(20, 20, 20, 0.08) 65%, 
-                transparent 100%);
-        }
-        @keyframes fogMove1 {
-            0% { transform: translateX(-150%) translateY(-20%) scale(0.8); }
-            100% { transform: translateX(150%) translateY(15%) scale(2.5); }
-        }
-        @keyframes fogMove2 {
-            0% { transform: translateX(150%) translateY(10%) scale(1.3); }
-            100% { transform: translateX(-150%) translateY(-25%) scale(3); }
-        }
-        @keyframes fogMove3 {
-            0% { transform: translateX(-150%) translateY(-30%) scale(0.6); }
-            100% { transform: translateX(150%) translateY(20%) scale(3.2); }
-        }
-        @keyframes fogMove4 {
-            0% { transform: translateX(150%) translateY(-10%) scale(1.1); }
-            100% { transform: translateX(-150%) translateY(30%) scale(2.8); }
-        }
-        @keyframes fogMove5 {
-            0% { transform: translateX(-150%) translateY(20%) scale(0.9); }
-            100% { transform: translateX(150%) translateY(-15%) scale(3.5); }
-        }
-        @keyframes fogMove6 {
-            0% { transform: translateX(150%) translateY(-35%) scale(0.7); }
-            100% { transform: translateX(-150%) translateY(25%) scale(4); }
-        }
-        /* Mega dynamic fog particles */
-        .fog-particle {
-            position: absolute;
-            background: radial-gradient(circle at center, 
-                rgba(255, 255, 255, 0.35) 0%, 
-                rgba(230, 230, 230, 0.3) 5%, 
-                rgba(200, 200, 200, 0.25) 12%, 
-                rgba(180, 180, 180, 0.2) 20%, 
-                rgba(150, 150, 150, 0.15) 30%, 
-                rgba(120, 120, 120, 0.12) 40%, 
-                rgba(100, 100, 100, 0.1) 50%, 
-                rgba(70, 70, 70, 0.08) 65%, 
-                rgba(50, 50, 50, 0.05) 80%, 
-                transparent 100%);
-            border-radius: 50%;
-            filter: blur(3px);
-            opacity: 0;
-        }
-        .fog-particle.large {
-            animation: fogParticleLarge 12s infinite linear;
-        }
-        .fog-particle.medium {
-            animation: fogParticleMedium 10s infinite linear;
-        }
-        .fog-particle.small {
-            animation: fogParticleSmall 8s infinite linear;
-        }
-        .fog-particle.xl {
-            animation: fogParticleXL 15s infinite linear;
-        }
-        .fog-particle.xxl {
-            animation: fogParticleXXL 18s infinite linear;
-        }
-        @keyframes fogParticleLarge {
-            0% {
-                transform: translateX(-300px) translateY(-50px) rotate(0deg) scale(0.3);
-                opacity: 0;
-            }
-            5% { opacity: 0.9; }
-            95% { opacity: 0.2; }
-            100% {
-                transform: translateX(calc(100vw + 300px)) translateY(-150px) rotate(120deg) scale(4);
-                opacity: 0;
-            }
-        }
-        @keyframes fogParticleMedium {
-            0% {
-                transform: translateX(-250px) translateY(30px) rotate(0deg) scale(0.4);
-                opacity: 0;
-            }
-            8% { opacity: 0.8; }
-            92% { opacity: 0.3; }
-            100% {
-                transform: translateX(calc(100vw + 250px)) translateY(-80px) rotate(-150deg) scale(3.5);
-                opacity: 0;
-            }
-        }
-        @keyframes fogParticleSmall {
-            0% {
-                transform: translateX(-200px) translateY(-30px) rotate(0deg) scale(0.5);
-                opacity: 0;
-            }
-            12% { opacity: 0.7; }
-            88% { opacity: 0.4; }
-            100% {
-                transform: translateX(calc(100vw + 200px)) translateY(50px) rotate(90deg) scale(3);
-                opacity: 0;
-            }
-        }
-        @keyframes fogParticleXL {
-            0% {
-                transform: translateX(-400px) translateY(0px) rotate(0deg) scale(0.2);
-                opacity: 0;
-            }
-            3% { opacity: 1; }
-            97% { opacity: 0.15; }
-            100% {
-                transform: translateX(calc(100vw + 400px)) translateY(-200px) rotate(180deg) scale(5);
-                opacity: 0;
-            }
-        }
-        @keyframes fogParticleXXL {
-            0% {
-                transform: translateX(-500px) translateY(-80px) rotate(0deg) scale(0.1);
-                opacity: 0;
-            }
-            2% { opacity: 1.2; }
-            98% { opacity: 0.1; }
-            100% {
-                transform: translateX(calc(100vw + 500px)) translateY(-300px) rotate(240deg) scale(6);
-                opacity: 0;
-            }
-        }
-        /* Multiple heavy fog overlays */
+        
         .fog-overlay {
             position: fixed;
             top: 0;
@@ -221,25 +67,29 @@
             width: 100%;
             height: 100%;
             background: 
-                linear-gradient(45deg, rgba(0,0,0,0.4), rgba(100,100,100,0.15), rgba(0,0,0,0.5)),
-                linear-gradient(120deg, rgba(80,80,80,0.25), rgba(0,0,0,0.7)),
-                linear-gradient(210deg, rgba(120,120,120,0.2), rgba(50,50,50,0.3), rgba(0,0,0,0.6));
+                linear-gradient(45deg, rgba(0,0,0,0.2), transparent, rgba(0,0,0,0.3)),
+                linear-gradient(120deg, rgba(80,80,80,0.1), rgba(0,0,0,0.4));
             z-index: -1;
-            animation: fogOverlayShift 15s ease-in-out infinite;
         }
-        @keyframes fogOverlayShift {
-            0%, 100% { opacity: 0.8; }
-            33% { opacity: 0.95; }
-            66% { opacity: 0.75; }
+        
+        .main-content {
+            transition: all 0.5s ease;
+            position: relative;
+            z-index: 1;
         }
+        
+        .main-content.search-mode {
+            opacity: 0.2;
+            filter: blur(5px);
+            transform: scale(0.95);
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem 1rem;
-            z-index: 1;
-            position: relative;
-            backdrop-filter: blur(1px);
         }
+        
         header {
             text-align: center;
             margin-bottom: 2rem;
@@ -248,6 +98,7 @@
             border-radius: 15px;
             backdrop-filter: blur(10px);
         }
+        
         h1 {
             font-size: 1.6rem;
             font-weight: 600;
@@ -256,26 +107,50 @@
             color: #f0f0f0;
             text-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
+        
         .subtitle {
             font-size: 0.8rem;
             opacity: 0.7;
             font-weight: 400;
         }
+        
         .clock {
             font-size: 0.75rem;
             opacity: 0.6;
             margin-top: 0.5rem;
             font-weight: 300;
         }
-        /* 6-column grid layout */
+        
+        /* Dynamic grid layout */
         .links-grid {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.5rem;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 1rem;
         }
+        
+        @media (min-width: 1200px) {
+            .links-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .links-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .links-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+        }
+        
         .link-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
@@ -295,12 +170,14 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
             width: 100%;
         }
+        
         .link-card:hover {
             background: rgba(255, 255, 255, 0.15);
             transform: translateY(-3px);
             border-color: rgba(255, 255, 255, 0.2);
             box-shadow: 0 6px 30px rgba(0,0,0,0.6);
         }
+        
         .link-card::before {
             content: '';
             position: absolute;
@@ -311,19 +188,35 @@
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
             transition: left 0.5s ease;
         }
+        
         .link-card:hover::before {
             left: 100%;
         }
+        
         .link-icon {
-            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            font-size: 1.5rem;
             flex-shrink: 0;
         }
+        
+        /* Custom icon styles */
+        .link-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: #ffffff;
+        }
+        
         .link-title {
             font-size: 0.8rem;
             font-weight: 500;
             text-align: center;
             line-height: 1.2;
         }
+        
         .link-desc {
             font-size: 0.7rem;
             opacity: 0.6;
@@ -331,31 +224,54 @@
             text-align: center;
             line-height: 1.1;
         }
+        
         /* Search functionality */
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 2rem;
-            position: relative;
-            z-index: 1;
-        }
-        .search-box {
-            position: relative;
-            background: transparent;
-            backdrop-filter: none;
-            border: none;
-            border-radius: 0;
-            padding: 0;
-            box-shadow: none;
+        .search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.4);
         }
-        .search-box.active {
+        
+        .search-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 0 2rem;
+            position: relative;
+        }
+        
+        .search-box {
             background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(30px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 25px;
             padding: 1rem 1.5rem;
             box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease 0.1s;
         }
+        
+        .search-overlay.active .search-box {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
         .search-input {
             width: 100%;
             border: none;
@@ -365,15 +281,12 @@
             color: #ffffff;
             font-family: 'JetBrains Mono', monospace;
             font-weight: 400;
-            text-align: center;
-            transition: all 0.3s ease;
         }
-        .search-input.active {
-            text-align: left;
-        }
+        
         .search-input::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
+        
         .search-suggestions {
             position: absolute;
             top: 100%;
@@ -391,10 +304,12 @@
             visibility: hidden;
             transition: all 0.3s ease;
         }
+        
         .search-suggestions.active {
             opacity: 1;
             visibility: visible;
         }
+        
         .suggestion-item {
             padding: 0.75rem 1rem;
             color: #ffffff;
@@ -404,14 +319,17 @@
             transition: all 0.2s ease;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
+        
         .suggestion-item:hover,
         .suggestion-item.highlighted {
             background: rgba(255, 255, 255, 0.08);
             color: #00ff00;
         }
+        
         .suggestion-item:last-child {
             border-bottom: none;
         }
+        
         .instructions {
             position: fixed;
             bottom: 1rem;
@@ -421,171 +339,139 @@
             opacity: 0.5;
             font-weight: 300;
         }
-        /* Responsive adjustments */
-        @media (max-width: 1200px) {
-            .links-grid {
-                grid-template-columns: repeat(5, 1fr);
-                gap: 1.5rem;
-                padding: 0 1.5rem;
-            }
-        }
-        @media (max-width: 1024px) {
-            .links-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 1.2rem;
-                padding: 0 1rem;
-            }
-        }
-        @media (max-width: 768px) {
-            .links-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 1rem;
-                padding: 0 0.5rem;
-            }
-            
-            .link-card {
-                padding: 1rem 0.8rem;
-                min-height: 100px;
-            }
-            .link-icon {
-                font-size: 1.5rem;
-            }
-            .link-title {
-                font-size: 0.7rem;
-            }
-            .link-desc {
-                font-size: 0.6rem;
-            }
-        }
-        @media (max-width: 480px) {
-            .container {
-                padding: 1.5rem 0.8rem;
-            }
-            
-            .links-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.8rem;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="fog-container" id="fogContainer">
-        <div class="fog-layer"></div>
-        <div class="fog-layer"></div>
-        <div class="fog-layer"></div>
+    <!-- Simplified fog effects -->
+    <div class="fog-container">
         <div class="fog-layer"></div>
         <div class="fog-layer"></div>
         <div class="fog-layer"></div>
     </div>
     <div class="fog-overlay"></div>
-    <!-- Search Box at the top -->
-    <div class="search-container">
-        <div class="search-box">
-            <input type="text" class="search-input" id="searchInput" placeholder="what time is it">
-            <div class="search-suggestions" id="searchSuggestions"></div>
+
+    <!-- Search overlay -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Type to search...">
+                <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
         </div>
     </div>
-    <div class="container">
-        <header>
-            <h1>chooch.net</h1>
-            <div class="subtitle">digital hub</div>
-            <div class="clock" id="clock"></div>
-        </header>
-        <div class="links-grid">
-            <a href="https://tutanota.com" class="link-card">
-                <span class="link-icon">📧</span>
-                <div class="link-title">Tutanota</div>
-                <div class="link-desc">secure mail</div>
-            </a>
-            <a href="https://webmail.disroot.org/" class="link-card">
-                <span class="link-icon">📧</span>
-                <div class="link-title">Disroot</div>
-                <div class="link-desc">secure mail</div>
-            </a>
-            <a href="https://your-rss.com" class="link-card">
-                <span class="link-icon">📡</span>
-                <div class="link-title">RSS</div>
-                <div class="link-desc">feeds</div>
-            </a>
-            <a href="https://your-jellyfin.com" class="link-card">
-                <span class="link-icon">🎬</span>
-                <div class="link-title">Jellyfin</div>
-                <div class="link-desc">media</div>
-            </a>
-            <a href="https://youtube.com" class="link-card">
-                <span class="link-icon">📺</span>
-                <div class="link-title">Youtube</div>
-                <div class="link-desc">videos</div>
-            </a>
-            <a href="https://your-seedbox.com" class="link-card">
-                <span class="link-icon">🌱</span>
-                <div class="link-title">Seedbox</div>
-                <div class="link-desc">torrents</div>
-            </a>
-            <a href="https://bin.chooch.net" class="link-card">
-                <span class="link-icon">🗂️</span>
-                <div class="link-title">Bin</div>
-                <div class="link-desc">storage</div>
-            </a>
-            <a href="https://zemail.me/" class="link-card">
-                <span class="link-icon">📨</span>
-                <div class="link-title">Temp Mail</div>
-                <div class="link-desc">disposable</div>
-            </a>
-            <a href="https://drive.chooch.net" class="link-card">
-                <span class="link-icon">☁️</span>
-                <div class="link-title">Drive</div>
-                <div class="link-desc">cloud</div>
-            </a>
-            <a href="https://your-jukebox.com" class="link-card">
-                <span class="link-icon">🎵</span>
-                <div class="link-title">Jukebox</div>
-                <div class="link-desc">tunes</div>
-            </a>
-            <a href="https://iplocation.net" class="link-card">
-                <span class="link-icon">🌍</span>
-                <div class="link-title">IP Location</div>
-                <div class="link-desc">geo</div>
-            </a>
-            <a href="https://your-soulseek.com" class="link-card">
-                <span class="link-icon">🔍</span>
-                <div class="link-title">Soulseek</div>
-                <div class="link-desc">p2p</div>
-            </a>
-            <a href="https://photos.google.com" class="link-card">
-                <span class="link-icon">📸</span>
-                <div class="link-title">Photos</div>
-                <div class="link-desc">gallery</div>
-            </a>
-            <a href="https://your-notebook.com" class="link-card">
-                <span class="link-icon">📝</span>
-                <div class="link-title">Notebook</div>
-                <div class="link-desc">notes</div>
-            </a>
-            <a href="https://music.youtube.com" class="link-card">
-                <span class="link-icon">🎶</span>
-                <div class="link-title">YT Music</div>
-                <div class="link-desc">streaming</div>
-            </a>
-            <a href="https://speedtest.net" class="link-card">
-                <span class="link-icon">⚡</span>
-                <div class="link-title">Speedtest</div>
-                <div class="link-desc">network</div>
-            </a>
-            <a href="https://your-debrid.com" class="link-card">
-                <span class="link-icon">💨</span>
-                <div class="link-title">Debrid</div>
-                <div class="link-desc">download</div>
-            </a>
-            <a href="https://your-admin.com" class="link-card">
-                <span class="link-icon">⚙️</span>
-                <div class="link-title">Admin</div>
-                <div class="link-desc">control</div>
-            </a>
+
+    <!-- Main content -->
+    <div class="main-content" id="mainContent">
+        <div class="container">
+            <header>
+                <h1>chooch.net</h1>
+                <div class="subtitle">digital hub</div>
+                <div class="clock" id="clock"></div>
+            </header>
+            <div class="links-grid">
+                <a href="https://tutanota.com" class="link-card">
+                    <span class="link-icon">📧</span>
+                    <div class="link-title">Tutanota</div>
+                    <div class="link-desc">secure mail</div>
+                </a>
+                <a href="https://webmail.disroot.org/" class="link-card">
+                    <span class="link-icon">📧</span>
+                    <div class="link-title">Disroot</div>
+                    <div class="link-desc">secure mail</div>
+                </a>
+                <a href="https://your-rss.com" class="link-card">
+                    <span class="link-icon">📡</span>
+                    <div class="link-title">RSS</div>
+                    <div class="link-desc">feeds</div>
+                </a>
+                <a href="https://your-jellyfin.com" class="link-card">
+                    <span class="link-icon">🎬</span>
+                    <div class="link-title">Jellyfin</div>
+                    <div class="link-desc">media</div>
+                </a>
+                <a href="https://youtube.com" class="link-card">
+                    <span class="link-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </span>
+                    <div class="link-title">YouTube</div>
+                    <div class="link-desc">videos</div>
+                </a>
+                <a href="https://your-seedbox.com" class="link-card">
+                    <span class="link-icon">🌱</span>
+                    <div class="link-title">Seedbox</div>
+                    <div class="link-desc">torrents</div>
+                </a>
+                <a href="https://bin.chooch.net" class="link-card">
+                    <span class="link-icon">🗂️</span>
+                    <div class="link-title">Bin</div>
+                    <div class="link-desc">storage</div>
+                </a>
+                <a href="https://zemail.me/" class="link-card">
+                    <span class="link-icon">📨</span>
+                    <div class="link-title">Temp Mail</div>
+                    <div class="link-desc">disposable</div>
+                </a>
+                <a href="https://drive.chooch.net" class="link-card">
+                    <span class="link-icon">☁️</span>
+                    <div class="link-title">Drive</div>
+                    <div class="link-desc">cloud</div>
+                </a>
+                <a href="https://your-jukebox.com" class="link-card">
+                    <span class="link-icon">🎵</span>
+                    <div class="link-title">Jukebox</div>
+                    <div class="link-desc">tunes</div>
+                </a>
+                <a href="https://iplocation.net" class="link-card">
+                    <span class="link-icon">🌍</span>
+                    <div class="link-title">IP Location</div>
+                    <div class="link-desc">geo</div>
+                </a>
+                <a href="https://your-soulseek.com" class="link-card">
+                    <span class="link-icon">🔍</span>
+                    <div class="link-title">Soulseek</div>
+                    <div class="link-desc">p2p</div>
+                </a>
+                <a href="https://photos.google.com" class="link-card">
+                    <span class="link-icon">📸</span>
+                    <div class="link-title">Photos</div>
+                    <div class="link-desc">gallery</div>
+                </a>
+                <a href="https://your-notebook.com" class="link-card">
+                    <span class="link-icon">📝</span>
+                    <div class="link-title">Notebook</div>
+                    <div class="link-desc">notes</div>
+                </a>
+                <a href="https://music.youtube.com" class="link-card">
+                    <span class="link-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                        </svg>
+                    </span>
+                    <div class="link-title">YT Music</div>
+                    <div class="link-desc">streaming</div>
+                </a>
+                <a href="https://speedtest.net" class="link-card">
+                    <span class="link-icon">⚡</span>
+                    <div class="link-title">Speedtest</div>
+                    <div class="link-desc">network</div>
+                </a>
+                <a href="https://your-debrid.com" class="link-card">
+                    <span class="link-icon">💨</span>
+                    <div class="link-title">Debrid</div>
+                    <div class="link-desc">download</div>
+                </a>
+                <a href="https://your-admin.com" class="link-card">
+                    <span class="link-icon">⚙️</span>
+                    <div class="link-title">Admin</div>
+                    <div class="link-desc">control</div>
+                </a>
+            </div>
         </div>
     </div>
-    <div class="instructions">type to search</div>
+    <div class="instructions">start typing to search</div>
+
     <script>
         // Clock
         function updateClock() {
@@ -604,90 +490,17 @@
         }
         updateClock();
         setInterval(updateClock, 1000);
-        // Create ULTRA-intense fog machine effect
-        function createFogParticle() {
-            const fogContainer = document.getElementById('fogContainer');
-            
-            // Create different sizes of fog particles including HUGE ones
-            const sizes = ['small', 'medium', 'large', 'xl', 'xxl'];
-            const sizeClass = sizes[Math.floor(Math.random() * sizes.length)];
-            
-            const particle = document.createElement('div');
-            particle.className = `fog-particle ${sizeClass}`;
-            
-            // Much larger size ranges
-            let size;
-            switch(sizeClass) {
-                case 'small':
-                    size = Math.random() * 100 + 80;
-                    break;
-                case 'medium':
-                    size = Math.random() * 150 + 120;
-                    break;
-                case 'large':
-                    size = Math.random() * 250 + 200;
-                    break;
-                case 'xl':
-                    size = Math.random() * 350 + 300;
-                    break;
-                case 'xxl':
-                    size = Math.random() * 500 + 400;
-                    break;
-            }
-            
-            particle.style.width = size + 'px';
-            particle.style.height = size + 'px';
-            particle.style.left = '-500px';
-            particle.style.top = Math.random() * (window.innerHeight + 200) - 100 + 'px';
-            particle.style.animationDelay = Math.random() * 3 + 's';
-            
-            // Variable duration based on size
-            const duration = sizeClass === 'xxl' ? 
-                Math.random() * 6 + 15 : 
-                sizeClass === 'xl' ? 
-                Math.random() * 5 + 12 : 
-                sizeClass === 'large' ? 
-                Math.random() * 4 + 10 : 
-                sizeClass === 'medium' ? 
-                Math.random() * 3 + 8 : 
-                Math.random() * 2 + 6;
-            
-            particle.style.animationDuration = duration + 's';
-            
-            fogContainer.appendChild(particle);
-            
-            // Remove after animation
-            setTimeout(() => {
-                if (particle.parentNode) {
-                    particle.remove();
-                }
-            }, duration * 1000 + 2000);
-        }
-        // Create fog particles EXTREMELY frequently for ultra-dense effect
-        setInterval(createFogParticle, 25);
-        
-        // Massive initial burst of fog
-        for(let i = 0; i < 100; i++) {
-            setTimeout(createFogParticle, i * 10);
-        }
-        
-        // Add periodic burst effects
-        setInterval(() => {
-            for(let i = 0; i < 30; i++) {
-                setTimeout(createFogParticle, i * 5);
-            }
-        }, 3000);
-        
-        // Search functionality with auto-suggestions
+
+        // Search functionality
+        const searchOverlay = document.getElementById('searchOverlay');
         const searchInput = document.getElementById('searchInput');
         const searchSuggestions = document.getElementById('searchSuggestions');
-        const searchBox = document.querySelector('.search-box');
+        const mainContent = document.getElementById('mainContent');
         let currentSuggestionIndex = -1;
         let suggestions = [];
-        let isSearchActive = false;
-        
-        // Common time-related search suggestions
-        const commonSuggestions = [
+
+        // Common search suggestions (you can customize these)
+        const allSuggestions = [
             'what time is it in japan',
             'what time is it in london',
             'what time is it in portland oregon',
@@ -696,39 +509,169 @@
             'what time is it in california',
             'what time is it in paris',
             'what time is it in tokyo',
+            'weather today',
+            'how to install linux',
+            'check my network speed',
+            'translate hello to spanish',
+            'convert 100 usd to eur'
         ];
-        function activateSearch() {
-            if (!isSearchActive) {
-                isSearchActive = true;
-                searchBox.classList.add('active');
-                searchInput.classList.add('active');
+
+        // Show search overlay when typing
+        document.addEventListener('keydown', (event) => {
+            // Don't trigger on special keys
+            if (event.ctrlKey || event.altKey || event.metaKey) return;
+            if (event.key === 'Tab' || event.key === 'Shift' || event.key === 'Control' || event.key === 'Alt') return;
+            if (event.key === 'F3' || event.key === 'F5' || event.key === 'F12') return;
+            
+            // If not already in search mode, show overlay
+            if (!searchOverlay.classList.contains('active')) {
+                showSearchOverlay();
+                // Pass the key to the input
+                if (event.key.length === 1) {
+                    setTimeout(() => {
+                        searchInput.value = event.key;
+                        searchInput.dispatchEvent(new Event('input'));
+                    }, 100);
+                }
             }
-        }
-        function deactivateSearch() {
-            if (isSearchActive && searchInput.value.trim() === '') {
-                isSearchActive = false;
-                searchBox.classList.remove('active');
-                searchInput.classList.remove('active');
+        });
+
+        // Handle escape key
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                hideSearchOverlay();
+            }
+        });
+
+        // Handle enter key and suggestions navigation
+        searchInput.addEventListener('keydown', (event) => {
+            const suggestionItems = searchSuggestions.querySelectorAll('.suggestion-item');
+            
+            if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                currentSuggestionIndex = Math.min(currentSuggestionIndex + 1, suggestionItems.length - 1);
+                updateSuggestionHighlight();
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                currentSuggestionIndex = Math.max(currentSuggestionIndex - 1, -1);
+                updateSuggestionHighlight();
+            } else if (event.key === 'Tab') {
+                if (currentSuggestionIndex >= 0 && suggestionItems[currentSuggestionIndex]) {
+                    event.preventDefault();
+                    selectSuggestion(suggestionItems[currentSuggestionIndex].textContent);
+                }
+            } else if (event.key === 'Enter') {
+                if (currentSuggestionIndex >= 0 && suggestionItems[currentSuggestionIndex]) {
+                    selectSuggestion(suggestionItems[currentSuggestionIndex].textContent);
+                } else {
+                    performSearch(searchInput.value);
+                }
+            }
+        });
+
+        // Handle search input changes
+        searchInput.addEventListener('input', (event) => {
+            const query = event.target.value;
+            
+            if (query.length === 0) {
                 hideSuggestions();
+            } else {
+                showSuggestions(query);
             }
+        });
+
+        // Hide search overlay when clicking outside
+        searchOverlay.addEventListener('click', (event) => {
+            if (event.target === searchOverlay) {
+                hideSearchOverlay();
+            }
+        });
+
+        function showSearchOverlay() {
+            searchOverlay.classList.add('active');
+            mainContent.classList.add('search-mode');
+            setTimeout(() => {
+                searchInput.focus();
+            }, 300);
         }
+
+        function hideSearchOverlay() {
+            searchOverlay.classList.remove('active');
+            mainContent.classList.remove('search-mode');
+            searchInput.value = '';
+            hideSuggestions();
+            currentSuggestionIndex = -1;
+        }
+
         function showSuggestions(query) {
             if (query.length === 0) {
                 hideSuggestions();
                 return;
             }
+
             // Filter suggestions based on query
-            suggestions = commonSuggestions.filter(suggestion => 
+            suggestions = allSuggestions.filter(suggestion => 
                 suggestion.toLowerCase().includes(query.toLowerCase())
             );
+
             if (suggestions.length === 0) {
                 hideSuggestions();
                 return;
             }
+
             searchSuggestions.innerHTML = '';
             suggestions.forEach((suggestion, index) => {
                 const suggestionElement = document.createElement('div');
                 suggestionElement.className = 'suggestion-item';
                 suggestionElement.textContent = suggestion;
                 suggestionElement.addEventListener('click', () => {
-                    
+                    selectSuggestion(suggestion);
+                });
+                searchSuggestions.appendChild(suggestionElement);
+            });
+
+            showSuggestionsBox();
+            currentSuggestionIndex = -1;
+        }
+
+        function hideSuggestions() {
+            searchSuggestions.classList.remove('active');
+        }
+
+        function showSuggestionsBox() {
+            searchSuggestions.classList.add('active');
+        }
+
+        function updateSuggestionHighlight() {
+            const suggestionItems = searchSuggestions.querySelectorAll('.suggestion-item');
+            suggestionItems.forEach((item, index) => {
+                item.classList.toggle('highlighted', index === currentSuggestionIndex);
+            });
+        }
+
+        function selectSuggestion(suggestion) {
+            searchInput.value = suggestion;
+            hideSuggestions();
+            performSearch(suggestion);
+        }
+
+        function performSearch(query) {
+            if (query.trim()) {
+                // You can customize this to use different search engines
+                const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                window.open(searchUrl, '_blank');
+                hideSearchOverlay();
+            }
+        }
+
+        // Prevent accidental page navigation when typing
+        window.addEventListener('keydown', (event) => {
+            // Prevent browser shortcuts that might interfere
+            if (event.key === 'F3' || (event.ctrlKey && event.key === 'f')) {
+                event.preventDefault();
+                showSearchOverlay();
+            }
+        });
+    </script>
+</body>
+</html>
