@@ -437,20 +437,20 @@
     </div>
     <div class="fog-overlay"></div>
 
+    <!-- Search Box at the top -->
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="what time is it">
+            <div class="search-suggestions" id="searchSuggestions"></div>
+        </div>
+    </div>
+
     <div class="container">
         <header>
             <h1>chooch.net</h1>
             <div class="subtitle">digital hub</div>
             <div class="clock" id="clock"></div>
         </header>
-
-        <!-- Search Box -->
-        <div class="search-container">
-            <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="what time is it">
-                <div class="search-suggestions" id="searchSuggestions"></div>
-            </div>
-        </div>
 
         <div class="links-grid">
             <a href="https://tutanota.com" class="link-card">
@@ -728,6 +728,7 @@
         }
 
         function performSearch(query) {
+            // Ensure we use your original Startpage query
             const searchUrl = `https://www.startpage.com/sp/search?query=${encodeURIComponent(query)}&abp=1&t=night&lui=english&cat=web&abd=1&prfe=bfc85c1d885357c455065cb1ddcee0a65c66627199470e854d8cf578fa2f6ca0deea4cb4fa181162bce2f096d76df7fe86753b93f749e81e69e6c0904008c2923dd5902389bf3777806c92e759`;
             window.location.href = searchUrl;
         }
