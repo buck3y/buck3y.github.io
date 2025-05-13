@@ -555,27 +555,11 @@
             <div class="hub-section">
                 <h2 class="section-title">Utilities</h2>
                 <div class="section-grid">
-                    <a href="https://zemail.me/" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">📨</div>
-                        <div class="card-title">Temp Mail</div>
-                        <div class="card-desc">disposable</div>
-                    </a>
                     <a href="https://your-notebook.com" class="hub-card">
                         <div class="card-status"></div>
                         <div class="card-icon">📝</div>
                         <div class="card-title">Notebook</div>
                         <div class="card-desc">notes</div>
-                    </a>
-                    <a href="https://music.youtube.com" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">
-                            <svg width="35" height="35" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
-                            </svg>
-                        </div>
-                        <div class="card-title">YT Music</div>
-                        <div class="card-desc">streaming</div>
                     </a>
                     <a href="https://real-debrid.com/speedtest" class="hub-card">
                         <div class="card-status"></div>
@@ -594,6 +578,18 @@
                         <div class="card-icon">⚙️</div>
                         <div class="card-title">Admin</div>
                         <div class="card-desc">control</div>
+                    </a>
+                    <a href="https://your-soulseek.com" class="hub-card">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🔍</div>
+                        <div class="card-title">Soulseek</div>
+                        <div class="card-desc">p2p</div>
+                    </a>
+                    <a href="https://weather.com" class="hub-card">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🌤️</div>
+                        <div class="card-title">Weather</div>
+                        <div class="card-desc">forecast</div>
                     </a>
                 </div>
             </div>
@@ -644,7 +640,7 @@
     </div>
     
     <div class="instructions">
-        Type to search • ESC to close • NEXUS ready
+        Type to search • ESC to close • Click 💨 for smoke • NEXUS ready 🌿
     </div>
     
     <script>
@@ -662,10 +658,104 @@
                 month: 'short',
                 day: 'numeric'
             });
-            document.getElementById('clock').textContent = `${timeString} :: ${dateString} - STATUS: ONLINE`;
+            
+            // Special 4:20 message
+            const time420 = timeString === '04:20:00' || timeString === '16:20:00';
+            const statusText = time420 ? '420 TIME! 🌿💨' : 'STATUS: ONLINE';
+            
+            document.getElementById('clock').textContent = `${timeString} :: ${dateString} - ${statusText}`;
+            
+            if (time420) {
+                createSmokeEffect();
+                showNotification('It\'s 420 time! 🌿💨');
+            }
         }
         updateClock();
         setInterval(updateClock, 1000);
+        
+        // Create vapor particles
+        function createVaporParticles() {
+            const container = document.getElementById('vaporParticles');
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'vapor-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        
+        // Create smoke effect on demand
+        function createSmokeEffect() {
+            const body = document.body;
+            const smoke = document.createElement('div');
+            smoke.style.position = 'fixed';
+            smoke.style.top = '50%';
+            smoke.style.left = '50%';
+            smoke.style.width = '100px';
+            smoke.style.height = '100px';
+            smoke.style.background = 'radial-gradient(circle, rgba(200, 255, 200, 0.6) 0%, transparent 70%)';
+            smoke.style.borderRadius = '50%';
+            smoke.style.filter = 'blur(30px)';
+            smoke.style.pointerEvents = 'none';
+            smoke.style.animation = 'smokeRise 3s ease-out forwards';
+            smoke.style.transform = 'translate(-50%, -50%)';
+            smoke.style.zIndex = '1000';
+            
+            // Add CSS for smoke animation if not already added
+            if (!document.getElementById('smokeCSS')) {
+                const style = document.createElement('style');
+                style.id = 'smokeCSS';
+                style.textContent = `
+                    @keyframes smokeRise {
+                        0% {
+                            transform: translate(-50%, -50%) scale(0.1);
+                            opacity: 0.8;
+                        }
+                        50% {
+                            transform: translate(-50%, -60%) scale(1);
+                            opacity: 0.4;
+                        }
+                        100% {
+                            transform: translate(-50%, -200%) scale(2);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            body.appendChild(smoke);
+            
+            // Remove after animation
+            setTimeout(() => smoke.remove(), 3000);
+            
+            // Add multiple smaller smoke puffs
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const puff = document.createElement('div');
+                    puff.style.position = 'fixed';
+                    puff.style.top = '50%';
+                    puff.style.left = (50 + Math.random() * 20 - 10) + '%';
+                    puff.style.width = '50px';
+                    puff.style.height = '50px';
+                    puff.style.background = 'radial-gradient(circle, rgba(150, 200, 150, 0.3) 0%, transparent 70%)';
+                    puff.style.borderRadius = '50%';
+                    puff.style.filter = 'blur(15px)';
+                    puff.style.pointerEvents = 'none';
+                    puff.style.animation = 'smokeRise 2s ease-out forwards';
+                    puff.style.transform = 'translate(-50%, -50%)';
+                    puff.style.zIndex = '1000';
+                    
+                    body.appendChild(puff);
+                    setTimeout(() => puff.remove(), 2000);
+                }, i * 300);
+            }
+            
+            showNotification('💨 *puff puff pass* 💨');
+        }
         
         // Search functionality
         const searchOverlay = document.getElementById('searchOverlay');
@@ -682,7 +772,7 @@
         function showSearch() {
             searchOverlay.classList.add('active');
             setTimeout(() => searchInput.focus(), 300);
-            showNotification('Search activated');
+            showNotification('Search activated 🔍');
         }
         
         function hideSearch() {
@@ -707,9 +797,14 @@
             if (e.key === 'Escape' && searchOverlay.classList.contains('active')) {
                 hideSearch();
             }
+            
+            // Easter egg: Press 'S' for smoke
+            if (e.key.toLowerCase() === 's' && !searchOverlay.classList.contains('active')) {
+                createSmokeEffect();
+            }
         });
         
-        // Search functionality
+        // Enhanced search with 420-themed shortcuts
         const shortcuts = {
             'g': 'https://github.com',
             'gmail': 'https://gmail.com',
@@ -720,22 +815,43 @@
             'claude': 'https://claude.ai',
             'gpt': 'https://chat.openai.com',
             'perplexity': 'https://www.perplexity.ai',
-            'gemini': 'https://gemini.google.com'
+            'gemini': 'https://gemini.google.com',
+            'netflix': 'https://netflix.com',
+            'n': 'https://netflix.com',
+            'discord': 'https://discord.com',
+            'd': 'https://discord.com',
+            // 420-themed shortcuts
+            '420': function() { 
+                createSmokeEffect(); 
+                showNotification('Smoke \'em if you got \'em! 🌿'); 
+            },
+            'smoke': function() { 
+                createSmokeEffect(); 
+                showNotification('*puff* 💨'); 
+            },
+            'weed': 'https://www.leafly.com',
+            'blaze': function() { 
+                createSmokeEffect();
+                showNotification('Blaze it! 🔥💨');
+            }
         };
         
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const query = searchInput.value.toLowerCase().trim();
                 
-                if (shortcuts[query]) {
+                if (typeof shortcuts[query] === 'function') {
+                    shortcuts[query]();
+                    hideSearch();
+                } else if (shortcuts[query]) {
                     window.open(shortcuts[query], '_blank');
                     hideSearch();
-                    showNotification(`Opening ${query}`);
+                    showNotification(`Opening ${query} 💨`);
                 } else {
                     // Default search
                     window.open(`https://www.startpage.com/sp/search?query=${encodeURIComponent(searchInput.value)}`, '_blank');
                     hideSearch();
-                    showNotification('Searching...');
+                    showNotification('Searching... 🔍');
                 }
             }
         });
@@ -758,10 +874,11 @@
             }, 3000);
         }
         
-        // Initialize
-        showNotification('NEXUS online');
+        // Initialize effects
+        createVaporParticles();
+        showNotification('NEXUS online 🌿');
         
-        // Add some interactivity
+        // Add enhanced hover effects with smoke
         document.querySelectorAll('.hub-card').forEach(card => {
             card.addEventListener('mouseenter', () => {
                 card.style.animation = 'float 2s ease-in-out infinite';
@@ -770,10 +887,65 @@
             card.addEventListener('mouseleave', () => {
                 card.style.animation = '';
             });
+            
+            // Random smoke on hover (10% chance)
+            card.addEventListener('mouseenter', () => {
+                if (Math.random() < 0.1) {
+                    createMiniSmoke(card);
+                }
+            });
         });
         
-        console.log('%c NEXUS INITIALIZED ', 'background: #00ff00; color: #000000; font-size: 14px; font-weight: bold;');
-        console.log('%c System online - Type to search ', 'color: #00ff00; font-size: 12px;');
+        // Create mini smoke effect on card
+        function createMiniSmoke(element) {
+            const rect = element.getBoundingClientRect();
+            const smoke = document.createElement('div');
+            smoke.style.position = 'absolute';
+            smoke.style.top = rect.top + 'px';
+            smoke.style.left = rect.left + rect.width/2 + 'px';
+            smoke.style.width = '30px';
+            smoke.style.height = '30px';
+            smoke.style.background = 'radial-gradient(circle, rgba(100, 200, 100, 0.4) 0%, transparent 70%)';
+            smoke.style.borderRadius = '50%';
+            smoke.style.filter = 'blur(10px)';
+            smoke.style.pointerEvents = 'none';
+            smoke.style.animation = 'smokeRise 1s ease-out forwards';
+            smoke.style.transform = 'translate(-50%, -50%)';
+            smoke.style.zIndex = '1001';
+            
+            document.body.appendChild(smoke);
+            setTimeout(() => smoke.remove(), 1000);
+        }
+        
+        // Console easter eggs
+        console.log('%c 🌿 NEXUS INITIALIZED 💨 ', 'background: #00ff00; color: #000000; font-size: 14px; font-weight: bold;');
+        console.log('%c System online - Smoke \'em if you got \'em! 🌿 ', 'color: #00ff00; font-size: 12px;');
+        console.log('%c Type "420" or "smoke" in search for special effects 💨 ', 'color: #00ffff; font-size: 12px;');
+        console.log('%c Press "S" for instant smoke 🚬 ', 'color: #ffff00; font-size: 12px;');
+        
+        // Random ambient smoke every 30 seconds
+        setInterval(() => {
+            if (Math.random() < 0.3) {
+                setTimeout(() => createSmokeEffect(), Math.random() * 5000);
+            }
+        }, 30000);
+        
+        // Special 420 time check every minute
+        setInterval(() => {
+            const now = new Date();
+            const time = now.toLocaleTimeString('en-US', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            if (time === '04:20' || time === '16:20') {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => createSmokeEffect(), i * 1000);
+                }
+                showNotification('🌿 4:20 BLAZE IT! 💨🔥');
+            }
+        }, 60000);
     </script>
 </body>
 </html>
