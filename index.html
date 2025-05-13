@@ -3,72 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS • Command Center</title>
+    <title>chooch.net - NEXUS</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --color-primary: #00ff41;
-            --color-secondary: #00ffff;
-            --color-background: #0a0a0a;
-            --color-background-dark: #000000;
-            --color-background-card: rgba(0, 20, 0, 0.8);
-            --color-text: #ffffff;
-            --color-text-dim: #888888;
-            --color-text-highlight: #70ff00;
-            --color-border: rgba(0, 255, 65, 0.3);
-            --color-border-hover: var(--color-primary);
-            --color-glow: rgba(0, 255, 65, 0.1);
-            --font-family: 'JetBrains Mono', monospace;
-            --font-size-base: clamp(14px, 1.2vw, 16px);
-            --font-size-large: clamp(18px, 2vw, 24px);
-            --font-size-title: clamp(24px, 3vw, 36px);
-            --space-small: 0.5rem;
-            --space-medium: 1rem;
-            --space-large: 2rem;
-            --border-radius: 10px;
-            --transition-speed: 0.2s;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
+        :root {
+            --primary-green: #00ff41;
+            --primary-cyan: #00ffff;
+            --bg-dark: #0a0a0a;
+            --bg-darker: #000000;
+        }
+        
         body {
-            font-family: var(--font-family);
-            font-size: var(--font-size-base);
-            background: var(--color-background);
-            color: var(--color-text);
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-dark);
+            color: #ffffff;
             min-height: 100vh;
             overflow-x: hidden;
         }
-
-        /* Matrix rain effect */
-        .matrix-effect {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -2;
-            opacity: 0.05;
+        
+        /* Simplified animations for GitHub Pages */
+        .float {
+            animation: float 6s ease-in-out infinite;
         }
-
-        .matrix-rain {
-            position: absolute;
-            font-size: 0.8rem;
-            color: var(--color-primary);
-            animation: matrixFall linear infinite;
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
-
-        @keyframes matrixFall {
-            0% { transform: translateY(-100vh); }
-            100% { transform: translateY(100vh); }
+        
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
         }
-
-        /* Fog effect */
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px var(--primary-green); }
+            to { text-shadow: 0 0 30px var(--primary-green), 0 0 40px var(--primary-green); }
+        }
+        
+        /* Simplified fog effect */
         .fog {
             position: fixed;
             top: 0;
@@ -76,153 +54,170 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(ellipse at top, rgba(100, 100, 100, 0.03), transparent),
-                radial-gradient(ellipse at bottom, rgba(50, 50, 50, 0.02), transparent);
+                radial-gradient(ellipse at top, rgba(100, 100, 100, 0.1), transparent),
+                radial-gradient(ellipse at bottom, rgba(50, 50, 50, 0.05), transparent);
             z-index: -1;
-            animation: fogMove 30s linear infinite;
+            animation: fogMove 20s linear infinite;
         }
-
+        
         @keyframes fogMove {
-            0% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            100% { transform: translateX(-10px); }
+            0% { transform: translateX(-20px); }
+            50% { transform: translateX(20px); }
+            100% { transform: translateX(-20px); }
         }
-
-        /* Header */
-        .header {
-            text-align: center;
-            padding: var(--space-large) var(--space-medium);
-            margin-bottom: var(--space-large);
-        }
-
-        .title {
-            font-size: var(--font-size-title);
-            color: var(--color-primary);
-            font-weight: 700;
-            margin-bottom: var(--space-medium);
-            text-shadow: 0 0 20px var(--color-primary);
-            animation: glow 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { text-shadow: 0 0 20px var(--color-primary); }
-            to { text-shadow: 0 0 30px var(--color-primary), 0 0 40px var(--color-primary); }
-        }
-
-        .subtitle {
-            color: var(--color-secondary);
-            font-size: var(--font-size-base);
-            opacity: 0.8;
-            margin-bottom: var(--space-small);
-        }
-
-        .clock {
-            color: var(--color-text-highlight);
-            font-size: 0.9rem;
-            font-weight: 400;
-        }
-
-        /* Layout modes */
-        .view-toggle {
+        
+        /* Simple matrix effect */
+        .matrix::before {
+            content: '01010101010101010101010101010101';
             position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-            display: flex;
-            gap: var(--space-small);
+            top: 0;
+            left: 0;
+            color: rgba(0, 255, 65, 0.1);
+            font-size: 14px;
+            white-space: pre;
+            animation: matrix-fall 20s linear infinite;
+            z-index: -2;
+            pointer-events: none;
         }
-
-        .toggle-btn {
-            width: 40px;
-            height: 40px;
-            background: var(--color-background-dark);
-            border: 1px solid var(--color-border);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-            color: var(--color-primary);
+        
+        @keyframes matrix-fall {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
         }
-
-        .toggle-btn:hover,
-        .toggle-btn.active {
-            background: var(--color-primary);
-            color: var(--color-background-dark);
-            transform: scale(1.1);
+        
+        /* Terminal header */
+        .terminal-header {
+            background: var(--bg-darker);
+            border: 2px solid var(--primary-green);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
         }
-
-        /* Grid view */
-        .grid-view {
+        
+        .terminal-title {
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .terminal-subtitle {
+            color: var(--primary-cyan);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .terminal-time {
+            color: var(--primary-green);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* Grid layout - GitHub Pages compatible */
+        .hub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 var(--space-medium);
+            padding: 0 1rem;
         }
-
-        .section {
-            margin-bottom: var(--space-large);
+        
+        @media (min-width: 1200px) {
+            .hub-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
         }
-
+        
+        @media (max-width: 768px) {
+            .hub-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hub-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+        }
+        
+        /* Hub sections */
+        .hub-section {
+            grid-column: span 6;
+            margin-bottom: 2rem;
+        }
+        
         .section-title {
-            color: var(--color-primary);
+            color: var(--primary-green);
             font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: var(--space-medium);
+            margin-bottom: 1rem;
             text-align: center;
             position: relative;
         }
-
+        
         .section-title::before,
         .section-title::after {
             content: '==';
             position: absolute;
             top: 0;
-            color: var(--color-secondary);
+            color: var(--primary-cyan);
         }
-
-        .section-title::before { left: -3rem; }
-        .section-title::after { right: -3rem; }
-
+        
+        .section-title::before {
+            left: -3rem;
+        }
+        
+        .section-title::after {
+            right: -3rem;
+        }
+        
         .section-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-medium);
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.2rem;
         }
-
+        
         @media (min-width: 1200px) {
             .section-grid {
                 grid-template-columns: repeat(6, 1fr);
             }
         }
-
+        
+        /* Hub cards */
         .hub-card {
-            background: var(--color-background-card);
-            border: 1px solid var(--color-border);
-            border-radius: var(--border-radius);
-            padding: var(--space-medium);
+            background: rgba(0, 20, 0, 0.8);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
             text-decoration: none;
-            color: var(--color-text);
-            transition: all var(--transition-speed);
+            color: #ffffff;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            min-height: 140px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: var(--space-small);
-            min-height: 120px;
-            position: relative;
-            overflow: hidden;
+            gap: 0.8rem;
             backdrop-filter: blur(5px);
         }
-
+        
         .hub-card:hover {
-            border-color: var(--color-border-hover);
-            background: var(--color-glow);
-            transform: translateY(-3px);
-            box-shadow: 0 3px 15px var(--color-glow);
+            border-color: var(--primary-green);
+            background: rgba(0, 255, 65, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 255, 65, 0.3);
         }
-
+        
         .hub-card::before {
             content: '';
             position: absolute;
@@ -230,30 +225,37 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, var(--color-glow), transparent);
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
             transition: left 0.5s;
         }
-
+        
         .hub-card:hover::before {
             left: 100%;
         }
-
+        
         .card-icon {
-            font-size: 2rem;
-            margin-bottom: var(--space-small);
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            margin-bottom: 0.5rem;
         }
-
+        
         .card-title {
             font-size: 0.9rem;
             font-weight: 600;
-            color: var(--color-primary);
+            color: var(--primary-green);
+            margin-bottom: 0.3rem;
         }
-
+        
         .card-desc {
             font-size: 0.7rem;
             opacity: 0.7;
+            color: #ffffff;
         }
-
+        
         .card-status {
             position: absolute;
             top: 10px;
@@ -261,74 +263,39 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--color-primary);
-            box-shadow: 0 0 10px var(--color-primary);
-            animation: pulse 3s infinite;
+            background: var(--primary-green);
+            box-shadow: 0 0 10px var(--primary-green);
+            animation: pulse 2s infinite;
         }
-
+        
         @keyframes pulse {
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.2); opacity: 0.7; }
             100% { transform: scale(1); opacity: 1; }
         }
-
-        /* Command view */
-        .command-view {
-            display: none;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 0 var(--space-medium);
+        
+        /* Color coding for different hubs */
+        .hub-ai .hub-card:hover {
+            border-color: #8040ff;
+            box-shadow: 0 5px 20px rgba(128, 64, 255, 0.3);
         }
-
-        .command-view.active {
-            display: block;
+        
+        .hub-security .hub-card:hover {
+            border-color: #ff0040;
+            box-shadow: 0 5px 20px rgba(255, 0, 64, 0.3);
         }
-
-        .command-list {
-            list-style: none;
-            padding: var(--space-small);
-            background: var(--color-background-dark);
-            border: 1px solid var(--color-border);
-            border-radius: var(--border-radius);
-            backdrop-filter: blur(5px);
+        
+        .hub-dev .hub-card:hover {
+            border-color: #4080ff;
+            box-shadow: 0 5px 20px rgba(64, 128, 255, 0.3);
         }
-
-        .command-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-medium);
-            padding: var(--space-small);
-            margin-bottom: var(--space-small);
-            text-decoration: none;
-            color: var(--color-text);
-            transition: all var(--transition-speed);
-            border-radius: 5px;
+        
+        .hub-monitoring .hub-card:hover {
+            border-color: #ff8000;
+            box-shadow: 0 5px 20px rgba(255, 128, 0, 0.3);
         }
-
-        .command-item:hover {
-            background: var(--color-glow);
-            color: var(--color-primary);
-            transform: translateX(5px);
-        }
-
-        .command-key {
-            color: var(--color-text-highlight);
-            font-weight: 600;
-            min-width: 4ch;
-            text-align: center;
-        }
-
-        .command-name {
-            flex: 1;
-            color: var(--color-text);
-            transition: color var(--transition-speed);
-        }
-
-        .command-item:hover .command-name {
-            color: var(--color-primary);
-        }
-
-        /* Search functionality */
+        
+        /* Search overlay */
         .search-overlay {
             position: fixed;
             top: 0;
@@ -342,480 +309,667 @@
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
-            transition: all var(--transition-speed);
+            transition: all 0.3s ease;
         }
-
+        
         .search-overlay.active {
             opacity: 1;
             visibility: visible;
         }
-
+        
         .search-container {
-            background: var(--color-background-dark);
-            border: 2px solid var(--color-primary);
-            border-radius: var(--border-radius);
-            padding: var(--space-large);
+            background: var(--bg-darker);
+            border: 2px solid var(--primary-green);
+            border-radius: 15px;
+            padding: 2rem;
             width: 90%;
             max-width: 600px;
-            box-shadow: 0 0 30px var(--color-glow);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
         }
-
-        .search-title {
-            text-align: center;
-            color: var(--color-primary);
-            font-size: 1.2rem;
-            margin-bottom: var(--space-medium);
-        }
-
+        
         .search-box {
             display: flex;
-            background: var(--color-glow);
+            background: rgba(0, 255, 65, 0.1);
             border-radius: 25px;
             padding: 15px;
-            border: 1px solid var(--color-border-hover);
+            border: 1px solid rgba(0, 255, 65, 0.5);
         }
-
+        
         .search-input {
             flex: 1;
             background: transparent;
             border: none;
             outline: none;
-            color: var(--color-primary);
+            color: var(--primary-green);
             font-size: 1.1rem;
-            font-family: var(--font-family);
+            font-family: 'JetBrains Mono', monospace;
         }
-
+        
         .search-input::placeholder {
-            color: var(--color-text-dim);
+            color: rgba(0, 255, 65, 0.5);
         }
-
-        .search-suggestions {
-            margin-top: var(--space-medium);
-        }
-
-        .suggestion {
-            padding: var(--space-small);
-            color: var(--color-text);
-            cursor: pointer;
-            border-radius: 5px;
-            transition: all var(--transition-speed);
-        }
-
-        .suggestion:hover {
-            background: var(--color-glow);
-            color: var(--color-primary);
-        }
-
+        
         /* Instructions */
         .instructions {
             position: fixed;
-            bottom: var(--space-medium);
+            bottom: 1rem;
             left: 50%;
             transform: translateX(-50%);
-            color: var(--color-text-dim);
+            color: var(--primary-green);
             font-size: 0.8rem;
+            opacity: 0.7;
             text-align: center;
         }
-
-        /* Special effects */
-        .smoke-effect {
+        
+        /* Quick access */
+        .quick-access {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(200, 255, 200, 0.6) 0%, transparent 70%);
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .quick-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--primary-green);
             border-radius: 50%;
-            filter: blur(30px);
-            pointer-events: none;
-            animation: smokeRise 3s ease-out forwards;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--primary-green);
+            font-size: 1.2rem;
+            user-select: none;
         }
-
-        @keyframes smokeRise {
-            0% {
-                transform: translate(-50%, -50%) scale(0.1);
-                opacity: 0.8;
-            }
-            50% {
-                transform: translate(-50%, -60%) scale(1);
-                opacity: 0.4;
-            }
-            100% {
-                transform: translate(-50%, -200%) scale(2);
-                opacity: 0;
-            }
+        
+        .quick-btn:hover {
+            background: var(--primary-green);
+            color: black;
+            transform: scale(1.1);
         }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .section-grid {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            }
-            
-            .section-title::before,
-            .section-title::after {
-                display: none;
-            }
-            
-            .hub-card {
-                min-height: 100px;
-                padding: var(--space-small);
-            }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 80px;
+            background: var(--bg-darker);
+            border: 1px solid var(--primary-green);
+            border-radius: 8px;
+            padding: 15px;
+            color: var(--primary-green);
+            font-size: 0.8rem;
+            max-width: 250px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 200;
         }
-
-        /* Animation performance */
-        @media (prefers-reduced-motion: reduce) {
-            .glow,
-            .fog,
-            .matrix-rain,
-            .pulse {
-                animation: none;
-            }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        /* Fix viewport issues */
+        html {
+            height: 100%;
+        }
+        
+        /* Ensure content is visible */
+        .matrix {
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
-<body>
-    <!-- Matrix rain effect -->
-    <div class="matrix-effect" id="matrixEffect"></div>
-    
-    <!-- Fog effect -->
+<body class="matrix">
+    <!-- Background effects -->
     <div class="fog"></div>
     
-    <!-- View toggle controls -->
-    <div class="view-toggle">
-        <div class="toggle-btn active" id="gridToggle" title="Grid View">⊞</div>
-        <div class="toggle-btn" id="commandToggle" title="Command View">⌘</div>
-        <div class="toggle-btn" id="searchToggle" title="Search">🔍</div>
-    </div>
-    
-    <!-- Header -->
-    <header class="header">
-        <h1 class="title">NEXUS</h1>
-        <div class="subtitle">[ DIGITAL COMMAND CENTER ]</div>
-        <div class="clock" id="clock"></div>
-    </header>
-    
-    <!-- Grid View -->
-    <div class="grid-view active" id="gridView">
-        <!-- Email & Communication -->
-        <section class="section">
-            <h2 class="section-title">Email & Communications</h2>
-            <div class="section-grid">
-                <a href="https://mail.tutanota.com" class="hub-card" target="_blank">
-                    <div class="card-status"></div>
-                    <div class="card-icon">📬</div>
-                    <div class="card-title">Tutanota</div>
-                    <div class="card-desc">secure mail</div>
-                </a>
-                <a href="https://zemail.me/" class="hub-card" target="_blank">
-                    <div class="card-status"></div>
-                    <div class="card-icon">📧</div>
-                    <div class="card-title">Temp Mail</div>
-                    <div class="card-desc">disposable mail</div>
-                </a>
-                <a href="https://webmail.disroot.org/" class="hub-card" target="_blank">
-                    <div class="card-status"></div>
-                    <div class="card-icon">📮</div>
-                    <div class="card-title">Disroot</div>
-                    <div class="card-desc">privacy mail</div>
-                </a>
-            </div>
-        </section>
-        
-        <!-- File Management & Storage -->
-        <section class="section">
-            <h2 class="section-title">File Management & Storage</h2>
-            <div class="section-grid">
-                <a href="#" class="hub-card">
-                    <div class="card-status"></div>
-                    <div class="card-icon">📂</div>
-                    <div class="card-title">Drive</div>
-                    <div class="card-desc">cloud storage</div>
-                </a>
-                <a href="#" class="hub-card">
-                    <div class="card-status"></div>
-                    <div class="card-icon">🗑️</div>
-                    <div class="card-title">Bin</div>
-                    <div class="card-desc">file storage</div>
-                </a>
-                <a href="#" class="hub-card">
-                    <div class="card-status"></div>
-                    <div class="card-icon">📔</div>
-                    <div class="card-title">Notebook</div>
-                    <div class="card-desc">notes & docs</div>
-                </a>
-                <a href="#" class="hub-card">
-                    <div class="card-status"></div>
-                    <div class="card-icon">📷</div>
-                    <div class="card-title">Photos</div>
-                    <div class="card-desc">image gallery</div>
-                </a>
-            </div>
-        </section>
-        
-        <!-- Media & Entertainment -->
-        <section class="section">
-            <h2 class="section-title">Media & Entertainment</h2>
-            <div class="section-grid">
-                <a href="#" class="hub-card">
-                    <div class="card-status"></div>
-                    <div class="card-icon">📺</div>
-                    <div class="card-title">Jellyfin</div>
-                    <div class="card-desc">media server</div>
-                </a>
-                <a href="#" class="hub-card">
-                    <div class="card-status"></div>
-                    <div class="card-icon">🎵</div>
-                    <div class="card-title">Jukebox</div>
-                    <div class="card-desc">music player</div>
-                </a>
-                <a href="https://music.youtube.com" class="hub-card" target="_blank">
-                    <div class="card-status"></div>
-                    <div class="card-icon">🎼</div>
-                    <div class="card-title">YT Music</div>
-                    <div class="card-desc">streaming</div>
-                </a>
-                <a href="https://youtube.com" class="hub-card" target="_blank">
-                    <div class="card-status"></div>
-                    <div class="card-icon">📻</div>
-                    <div class="card-title">YouTube</div>
-                    <div class="card-desc">videos</div>
-                </a>
-            </div>
-        </section>
-        
-        <!-- P2P & Downloads -->
-        <section class="section">
-            <h2 class="section-title">P2P & Downloads</h2>
-            <div class="section-grid">
-                <a href="#" class="hub-card">
-                    <div class="card-status"></div>
-                    <div class="card-icon">📡</div>
-                    <div class="card-title">Seedbox</div>
-                    <div class="card-desc">torrents</div>
-                </a>
-                <a href="#" class="hub-card">
-                    <div class="card-status"></div>
-                    <div class="card-icon">🎧</div>
-                    <div class="card-title">Soulseek</div>
-                    <div class="card-desc">music sharing</div>
-                </a>
-                <a href="https://real-debrid.com/" class="hub-card" target="_blank">
-                    <div class="card-status"></div>
-                    <div class="card-icon">🗄️</div>
-                    <div class="card-title">Debrid</div>
-                    <div class="card-desc">premium dl</div>
-                </a>
-            </div>
-        </section>
-        
-        <!-- Tools & Utilities -->
-        <section class="section">
-            <h2 class="section-title">Tools & Utilities</h2>
-            <div class="section-grid">
-                <a href="https://real-debrid.com/speedtest" class="hub-card" target="_blank">
-                    <div class="card-status"></div>
-                    <div class="card-icon">🪛</div>
-                    <div class="card-title">Speedtest</div>
-                    <div class="card-desc">network test</div>
-                </a>
-                <a href="https://ipleak.net/" class="hub-card" target="_blank">
-                    <div class="card-status"></div>
-                    <div class="card-icon">📍</div>
-                    <div class="card-title">IP Location</div>
-                    <div class="card-desc">network info</div>
-                </a>
-                <a href="#" class="hub-card">
-                    <div class="card-status"></div>
-                    <div class="card-icon">🛜</div>
-                    <div class="card-title">RSS</div>
-                    <div class="card-desc">news feeds</div>
-                </a>
-                <a href="#" class="hub-card">
-                    <div class="card-status"></div>
-                    <div class="card-icon">🧑‍💻</div>
-                    <div class="card-title">Admin</div>
-                    <div class="card-desc">control panel</div>
-                </a>
-            </div>
-        </section>
-    </div>
-    
-    <!-- Command View -->
-    <div class="command-view" id="commandView">
-        <nav class="command-list" id="commandList">
-            <!-- Commands will be populated by JavaScript -->
-        </nav>
-    </div>
-    
-    <!-- Search Overlay -->
+    <!-- Search overlay -->
     <div class="search-overlay" id="searchOverlay">
         <div class="search-container">
-            <div class="search-title">[ NEXUS SEARCH ]</div>
-            <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="Type to search or command...">
+            <div style="text-align: center; margin-bottom: 1rem;">
+                <div style="color: var(--primary-green); font-size: 1.2rem;">[ NEXUS SEARCH ]</div>
             </div>
-            <div class="search-suggestions" id="searchSuggestions"></div>
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Type to search or enter command..."/>
+            </div>
             <div style="margin-top: 1rem; text-align: center; font-size: 0.8rem; color: #888;">
                 Press Escape to close
             </div>
         </div>
     </div>
     
+    <!-- Quick access -->
+    <div class="quick-access">
+        <div class="quick-btn" id="searchBtn" title="Search">🔍</div>
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        System ready
+    </div>
+    
+    <!-- Main content -->
+    <div class="container">
+        <!-- Header -->
+        <header class="terminal-header">
+            <div class="terminal-title glow">CHOOCH.NET</div>
+            <div class="terminal-subtitle">[ DIGITAL NEXUS - SYSTEM ONLINE ]</div>
+            <div class="terminal-time" id="clock"></div>
+        </header>
+        
+        <!-- Hub sections -->
+        <div class="hub-grid">
+            <!-- Primary Services -->
+            <div class="hub-section">
+                <h2 class="section-title">Primary Services</h2>
+                <div class="section-grid">
+                    <a href="https://mail.tutanota.com/login" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">📧</div>
+                        <div class="card-title">Tutanota</div>
+                        <div class="card-desc">secure mail</div>
+                    </a>
+                    <a href="#" class="hub-card">
+                        <div class="card-status"></div>
+                        <div class="card-icon">📡</div>
+                        <div class="card-title">RSS</div>
+                        <div class="card-desc">feeds</div>
+                    </a>
+                    <a href="#" class="hub-card">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🎬</div>
+                        <div class="card-title">Jellyfin</div>
+                        <div class="card-desc">media</div>
+                    </a>
+                    <a href="#" class="hub-card">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🎵</div>
+                        <div class="card-title">Jukebox</div>
+                        <div class="card-desc">tunes</div>
+                    </a>
+                    <a href="#" class="hub-card">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🌱</div>
+                        <div class="card-title">Seedbox</div>
+                        <div class="card-desc">torrents</div>
+                    </a>
+                    <a href="https://bin.chooch.net" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🗂️</div>
+                        <div class="card-title">Bin</div>
+                        <div class="card-desc">storage</div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Communications -->
+            <div class="hub-section">
+                <h2 class="section-title">Communications</h2>
+                <div class="section-grid">
+                    <a href="https://webmail.disroot.org/" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">📧</div>
+                        <div class="card-title">Disroot</div>
+                        <div class="card-desc">secure mail</div>
+                    </a>
+                    <a href="https://drive.chooch.net" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">☁️</div>
+                        <div class="card-title">Drive</div>
+                        <div class="card-desc">cloud</div>
+                    </a>
+                    <a href="https://youtube.com" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">
+                            <svg width="35" height="35" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                        </div>
+                        <div class="card-title">YouTube</div>
+                        <div class="card-desc">videos</div>
+                    </a>
+                    <a href="https://ipleak.net/" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🌍</div>
+                        <div class="card-title">IP Location</div>
+                        <div class="card-desc">geo</div>
+                    </a>
+                    <a href="#" class="hub-card">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🔍</div>
+                        <div class="card-title">Soulseek</div>
+                        <div class="card-desc">p2p</div>
+                    </a>
+                    <a href="https://photos.google.com" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">📸</div>
+                        <div class="card-title">Photos</div>
+                        <div class="card-desc">gallery</div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Utilities -->
+            <div class="hub-section">
+                <h2 class="section-title">Utilities</h2>
+                <div class="section-grid">
+                    <a href="#" class="hub-card">
+                        <div class="card-status"></div>
+                        <div class="card-icon">📝</div>
+                        <div class="card-title">Notebook</div>
+                        <div class="card-desc">notes</div>
+                    </a>
+                    <a href="https://real-debrid.com/speedtest" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">⚡</div>
+                        <div class="card-title">Speedtest</div>
+                        <div class="card-desc">network</div>
+                    </a>
+                    <a href="https://real-debrid.com/" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">💨</div>
+                        <div class="card-title">Debrid</div>
+                        <div class="card-desc">download</div>
+                    </a>
+                    <a href="#" class="hub-card">
+                        <div class="card-status"></div>
+                        <div class="card-icon">⚙️</div>
+                        <div class="card-title">Admin</div>
+                        <div class="card-desc">control</div>
+                    </a>
+                    <a href="#" class="hub-card">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🔍</div>
+                        <div class="card-title">Soulseek</div>
+                        <div class="card-desc">p2p</div>
+                    </a>
+                    <a href="https://weather.com" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🌤️</div>
+                        <div class="card-title">Weather</div>
+                        <div class="card-desc">forecast</div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- AI Hub -->
+            <div class="hub-section hub-ai">
+                <h2 class="section-title">AI Nexus</h2>
+                <div class="section-grid">
+                    <a href="https://claude.ai" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🤖</div>
+                        <div class="card-title">Claude</div>
+                        <div class="card-desc">AI assistant</div>
+                    </a>
+                    <a href="https://chat.openai.com" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🧠</div>
+                        <div class="card-title">ChatGPT</div>
+                        <div class="card-desc">AI model</div>
+                    </a>
+                    <a href="https://www.perplexity.ai" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🔮</div>
+                        <div class="card-title">Perplexity</div>
+                        <div class="card-desc">AI search</div>
+                    </a>
+                    <a href="https://gemini.google.com" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">💎</div>
+                        <div class="card-title">Gemini</div>
+                        <div class="card-desc">Google AI</div>
+                    </a>
+                    <a href="https://www.anthropic.com/claude" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">⚡</div>
+                        <div class="card-title">Claude API</div>
+                        <div class="card-desc">developer</div>
+                    </a>
+                    <a href="https://huggingface.co" class="hub-card" target="_blank">
+                        <div class="card-status"></div>
+                        <div class="card-icon">🤗</div>
+                        <div class="card-title">HuggingFace</div>
+                        <div class="card-desc">ML models</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="instructions">
-        Type to search • ESC to close • S for smoke • Click icons to toggle views
+        Type to search • ESC to close • Click 💨 for smoke • NEXUS ready 🌿
     </div>
     
     <script>
-        // Configuration
-        const CONFIG = {
-            defaultSearchTemplate: 'https://www.startpage.com/sp/search?query={}&abp=1',
-            matrixColumns: 100,
-            matrixUpdateInterval: 100,
-            clockUpdateInterval: 1000,
-        };
-        
-        // Commands mapping
-        const COMMANDS = new Map([
-            ['📬', { name: 'Tutanota', url: 'https://mail.tutanota.com' }],
-            ['📧', { name: 'Temp Mail', url: 'https://zemail.me/' }],
-            ['📮', { name: 'Disroot', url: 'https://webmail.disroot.org/' }],
-            ['📂', { name: 'Drive', url: '#' }],
-            ['🗑️', { name: 'Bin', url: '#' }],
-            ['📔', { name: 'Notebook', url: '#' }],
-            ['📷', { name: 'Photos', url: '#' }],
-            ['📺', { name: 'Jellyfin', url: '#' }],
-            ['🎵', { name: 'Jukebox', url: '#' }],
-            ['🎼', { name: 'YT Music', url: 'https://music.youtube.com' }],
-            ['📻', { name: 'YouTube', url: 'https://youtube.com' }],
-            ['📡', { name: 'Seedbox', url: '#' }],
-            ['🎧', { name: 'Soulseek', url: '#' }],
-            ['🗄️', { name: 'Debrid', url: 'https://real-debrid.com/' }],
-            ['🪛', { name: 'Speedtest', url: 'https://real-debrid.com/speedtest' }],
-            ['📍', { name: 'IP Location', url: 'https://ipleak.net/' }],
-            ['🛜', { name: 'RSS', url: '#' }],
-            ['🧑‍💻', { name: 'Admin', url: '#' }],
-        ]);
-        
-        class DigitalNexus {
-            constructor() {
-                this.currentView = 'grid';
-                this.searchActive = false;
-                this.init();
-            }
-            
-            init() {
-                this.setupMatrix();
-                this.setupClock();
-                this.setupCommands();
-                this.setupEventListeners();
-                this.checkSpecialTime();
-            }
-            
-            setupMatrix() {
-                const matrixEffect = document.getElementById('matrixEffect');
-                const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZアカサタナハマヤラワ';
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Clock
+            function updateClock() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', { 
+                    hour12: false,
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                const dateString = now.toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric'
+                });
                 
-                for (let i = 0; i < CONFIG.matrixColumns; i++) {
-                    const column = document.createElement('div');
-                    column.className = 'matrix-rain';
-                    column.style.left = `${(i * 100) / CONFIG.matrixColumns}%`;
-                    column.style.animationDuration = `${Math.random() * 3 + 2}s`;
-                    column.style.animationDelay = `${Math.random() * 2}s`;
-                    
-                    const length = Math.floor(Math.random() * 15) + 5;
-                    let text = '';
-                    for (let j = 0; j < length; j++) {
-                        text += chars[Math.floor(Math.random() * chars.length)] + '<br>';
-                    }
-                    column.innerHTML = text;
-                    
-                    matrixEffect.appendChild(column);
+                // Special 4:20 message
+                const time420 = timeString === '04:20:00' || timeString === '16:20:00';
+                const statusText = time420 ? '420 TIME! 🌿💨' : 'STATUS: ONLINE';
+                
+                const clockElement = document.getElementById('clock');
+                if (clockElement) {
+                    clockElement.textContent = `${timeString} :: ${dateString} - ${statusText}`;
+                }
+                
+                if (time420) {
+                    createSmokeEffect();
+                    showNotification('It\'s 420 time! 🌿💨');
                 }
             }
+            updateClock();
+            setInterval(updateClock, 1000);
             
-            setupClock() {
-                const updateClock = () => {
-                    const now = new Date();
-                    const timeString = now.toLocaleTimeString('en-US', {
-                        hour12: false,
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit'
-                    });
-                    const dateString = now.toLocaleDateString('en-US', {
-                        weekday: 'short',
-                        month: 'short',
-                        day: 'numeric'
-                    });
-                    
-                    const is420 = timeString === '04:20:00' || timeString === '16:20:00';
-                    const statusText = is420 ? '420 TIME! 🌿💨' : 'STATUS: ONLINE';
-                    
-                    document.getElementById('clock').textContent = 
-                        `${timeString} :: ${dateString} - ${statusText}`;
-                    
-                    if (is420) {
-                        this.createSmokeEffect();
-                    }
-                };
-                
-                updateClock();
-                setInterval(updateClock, CONFIG.clockUpdateInterval);
+            // Create vapor particles (simplified for GitHub Pages)
+            function createVaporParticles() {
+                // Simplified version that won't cause issues
+                console.log('Vapor particles ready');
             }
             
-            setupCommands() {
-                const commandList = document.getElementById('commandList');
-                commandList.innerHTML = '';
+            // Create smoke effect on demand
+            function createSmokeEffect() {
+                const body = document.body;
+                const smoke = document.createElement('div');
+                smoke.style.position = 'fixed';
+                smoke.style.top = '50%';
+                smoke.style.left = '50%';
+                smoke.style.width = '100px';
+                smoke.style.height = '100px';
+                smoke.style.background = 'radial-gradient(circle, rgba(200, 255, 200, 0.6) 0%, transparent 70%)';
+                smoke.style.borderRadius = '50%';
+                smoke.style.filter = 'blur(30px)';
+                smoke.style.pointerEvents = 'none';
+                smoke.style.animation = 'smokeRise 3s ease-out forwards';
+                smoke.style.transform = 'translate(-50%, -50%)';
+                smoke.style.zIndex = '1000';
                 
-                for (const [key, { name, url }] of COMMANDS.entries()) {
-                    const item = document.createElement('a');
-                    item.className = 'command-item';
-                    item.href = url;
-                    item.innerHTML = `
-                        <span class="command-key">${key}</span>
-                        <span class="command-name">${name}</span>
+                // Add CSS for smoke animation if not already added
+                if (!document.getElementById('smokeCSS')) {
+                    const style = document.createElement('style');
+                    style.id = 'smokeCSS';
+                    style.textContent = `
+                        @keyframes smokeRise {
+                            0% {
+                                transform: translate(-50%, -50%) scale(0.1);
+                                opacity: 0.8;
+                            }
+                            50% {
+                                transform: translate(-50%, -60%) scale(1);
+                                opacity: 0.4;
+                            }
+                            100% {
+                                transform: translate(-50%, -200%) scale(2);
+                                opacity: 0;
+                            }
+                        }
                     `;
-                    commandList.appendChild(item);
+                    document.head.appendChild(style);
+                }
+                
+                body.appendChild(smoke);
+                
+                // Remove after animation
+                setTimeout(() => smoke.remove(), 3000);
+                
+                // Add multiple smaller smoke puffs
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const puff = document.createElement('div');
+                        puff.style.position = 'fixed';
+                        puff.style.top = '50%';
+                        puff.style.left = (50 + Math.random() * 20 - 10) + '%';
+                        puff.style.width = '50px';
+                        puff.style.height = '50px';
+                        puff.style.background = 'radial-gradient(circle, rgba(150, 200, 150, 0.3) 0%, transparent 70%)';
+                        puff.style.borderRadius = '50%';
+                        puff.style.filter = 'blur(15px)';
+                        puff.style.pointerEvents = 'none';
+                        puff.style.animation = 'smokeRise 2s ease-out forwards';
+                        puff.style.transform = 'translate(-50%, -50%)';
+                        puff.style.zIndex = '1000';
+                        
+                        body.appendChild(puff);
+                        setTimeout(() => puff.remove(), 2000);
+                    }, i * 300);
+                }
+                
+                showNotification('💨 *puff puff pass* 💨');
+            }
+            
+            // Make createSmokeEffect available globally
+            window.createSmokeEffect = createSmokeEffect;
+            
+            // Search functionality
+            const searchOverlay = document.getElementById('searchOverlay');
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            
+            function toggleSearch() {
+                if (searchOverlay.classList.contains('active')) {
+                    hideSearch();
+                } else {
+                    showSearch();
                 }
             }
             
-            setupEventListeners() {
-                // View toggles
-                document.getElementById('gridToggle').addEventListener('click', () => this.switchView('grid'));
-                document.getElementById('commandToggle').addEventListener('click', () => this.switchView('command'));
-                document.getElementById('searchToggle').addEventListener('click', () => this.toggleSearch());
+            function showSearch() {
+                searchOverlay.classList.add('active');
+                setTimeout(() => searchInput.focus(), 300);
+                showNotification('Search activated 🔍');
+            }
+            
+            function hideSearch() {
+                searchOverlay.classList.remove('active');
+                searchInput.value = '';
+                showNotification('Search closed');
+            }
+            
+            // Event listeners
+            if (searchBtn) {
+                searchBtn.addEventListener('click', toggleSearch);
+            }
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                // Type to search
+                if (!searchOverlay.classList.contains('active') && 
+                    !e.ctrlKey && !e.altKey && !e.metaKey &&
+                    e.key.length === 1 && 
+                    !e.target.tagName || e.target.tagName.toLowerCase() !== 'input') {
+                    showSearch();
+                    setTimeout(() => {
+                        searchInput.value = e.key;
+                    }, 50);
+                }
                 
-                // Search functionality
-                document.getElementById('searchInput').addEventListener('input', this.handleSearch.bind(this));
-                document.getElementById('searchOverlay').addEventListener('click', (e) => {
-                    if (e.target === e.currentTarget) this.toggleSearch();
-                });
+                // Escape to close
+                if (e.key === 'Escape' && searchOverlay.classList.contains('active')) {
+                    hideSearch();
+                }
                 
-                // Keyboard shortcuts
-                document.addEventListener('keydown', this.handleKeydown.bind(this));
-                
-                // Special smoke effect trigger
-                document.addEventListener('keypress', (e) => {
-                    if (e.key.toLowerCase() === 's' && !this.searchActive) {
-                        this.createSmokeEffect();
+                // Easter egg: Press 'S' for smoke
+                if (e.key.toLowerCase() === 's' && !searchOverlay.classList.contains('active')) {
+                    createSmokeEffect();
+                }
+            });
+            
+            // Enhanced search with 420-themed shortcuts
+            const shortcuts = {
+                'g': 'https://github.com',
+                'gmail': 'https://gmail.com',
+                'y': 'https://youtube.com',
+                'yt': 'https://youtube.com',
+                'reddit': 'https://reddit.com',
+                'r': 'https://reddit.com',
+                'claude': 'https://claude.ai',
+                'gpt': 'https://chat.openai.com',
+                'perplexity': 'https://www.perplexity.ai',
+                'gemini': 'https://gemini.google.com',
+                'netflix': 'https://netflix.com',
+                'n': 'https://netflix.com',
+                'discord': 'https://discord.com',
+                'd': 'https://discord.com',
+                // 420-themed shortcuts
+                '420': function() { 
+                    createSmokeEffect(); 
+                    showNotification('Smoke \'em if you got \'em! 🌿'); 
+                },
+                'smoke': function() { 
+                    createSmokeEffect(); 
+                    showNotification('*puff* 💨'); 
+                },
+                'weed': 'https://www.leafly.com',
+                'blaze': function() { 
+                    createSmokeEffect();
+                    showNotification('Blaze it! 🔥💨');
+                }
+            };
+            
+            if (searchInput) {
+                searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        const query = searchInput.value.toLowerCase().trim();
+                        
+                        if (typeof shortcuts[query] === 'function') {
+                            shortcuts[query]();
+                            hideSearch();
+                        } else if (shortcuts[query]) {
+                            window.open(shortcuts[query], '_blank');
+                            hideSearch();
+                            showNotification(`Opening ${query} 💨`);
+                        } else {
+                            // Default search
+                            window.open(`https://www.startpage.com/sp/search?query=${encodeURIComponent(searchInput.value)}`, '_blank');
+                            hideSearch();
+                            showNotification('Searching... 🔍');
+                        }
                     }
                 });
             }
             
-            switchView(view) {
-                // Update view
-                document.getElementById('gridView').classList.toggle('active', view === 'grid');
-                document.getElementById('commandView').classList.toggle('active', view === 'command');
-                
-                // Update buttons
-                document.getElementById('gridToggle').classList.toggle('active', view === 'grid');
-                document.getElementById('commandToggle').classList.toggle('active', view === 'command');
-                
-                this.currentView = view;
+            // Click outside to close
+            if (searchOverlay) {
+                searchOverlay.addEventListener('click', (e) => {
+                    if (e.target === searchOverlay) {
+                        hideSearch();
+                    }
+                });
             }
             
-            toggleSearch() {
-                this.searchActive = !this
+            // Notification system
+            function showNotification(message) {
+                const notification = document.getElementById('notification');
+                if (notification) {
+                    notification.textContent = message;
+                    notification.classList.add('show');
+                    
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                    }, 3000);
+                }
+            }
+            
+            // Initialize effects
+            createVaporParticles();
+            showNotification('NEXUS online 🌿');
+            
+            // Add enhanced hover effects with smoke
+            document.querySelectorAll('.hub-card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.animation = 'float 2s ease-in-out infinite';
+                    
+                    // Random smoke on hover (10% chance)
+                    if (Math.random() < 0.1) {
+                        createMiniSmoke(card);
+                    }
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.animation = '';
+                });
+            });
+            
+            // Create mini smoke effect on card
+            function createMiniSmoke(element) {
+                const rect = element.getBoundingClientRect();
+                const smoke = document.createElement('div');
+                smoke.style.position = 'absolute';
+                smoke.style.top = rect.top + 'px';
+                smoke.style.left = rect.left + rect.width/2 + 'px';
+                smoke.style.width = '30px';
+                smoke.style.height = '30px';
+                smoke.style.background = 'radial-gradient(circle, rgba(100, 200, 100, 0.4) 0%, transparent 70%)';
+                smoke.style.borderRadius = '50%';
+                smoke.style.filter = 'blur(10px)';
+                smoke.style.pointerEvents = 'none';
+                smoke.style.animation = 'smokeRise 1s ease-out forwards';
+                smoke.style.transform = 'translate(-50%, -50%)';
+                smoke.style.zIndex = '1001';
+                
+                document.body.appendChild(smoke);
+                setTimeout(() => smoke.remove(), 1000);
+            }
+            
+            // Console easter eggs
+            console.log('%c 🌿 NEXUS INITIALIZED 💨 ', 'background: #00ff00; color: #000000; font-size: 14px; font-weight: bold;');
+            console.log('%c System online - Smoke \'em if you got \'em! 🌿 ', 'color: #00ff00; font-size: 12px;');
+            console.log('%c Type "420" or "smoke" in search for special effects 💨 ', 'color: #00ffff; font-size: 12px;');
+            console.log('%c Press "S" for instant smoke 🚬 ', 'color: #ffff00; font-size: 12px;');
+            
+            // Random ambient smoke every 30 seconds
+            setInterval(() => {
+                if (Math.random() < 0.3) {
+                    setTimeout(() => createSmokeEffect(), Math.random() * 5000);
+                }
+            }, 30000);
+            
+            // Special 420 time check every minute
+            setInterval(() => {
+                const now = new Date();
+                const time = now.toLocaleTimeString('en-US', { 
+                    hour12: false,
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                if (time === '04:20' || time === '16:20') {
+                    for (let i = 0; i < 5; i++) {
+                        setTimeout(() => createSmokeEffect(), i * 1000);
+                    }
+                    showNotification('🌿 4:20 BLAZE IT! 💨🔥');
+                }
+            }, 60000);
+        });
+    </script>
+</body>
+</html>
