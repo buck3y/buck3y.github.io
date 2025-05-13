@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chooch.net - Storm Command</title>
+    <title>STORM COMMAND - Unleash the Thunder</title>
     <style>
         * {
             margin: 0;
@@ -11,44 +11,71 @@
             box-sizing: border-box;
         }
 
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
         body {
             min-height: 100vh;
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Orbitron', monospace;
             color: #ffffff;
             overflow-x: hidden;
             position: relative;
+            background: #000;
         }
 
-        /* Animated Storm Background */
+        /* Epic Storm Background */
         .storm-background {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            z-index: -4;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(15, 20, 25, 0.9) 0%, transparent 70%),
+                radial-gradient(circle at 80% 20%, rgba(26, 35, 50, 0.8) 0%, transparent 70%),
+                radial-gradient(circle at 40% 80%, rgba(44, 62, 80, 0.7) 0%, transparent 70%),
+                linear-gradient(45deg, #000000 0%, #0f1419 20%, #1a2332 40%, #2c3e50 60%, #34495e 80%, #2c3e50 100%);
+            background-size: 300% 300%, 250% 250%, 400% 400%, 200% 200%;
+            animation: stormChaos 15s ease-in-out infinite;
+        }
+
+        @keyframes stormChaos {
+            0% { background-position: 0% 0%, 100% 100%, 50% 50%, 0% 0%; transform: rotate(0deg) scale(1); }
+            25% { background-position: 100% 0%, 0% 50%, 0% 100%, 50% 0%; transform: rotate(1deg) scale(1.05); }
+            50% { background-position: 100% 100%, 50% 0%, 100% 0%, 100% 50%; transform: rotate(0deg) scale(1); }
+            75% { background-position: 0% 100%, 100% 0%, 50% 50%, 0% 100%; transform: rotate(-1deg) scale(1.05); }
+            100% { background-position: 0% 0%, 0% 100%, 0% 0%, 0% 0%; transform: rotate(0deg) scale(1); }
+        }
+
+        /* EPIC SMOKE EFFECTS */
+        .smoke-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -3;
-            background: linear-gradient(
-                45deg,
-                #0f1419 0%,
-                #1a2332 25%,
-                #2c3e50 50%,
-                #34495e 75%,
-                #2c3e50 100%
-            );
-            background-size: 400% 400%;
-            animation: stormMove 20s ease infinite;
+            overflow: hidden;
         }
 
-        @keyframes stormMove {
-            0% { background-position: 0% 0%; }
-            25% { background-position: 100% 0%; }
-            50% { background-position: 100% 100%; }
-            75% { background-position: 0% 100%; }
-            100% { background-position: 0% 0%; }
+        .smoke {
+            position: absolute;
+            background: radial-gradient(circle, rgba(100,100,100,0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(3px);
+            opacity: 0;
+            animation: smokeRise 12s infinite ease-out;
         }
 
-        /* Lightning Effects */
-        .lightning {
+        @keyframes smokeRise {
+            0% { transform: translateY(100vh) translateX(0) scale(0.5); opacity: 0; }
+            15% { opacity: 0.6; }
+            85% { opacity: 0.3; }
+            100% { transform: translateY(-20vh) translateX(50px) scale(2); opacity: 0; }
+        }
+
+        /* Insane Lightning */
+        .lightning-container {
             position: fixed;
             width: 100%;
             height: 100%;
@@ -58,119 +85,138 @@
 
         .lightning-strike {
             position: absolute;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), rgba(135,206,235,0.8), transparent);
-            width: 2px;
+            width: 3px;
             height: 100%;
-            animation: lightning 8s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,1), rgba(173,216,230,0.9), rgba(135,206,235,0.8), transparent);
             opacity: 0;
+            filter: drop-shadow(0 0 20px rgba(135,206,235,0.8));
+            animation: megaLightning 6s infinite;
         }
 
-        .lightning-strike:nth-child(1) {
-            left: 20%;
-            animation-delay: 0s;
-        }
+        .lightning-strike:nth-child(1) { left: 15%; animation-delay: 0s; transform: rotate(-2deg); }
+        .lightning-strike:nth-child(2) { left: 45%; animation-delay: 2s; transform: rotate(3deg); }
+        .lightning-strike:nth-child(3) { left: 75%; animation-delay: 4s; transform: rotate(-1deg); }
+        .lightning-strike:nth-child(4) { left: 30%; animation-delay: 1s; transform: rotate(2deg); }
+        .lightning-strike:nth-child(5) { left: 60%; animation-delay: 3s; transform: rotate(-3deg); }
 
-        .lightning-strike:nth-child(2) {
-            left: 60%;
-            animation-delay: 3s;
-            transform: rotate(5deg);
-        }
-
-        .lightning-strike:nth-child(3) {
-            left: 80%;
-            animation-delay: 6s;
-            transform: rotate(-3deg);
-        }
-
-        @keyframes lightning {
-            0%, 95% { opacity: 0; }
-            96% { opacity: 1; box-shadow: 0 0 20px rgba(255,255,255,0.8); }
-            97% { opacity: 0; }
-            98% { opacity: 1; box-shadow: 0 0 50px rgba(135,206,235,0.9); }
+        @keyframes megaLightning {
+            0%, 92% { opacity: 0; transform: scaleY(1); }
+            93% { opacity: 1; box-shadow: 0 0 30px rgba(255,255,255,1), 0 0 60px rgba(135,206,235,0.8), 0 0 90px rgba(173,216,230,0.6); transform: scaleY(1.1); }
+            94% { opacity: 0; }
+            95% { opacity: 1; box-shadow: 0 0 50px rgba(255,255,255,1), 0 0 100px rgba(135,206,235,0.9), 0 0 150px rgba(173,216,230,0.7); transform: scaleY(1.2); }
+            96% { opacity: 0; }
+            97% { opacity: 1; transform: scaleY(1.05); }
             100% { opacity: 0; }
         }
 
-        /* Ocean Waves Overlay */
-        .ocean-overlay {
+        /* Plasma Effects */
+        .plasma-waves {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 60%;
-            z-index: -1;
-            background: rgba(0, 50, 100, 0.1);
-            border-radius: 50% 50% 0 0 / 10% 20% 0 0;
-            animation: oceanWave 15s ease-in-out infinite;
+            height: 50%;
+            z-index: -2;
+            background: 
+                radial-gradient(ellipse at center bottom, rgba(30,144,255,0.2) 0%, transparent 60%),
+                radial-gradient(ellipse at center bottom, rgba(0,191,255,0.1) 0%, transparent 70%);
+            animation: plasmaFlow 10s ease-in-out infinite;
         }
 
-        @keyframes oceanWave {
+        @keyframes plasmaFlow {
             0%, 100% { transform: translateY(0px) scaleX(1); }
-            50% { transform: translateY(-20px) scaleX(1.05); }
+            50% { transform: translateY(-30px) scaleX(1.1); }
         }
 
-        /* Glass morphism container */
         .container {
             position: relative;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 3rem 2rem;
+            padding: 4rem 2rem;
             z-index: 1;
         }
 
-        /* Header with glow effect */
+        /* Epic Header */
         header {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;
             position: relative;
         }
 
         h1 {
             font-size: 4rem;
-            font-weight: 300;
+            font-weight: 900;
             letter-spacing: -2px;
-            text-shadow: 
-                0 0 20px rgba(255,255,255,0.5),
-                0 0 40px rgba(135,206,235,0.3),
-                0 0 60px rgba(135,206,235,0.2);
-            margin-bottom: 0.5rem;
-            background: linear-gradient(45deg, #ffffff, #87ceeb, #b0e0e6);
+            text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(135,206,235,0.6), 0 0 60px rgba(173,216,230,0.4), 0 0 80px rgba(30,144,255,0.3);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff, #87ceeb, #4682b4, #1e90ff);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: textGlow 3s ease-in-out infinite alternate;
+            animation: epicGlow 4s ease-in-out infinite alternate;
+            position: relative;
         }
 
-        @keyframes textGlow {
-            from { filter: brightness(1); }
-            to { filter: brightness(1.2); }
+        h1::before {
+            content: "STORM COMMAND";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(135,206,235,0.2));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: blur(4px);
+            animation: textBlur 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes epicGlow {
+            from { filter: brightness(1) saturate(1); transform: scale(1); }
+            to { filter: brightness(1.3) saturate(1.2); transform: scale(1.02); }
+        }
+
+        @keyframes textBlur {
+            from { filter: blur(4px); }
+            to { filter: blur(8px); }
         }
 
         .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.8;
-            font-weight: 300;
+            font-size: 1.5rem;
+            opacity: 0.9;
+            font-weight: 400;
             color: #e0f4ff;
+            text-shadow: 0 0 20px rgba(135,206,235,0.5);
+            animation: subtitlePulse 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes subtitlePulse {
+            from { opacity: 0.9; }
+            to { opacity: 1; }
         }
 
         .clock {
-            font-size: 1.1rem;
-            opacity: 0.7;
-            margin-top: 1rem;
-            font-family: 'SF Mono', monospace;
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-top: 1.5rem;
+            font-family: 'Orbitron', monospace;
+            color: #4682b4;
+            text-shadow: 0 0 10px rgba(70,130,180,0.6);
         }
 
-        /* Search Box Enhancements */
+        /* Insane Search */
         .search-container {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 90%;
-            max-width: 700px;
+            max-width: 800px;
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .search-container.active {
@@ -185,8 +231,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
             z-index: 999;
             opacity: 0;
             visibility: hidden;
@@ -199,50 +245,73 @@
         }
 
         .search-box {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 60px;
-            padding: 1.5rem 2rem;
-            box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border: 2px solid rgba(135, 206, 235, 0.3);
+            border-radius: 80px;
+            padding: 2rem 3rem;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 0 50px rgba(135, 206, 235, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-box::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, rgba(135,206,235,0.5), rgba(173,216,230,0.5), rgba(240,248,255,0.5), rgba(135,206,235,0.5));
+            background-size: 400% 400%;
+            border-radius: 80px;
+            z-index: -1;
+            animation: borderGlow 3s ease infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .search-input {
             width: 100%;
             border: none;
             outline: none;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             background: transparent;
             color: #ffffff;
-            font-weight: 300;
+            font-weight: 400;
+            font-family: 'Orbitron', monospace;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
         }
 
         .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.7);
+            text-shadow: 0 0 10px rgba(135,206,235,0.3);
         }
 
-        /* Quick Links Grid */
+        /* Enhanced Cards */
         .links-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
+            margin-top: 4rem;
         }
 
         .link-card {
             position: relative;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(135, 206, 235, 0.2);
+            border-radius: 25px;
             padding: 2rem;
             text-align: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
             color: #ffffff;
             overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .link-card::before {
@@ -252,68 +321,70 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(135,206,235,0.2), rgba(173,216,230,0.3), rgba(135,206,235,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .link-card::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, rgba(135,206,235,0), rgba(135,206,235,0.3), rgba(173,216,230,0.3), rgba(135,206,235,0));
+            background-size: 400% 400%;
+            border-radius: 25px;
+            z-index: -1;
+            opacity: 0;
+            animation: cardBorder 3s ease infinite;
+        }
+
+        @keyframes cardBorder {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .link-card:hover::before {
             left: 100%;
         }
 
+        .link-card:hover::after {
+            opacity: 1;
+        }
+
         .link-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.3),
-                0 0 50px rgba(135, 206, 235, 0.2);
-            border-color: rgba(135, 206, 235, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.4), 0 0 60px rgba(135, 206, 235, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgba(135, 206, 235, 0.4);
         }
 
         .link-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
             display: block;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.4));
+            animation: iconFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
         }
 
         .link-title {
-            font-weight: 400;
-            font-size: 1.3rem;
+            font-weight: 700;
+            font-size: 1.2rem;
             margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(135,206,235,0.3);
         }
 
         .link-description {
             font-size: 0.9rem;
-            opacity: 0.7;
+            opacity: 0.8;
             font-weight: 300;
-        }
-
-        /* Floating particles */
-        .particle {
-            position: fixed;
-            width: 2px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            z-index: -1;
-            animation: float 20s infinite linear;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) translateX(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(200px);
-                opacity: 0;
-            }
+            color: #b0d4f1;
         }
 
         /* Instructions */
@@ -322,76 +393,142 @@
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            opacity: 0.8;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            padding: 1.2rem 2.5rem;
+            border-radius: 60px;
+            font-size: 0.95rem;
+            opacity: 0.9;
+            border: 1px solid rgba(135, 206, 235, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .links-grid {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 1.5rem;
-            }
-            
-            .link-card {
-                padding: 1.5rem;
-            }
+            h1 { font-size: 2.5rem; }
+            .links-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; }
+            .link-card { padding: 1.5rem; }
+            .search-box { padding: 1.5rem 2rem; }
+            .search-input { font-size: 1.4rem; }
+        }
+
+        @media (max-width: 480px) {
+            .links-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
         }
     </style>
 </head>
 <body>
-    <!-- Storm Background -->
+    <!-- Epic Backgrounds -->
     <div class="storm-background"></div>
-    
-    <!-- Lightning Effects -->
-    <div class="lightning">
+    <div class="smoke-container" id="smokeContainer"></div>
+    <div class="lightning-container">
+        <div class="lightning-strike"></div>
+        <div class="lightning-strike"></div>
         <div class="lightning-strike"></div>
         <div class="lightning-strike"></div>
         <div class="lightning-strike"></div>
     </div>
-    
-    <!-- Ocean Overlay -->
-    <div class="ocean-overlay"></div>
+    <div class="plasma-waves"></div>
 
     <div class="container">
         <header>
             <h1>STORM COMMAND</h1>
-            <div class="subtitle">Your Digital Command Center</div>
+            <div class="subtitle">⚡ Your Digital Command Center ⚡</div>
             <div class="clock" id="clock"></div>
         </header>
 
         <div class="links-grid">
-            <a href="https://room300.net" class="link-card">
-                <span class="link-icon">🌪️</span>
-                <div class="link-title">Room300</div>
-                <div class="link-description">The Original Hub</div>
+            <!-- Row 1 -->
+            <a href="https://tutanota.com" class="link-card">
+                <span class="link-icon">🔐</span>
+                <div class="link-title">Tutanota</div>
+                <div class="link-description">Secure Email</div>
             </a>
 
-            <a href="https://discord.com" class="link-card">
-                <span class="link-icon">⚡</span>
-                <div class="link-title">Discord</div>
-                <div class="link-description">Command Comms</div>
+            <a href="https://your-rss-feed.com" class="link-card">
+                <span class="link-icon">📡</span>
+                <div class="link-title">RSS</div>
+                <div class="link-description">News Feed</div>
             </a>
 
-            <a href="https://github.com" class="link-card">
-                <span class="link-icon">🌊</span>
-                <div class="link-title">GitHub</div>
-                <div class="link-description">Code Depths</div>
+            <a href="https://your-jellyfin.com" class="link-card">
+                <span class="link-icon">🎬</span>
+                <div class="link-title">Jellyfin</div>
+                <div class="link-description">Media Storm</div>
             </a>
 
             <a href="https://youtube.com" class="link-card">
-                <span class="link-icon">🌩️</span>
+                <span class="link-icon">📺</span>
                 <div class="link-title">YouTube</div>
-                <div class="link-description">Storm Vision</div>
+                <div class="link-description">Thunder Vision</div>
+            </a>
+
+            <a href="https://your-seedbox.com" class="link-card">
+                <span class="link-icon">🌱</span>
+                <div class="link-title">Seedbox</div>
+                <div class="link-description">Data Seeds</div>
+            </a>
+
+            <a href="https://your-bin.com" class="link-card">
+                <span class="link-icon">🗂️</span>
+                <div class="link-title">Bin</div>
+                <div class="link-description">File Vault</div>
+            </a>
+
+            <!-- Row 2 -->
+            <a href="https://temp-mail.org" class="link-card">
+                <span class="link-icon">📨</span>
+                <div class="link-title">Temp Mail</div>
+                <div class="link-description">Ghost Mail</div>
+            </a>
+
+            <a href="https://drive.google.com" class="link-card">
+                <span class="link-icon">☁️</span>
+                <div class="link-title">Drive</div>
+                <div class="link-description">Cloud Storm</div>
+            </a>
+
+            <a href="https://your-jukebox.com" class="link-card">
+                <span class="link-icon">🎵</span>
+                <div class="link-title">Jukebox</div>
+                <div class="link-description">Music Thunder</div>
+            </a>
+
+            <a href="https://iplocation.net" class="link-card">
+                <span class="link-icon">🌍</span>
+                <div class="link-title">IP Location</div>
+                <div class="link-description">Storm Tracker</div>
+            </a>
+
+            <a href="https://your-soulseek.com" class="link-card">
+                <span class="link-icon">👁️</span>
+                <div class="link-title">Soulseek</div>
+                <div class="link-description">Soul Search</div>
+            </a>
+
+            <a href="https://photos.google.com" class="link-card">
+                <span class="link-icon">📸</span>
+                <div class="link-title">Photos</div>
+                <div class="link-description">Lightning Shots</div>
+            </a>
+
+            <!-- Row 3 -->
+            <a href="https://discord.com" class="link-card">
+                <span class="link-icon">💬</span>
+                <div class="link-title">Discord</div>
+                <div class="link-description">Command Comm</div>
+            </a>
+
+            <a href="https://your-notebook.com" class="link-card">
+                <span class="link-icon">📝</span>
+                <div class="link-title">Notebook</div>
+                <div class="link-description">Storm Log</div>
+            </a>
+
+            <a href="https://music.youtube.com" class="link-card">
+                <span class="link-icon">🎶</span>
+                <div class="link-title">YT Music</div>
+                <div class="link-description">Thunder Beats</div>
             </a>
 
             <a href="https://speedtest.net" class="link-card">
@@ -400,22 +537,16 @@
                 <div class="link-description">Lightning Speed</div>
             </a>
 
-            <a href="https://vaultwarden.example.com" class="link-card">
-                <span class="link-icon">🔒</span>
-                <div class="link-title">Vaultwarden</div>
-                <div class="link-description">Storm Vault</div>
+            <a href="https://your-debrid.com" class="link-card">
+                <span class="link-icon">💨</span>
+                <div class="link-title">Debrid</div>
+                <div class="link-description">Storm Downloader</div>
             </a>
 
-            <a href="https://jellyfin.example.com" class="link-card">
-                <span class="link-icon">🎬</span>
-                <div class="link-title">Jellyfin</div>
-                <div class="link-description">Media Tempest</div>
-            </a>
-
-            <a href="https://adguard.example.com" class="link-card">
-                <span class="link-icon">🛡️</span>
-                <div class="link-title">AdGuard</div>
-                <div class="link-description">Shield Wall</div>
+            <a href="https://your-admin.com" class="link-card">
+                <span class="link-icon">⚙️</span>
+                <div class="link-title">Admin</div>
+                <div class="link-description">Command Center</div>
             </a>
         </div>
     </div>
@@ -431,11 +562,11 @@
     </div>
 
     <div class="instructions">
-        ⚡ Start typing to wield the storm ⚡
+        ⚡ Start typing to command the storm ⚡
     </div>
 
     <script>
-        // Update clock with dramatic styling
+        // Epic Clock
         function updateClock() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('en-US', { 
@@ -455,22 +586,30 @@
         updateClock();
         setInterval(updateClock, 1000);
 
-        // Create floating particles
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.animationDelay = Math.random() * 20 + 's';
-            particle.style.animationDuration = (Math.random() * 10 + 20) + 's';
-            document.body.appendChild(particle);
+        // Epic Smoke Creation
+        function createSmoke() {
+            const smokeContainer = document.getElementById('smokeContainer');
+            const smoke = document.createElement('div');
+            smoke.className = 'smoke';
             
+            // Random size and position
+            const size = Math.random() * 80 + 20;
+            smoke.style.width = size + 'px';
+            smoke.style.height = size + 'px';
+            smoke.style.left = Math.random() * window.innerWidth + 'px';
+            smoke.style.animationDelay = Math.random() * 5 + 's';
+            smoke.style.animationDuration = (Math.random() * 8 + 10) + 's';
+            
+            smokeContainer.appendChild(smoke);
+            
+            // Remove smoke after animation
             setTimeout(() => {
-                particle.remove();
-            }, 30000);
+                smokeContainer.removeChild(smoke);
+            }, 18000);
         }
 
-        // Create particles periodically
-        setInterval(createParticle, 500);
+        // Create smoke periodically
+        setInterval(createSmoke, 800);
 
         // Search functionality
         const searchOverlay = document.getElementById('searchOverlay');
@@ -533,7 +672,7 @@
             }, 3000);
         });
 
-        // Lightning effects enhancement
+        // Random lightning strikes
         function triggerLightning() {
             const lightningStrikes = document.querySelectorAll('.lightning-strike');
             const randomStrike = lightningStrikes[Math.floor(Math.random() * lightningStrikes.length)];
@@ -547,12 +686,27 @@
             }, 200);
         }
 
-        // Random lightning strikes
+        // Random lightning
         setInterval(() => {
             if (Math.random() < 0.3) {
                 triggerLightning();
             }
         }, 2000);
+
+        // Page flash on lightning
+        function flashScreen() {
+            document.body.style.filter = 'brightness(1.5)';
+            setTimeout(() => {
+                document.body.style.filter = 'brightness(1)';
+            }, 100);
+        }
+
+        // Flash screen occasionally with lightning
+        setInterval(() => {
+            if (Math.random() < 0.1) {
+                flashScreen();
+            }
+        }, 3000);
     </script>
 </body>
 </html>
