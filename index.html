@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>chooch.net - NEXUS</title>
+    <title>chooch.net</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -11,305 +11,236 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
-        :root {
-            --primary-green: #00ff41;
-            --primary-cyan: #00ffff;
-            --bg-dark: #0a0a0a;
-            --bg-darker: #000000;
-        }
-        
         body {
             font-family: 'JetBrains Mono', monospace;
-            background: var(--bg-dark);
+            background: #080808;
             color: #ffffff;
             min-height: 100vh;
+            overflow-y: auto;
             overflow-x: hidden;
+            position: relative;
         }
         
-        /* Simplified animations for GitHub Pages */
-        .float {
-            animation: float 6s ease-in-out infinite;
+        /* Simplified fog effects */
+        .fog-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
         }
         
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+        .fog-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, 
+                rgba(220, 220, 220, 0.1) 0%, 
+                rgba(180, 180, 180, 0.08) 20%, 
+                rgba(120, 120, 120, 0.05) 40%, 
+                rgba(50, 50, 50, 0.02) 70%, 
+                transparent 100%);
+            animation: fogMove 30s linear infinite;
         }
         
-        .glow {
-            animation: glow 2s ease-in-out infinite alternate;
+        .fog-layer:nth-child(2) {
+            animation: fogMove 25s linear infinite reverse;
+            animation-delay: -8s;
         }
         
-        @keyframes glow {
-            from { text-shadow: 0 0 20px var(--primary-green); }
-            to { text-shadow: 0 0 30px var(--primary-green), 0 0 40px var(--primary-green); }
+        .fog-layer:nth-child(3) {
+            animation: fogMove 35s linear infinite;
+            animation-delay: -15s;
         }
         
-        /* Simplified fog effect */
-        .fog {
+        @keyframes fogMove {
+            0% { transform: translateX(-100%) translateY(-20%) scale(1); }
+            100% { transform: translateX(100%) translateY(20%) scale(1.5); }
+        }
+        
+        .fog-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(ellipse at top, rgba(100, 100, 100, 0.1), transparent),
-                radial-gradient(ellipse at bottom, rgba(50, 50, 50, 0.05), transparent);
+                linear-gradient(45deg, rgba(0,0,0,0.2), transparent, rgba(0,0,0,0.3)),
+                linear-gradient(120deg, rgba(80,80,80,0.1), rgba(0,0,0,0.4));
             z-index: -1;
-            animation: fogMove 20s linear infinite;
         }
         
-        @keyframes fogMove {
-            0% { transform: translateX(-20px); }
-            50% { transform: translateX(20px); }
-            100% { transform: translateX(-20px); }
+        .main-content {
+            transition: all 0.5s ease;
+            position: relative;
+            z-index: 1;
         }
         
-        /* Simple matrix effect */
-        .matrix::before {
-            content: '01010101010101010101010101010101';
-            position: fixed;
-            top: 0;
-            left: 0;
-            color: rgba(0, 255, 65, 0.1);
-            font-size: 14px;
-            white-space: pre;
-            animation: matrix-fall 20s linear infinite;
-            z-index: -2;
-            pointer-events: none;
+        .main-content.search-mode {
+            opacity: 0.2;
+            filter: blur(5px);
+            transform: scale(0.95);
         }
         
-        @keyframes matrix-fall {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100vh); }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
         }
         
-        /* Terminal header */
-        .terminal-header {
-            background: var(--bg-darker);
-            border: 2px solid var(--primary-green);
-            border-radius: 10px;
-            padding: 1rem;
+        header {
             text-align: center;
             margin-bottom: 2rem;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
         }
         
-        .terminal-title {
-            color: var(--primary-green);
-            font-size: 1.5rem;
+        h1 {
+            font-size: 1.6rem;
             font-weight: 600;
+            letter-spacing: -0.5px;
             margin-bottom: 0.5rem;
+            color: #f0f0f0;
+            text-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
         
-        .terminal-subtitle {
-            color: var(--primary-cyan);
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-        
-        .terminal-time {
-            color: var(--primary-green);
+        .subtitle {
             font-size: 0.8rem;
-            margin-top: 0.5rem;
+            opacity: 0.7;
+            font-weight: 400;
         }
         
-        /* Grid layout - GitHub Pages compatible */
-        .hub-grid {
+        .clock {
+            font-size: 0.75rem;
+            opacity: 0.6;
+            margin-top: 0.5rem;
+            font-weight: 300;
+        }
+        
+        /* Dynamic grid layout */
+        .links-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1.5rem;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 1rem;
         }
         
         @media (min-width: 1200px) {
-            .hub-grid {
+            .links-grid {
                 grid-template-columns: repeat(6, 1fr);
             }
         }
         
         @media (max-width: 768px) {
-            .hub-grid {
+            .links-grid {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 1rem;
             }
         }
         
         @media (max-width: 480px) {
-            .hub-grid {
+            .links-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 0.8rem;
             }
         }
         
-        /* Hub sections */
-        .hub-section {
-            grid-column: span 6;
-            margin-bottom: 2rem;
-        }
-        
-        .section-title {
-            color: var(--primary-green);
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-            text-align: center;
-            position: relative;
-        }
-        
-        .section-title::before,
-        .section-title::after {
-            content: '==';
-            position: absolute;
-            top: 0;
-            color: var(--primary-cyan);
-        }
-        
-        .section-title::before {
-            left: -3rem;
-        }
-        
-        .section-title::after {
-            right: -3rem;
-        }
-        
-        .section-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.2rem;
-        }
-        
-        @media (min-width: 1200px) {
-            .section-grid {
-                grid-template-columns: repeat(6, 1fr);
-            }
-        }
-        
-        /* Hub cards */
-        .hub-card {
-            background: rgba(0, 20, 0, 0.8);
-            border: 1px solid rgba(0, 255, 65, 0.3);
-            border-radius: 10px;
-            padding: 1.5rem;
+        .link-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
             text-decoration: none;
             color: #ffffff;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            text-align: center;
-            min-height: 140px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             gap: 0.8rem;
-            backdrop-filter: blur(5px);
+            min-height: 120px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            width: 100%;
         }
         
-        .hub-card:hover {
-            border-color: var(--primary-green);
-            background: rgba(0, 255, 65, 0.1);
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0, 255, 65, 0.3);
+        .link-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.6);
         }
         
-        .hub-card::before {
+        .link-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
-            transition: left 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: left 0.5s ease;
         }
         
-        .hub-card:hover::before {
+        .link-card:hover::before {
             left: 100%;
         }
         
-        .card-icon {
-            font-size: 2.5rem;
+        .link-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 60px;
-            height: 60px;
-            margin-bottom: 0.5rem;
+            width: 48px;
+            height: 48px;
+            font-size: 1.5rem;
+            flex-shrink: 0;
         }
         
-        .card-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--primary-green);
-            margin-bottom: 0.3rem;
+        /* Custom icon styles */
+        .link-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: #ffffff;
         }
         
-        .card-desc {
+        .link-title {
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.2;
+        }
+        
+        .link-desc {
             font-size: 0.7rem;
-            opacity: 0.7;
-            color: #ffffff;
+            opacity: 0.6;
+            font-weight: 300;
+            text-align: center;
+            line-height: 1.1;
         }
         
-        .card-status {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--primary-green);
-            box-shadow: 0 0 10px var(--primary-green);
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        /* Color coding for different hubs */
-        .hub-ai .hub-card:hover {
-            border-color: #8040ff;
-            box-shadow: 0 5px 20px rgba(128, 64, 255, 0.3);
-        }
-        
-        .hub-security .hub-card:hover {
-            border-color: #ff0040;
-            box-shadow: 0 5px 20px rgba(255, 0, 64, 0.3);
-        }
-        
-        .hub-dev .hub-card:hover {
-            border-color: #4080ff;
-            box-shadow: 0 5px 20px rgba(64, 128, 255, 0.3);
-        }
-        
-        .hub-monitoring .hub-card:hover {
-            border-color: #ff8000;
-            box-shadow: 0 5px 20px rgba(255, 128, 0, 0.3);
-        }
-        
-        /* Search overlay */
+        /* Search functionality */
         .search-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.4);
         }
         
         .search-overlay.active {
@@ -318,657 +249,443 @@
         }
         
         .search-container {
-            background: var(--bg-darker);
-            border: 2px solid var(--primary-green);
-            border-radius: 15px;
-            padding: 2rem;
-            width: 90%;
+            width: 100%;
             max-width: 600px;
-            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+            padding: 0 2rem;
+            position: relative;
         }
         
         .search-box {
-            display: flex;
-            background: rgba(0, 255, 65, 0.1);
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 25px;
-            padding: 15px;
-            border: 1px solid rgba(0, 255, 65, 0.5);
+            padding: 1rem 1.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease 0.1s;
+        }
+        
+        .search-overlay.active .search-box {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .search-input {
-            flex: 1;
-            background: transparent;
+            width: 100%;
             border: none;
             outline: none;
-            color: var(--primary-green);
-            font-size: 1.1rem;
+            font-size: 1rem;
+            background: transparent;
+            color: #ffffff;
             font-family: 'JetBrains Mono', monospace;
+            font-weight: 400;
         }
         
         .search-input::placeholder {
-            color: rgba(0, 255, 65, 0.5);
+            color: rgba(255, 255, 255, 0.5);
         }
         
-        /* Instructions */
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 2;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .search-suggestions.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .suggestion-item {
+            padding: 0.75rem 1rem;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 300;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .suggestion-item:hover,
+        .suggestion-item.highlighted {
+            background: rgba(255, 255, 255, 0.08);
+            color: #00ff00;
+        }
+        
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+        
         .instructions {
             position: fixed;
             bottom: 1rem;
             left: 50%;
             transform: translateX(-50%);
-            color: var(--primary-green);
-            font-size: 0.8rem;
-            opacity: 0.7;
-            text-align: center;
-        }
-        
-        /* Quick access */
-        .quick-access {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-            z-index: 100;
-        }
-        
-        .quick-btn {
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid var(--primary-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--primary-green);
-            font-size: 1.2rem;
-            user-select: none;
-        }
-        
-        .quick-btn:hover {
-            background: var(--primary-green);
-            color: black;
-            transform: scale(1.1);
-        }
-        
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 80px;
-            background: var(--bg-darker);
-            border: 1px solid var(--primary-green);
-            border-radius: 8px;
-            padding: 15px;
-            color: var(--primary-green);
-            font-size: 0.8rem;
-            max-width: 250px;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            z-index: 200;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        /* Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-        
-        /* Fix viewport issues */
-        html {
-            height: 100%;
-        }
-        
-        /* Ensure content is visible */
-        .matrix {
-            position: relative;
-            z-index: 1;
+            font-size: 0.7rem;
+            opacity: 0.5;
+            font-weight: 300;
         }
     </style>
 </head>
-<body class="matrix">
-    <!-- Background effects -->
-    <div class="fog"></div>
-    
+<body>
+    <!-- Simplified fog effects -->
+    <div class="fog-container">
+        <div class="fog-layer"></div>
+        <div class="fog-layer"></div>
+        <div class="fog-layer"></div>
+    </div>
+    <div class="fog-overlay"></div>
+
     <!-- Search overlay -->
     <div class="search-overlay" id="searchOverlay">
         <div class="search-container">
-            <div style="text-align: center; margin-bottom: 1rem;">
-                <div style="color: var(--primary-green); font-size: 1.2rem;">[ NEXUS SEARCH ]</div>
-            </div>
             <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="Type to search or enter command..."/>
-            </div>
-            <div style="margin-top: 1rem; text-align: center; font-size: 0.8rem; color: #888;">
-                Press Escape to close
+                <input type="text" class="search-input" id="searchInput" placeholder="Type to search...">
+                <div class="search-suggestions" id="searchSuggestions"></div>
             </div>
         </div>
     </div>
-    
-    <!-- Quick access -->
-    <div class="quick-access">
-        <div class="quick-btn" id="searchBtn" title="Search">🔍</div>
-    </div>
-    
-    <!-- Notification -->
-    <div class="notification" id="notification">
-        System ready
-    </div>
-    
+
     <!-- Main content -->
-    <div class="container">
-        <!-- Header -->
-        <header class="terminal-header">
-            <div class="terminal-title glow">CHOOCH.NET</div>
-            <div class="terminal-subtitle">[ DIGITAL NEXUS - SYSTEM ONLINE ]</div>
-            <div class="terminal-time" id="clock"></div>
-        </header>
-        
-        <!-- Hub sections -->
-        <div class="hub-grid">
-            <!-- Primary Services -->
-            <div class="hub-section">
-                <h2 class="section-title">Primary Services</h2>
-                <div class="section-grid">
-                    <a href="https://mail.tutanota.com/login" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">📧</div>
-                        <div class="card-title">Tutanota</div>
-                        <div class="card-desc">secure mail</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">📡</div>
-                        <div class="card-title">RSS</div>
-                        <div class="card-desc">feeds</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🎬</div>
-                        <div class="card-title">Jellyfin</div>
-                        <div class="card-desc">media</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🎵</div>
-                        <div class="card-title">Jukebox</div>
-                        <div class="card-desc">tunes</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🌱</div>
-                        <div class="card-title">Seedbox</div>
-                        <div class="card-desc">torrents</div>
-                    </a>
-                    <a href="https://bin.chooch.net" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🗂️</div>
-                        <div class="card-title">Bin</div>
-                        <div class="card-desc">storage</div>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Communications -->
-            <div class="hub-section">
-                <h2 class="section-title">Communications</h2>
-                <div class="section-grid">
-                    <a href="https://webmail.disroot.org/" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">📧</div>
-                        <div class="card-title">Disroot</div>
-                        <div class="card-desc">secure mail</div>
-                    </a>
-                    <a href="https://drive.chooch.net" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">☁️</div>
-                        <div class="card-title">Drive</div>
-                        <div class="card-desc">cloud</div>
-                    </a>
-                    <a href="https://youtube.com" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">
-                            <svg width="35" height="35" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                            </svg>
-                        </div>
-                        <div class="card-title">YouTube</div>
-                        <div class="card-desc">videos</div>
-                    </a>
-                    <a href="https://ipleak.net/" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🌍</div>
-                        <div class="card-title">IP Location</div>
-                        <div class="card-desc">geo</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🔍</div>
-                        <div class="card-title">Soulseek</div>
-                        <div class="card-desc">p2p</div>
-                    </a>
-                    <a href="https://photos.google.com" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">📸</div>
-                        <div class="card-title">Photos</div>
-                        <div class="card-desc">gallery</div>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Utilities -->
-            <div class="hub-section">
-                <h2 class="section-title">Utilities</h2>
-                <div class="section-grid">
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">📝</div>
-                        <div class="card-title">Notebook</div>
-                        <div class="card-desc">notes</div>
-                    </a>
-                    <a href="https://real-debrid.com/speedtest" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">⚡</div>
-                        <div class="card-title">Speedtest</div>
-                        <div class="card-desc">network</div>
-                    </a>
-                    <a href="https://real-debrid.com/" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">💨</div>
-                        <div class="card-title">Debrid</div>
-                        <div class="card-desc">download</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">⚙️</div>
-                        <div class="card-title">Admin</div>
-                        <div class="card-desc">control</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🔍</div>
-                        <div class="card-title">Soulseek</div>
-                        <div class="card-desc">p2p</div>
-                    </a>
-                    <a href="https://weather.com" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🌤️</div>
-                        <div class="card-title">Weather</div>
-                        <div class="card-desc">forecast</div>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- AI Hub -->
-            <div class="hub-section hub-ai">
-                <h2 class="section-title">AI Nexus</h2>
-                <div class="section-grid">
-                    <a href="https://claude.ai" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🤖</div>
-                        <div class="card-title">Claude</div>
-                        <div class="card-desc">AI assistant</div>
-                    </a>
-                    <a href="https://chat.openai.com" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🧠</div>
-                        <div class="card-title">ChatGPT</div>
-                        <div class="card-desc">AI model</div>
-                    </a>
-                    <a href="https://www.perplexity.ai" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🔮</div>
-                        <div class="card-title">Perplexity</div>
-                        <div class="card-desc">AI search</div>
-                    </a>
-                    <a href="https://gemini.google.com" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">💎</div>
-                        <div class="card-title">Gemini</div>
-                        <div class="card-desc">Google AI</div>
-                    </a>
-                    <a href="https://www.anthropic.com/claude" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">⚡</div>
-                        <div class="card-title">Claude API</div>
-                        <div class="card-desc">developer</div>
-                    </a>
-                    <a href="https://huggingface.co" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🤗</div>
-                        <div class="card-title">HuggingFace</div>
-                        <div class="card-desc">ML models</div>
-                    </a>
-                </div>
+    <div class="main-content" id="mainContent">
+        <div class="container">
+            <header>
+                <h1>chooch.net</h1>
+                <div class="subtitle">digital hub</div>
+                <div class="clock" id="clock"></div>
+            </header>
+            <div class="links-grid">
+                <a href="https://mail.tutanota.com/login" class="link-card">
+                    <span class="link-icon">📧</span>
+                    <div class="link-title">Tutanota</div>
+                    <div class="link-desc">secure mail</div>
+                </a>
+                <a href="https://your-rss.com" class="link-card">
+                    <span class="link-icon">📡</span>
+                    <div class="link-title">RSS</div>
+                    <div class="link-desc">feeds</div>
+                </a>
+                <a href="https://your-jellyfin.com" class="link-card">
+                    <span class="link-icon">🎬</span>
+                    <div class="link-title">Jellyfin</div>
+                    <div class="link-desc">media</div>
+                </a>
+                <a href="https://your-jukebox.com" class="link-card">
+                    <span class="link-icon">🎵</span>
+                    <div class="link-title">Jukebox</div>
+                    <div class="link-desc">tunes</div>
+                </a>
+                <a href="https://your-seedbox.com" class="link-card">
+                    <span class="link-icon">🌱</span>
+                    <div class="link-title">Seedbox</div>
+                    <div class="link-desc">torrents</div>
+                </a>
+                <a href="https://bin.chooch.net" class="link-card">
+                    <span class="link-icon">🗂️</span>
+                    <div class="link-title">Bin</div>
+                    <div class="link-desc">storage</div>
+                </a>
+                <a href="https://webmail.disroot.org/" class="link-card">
+                    <span class="link-icon">📧</span>
+                    <div class="link-title">Disroot</div>
+                    <div class="link-desc">secure mail</div>
+                </a>
+                <a href="https://drive.chooch.net" class="link-card">
+                    <span class="link-icon">☁️</span>
+                    <div class="link-title">Drive</div>
+                    <div class="link-desc">cloud</div>
+                </a>
+                <a href="https://youtube.com" class="link-card">
+                    <span class="link-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </span>
+                    <div class="link-title">YouTube</div>
+                    <div class="link-desc">videos</div>
+                </a>
+                <a href="https://ipleak.net/" class="link-card">
+                    <span class="link-icon">🌍</span>
+                    <div class="link-title">IP Location</div>
+                    <div class="link-desc">geo</div>
+                </a>
+                <a href="https://your-soulseek.com" class="link-card">
+                    <span class="link-icon">🔍</span>
+                    <div class="link-title">Soulseek</div>
+                    <div class="link-desc">p2p</div>
+                </a>
+                <a href="https://photos.google.com" class="link-card">
+                    <span class="link-icon">📸</span>
+                    <div class="link-title">Photos</div>
+                    <div class="link-desc">gallery</div>
+                </a>
+                <a href="https://zemail.me/" class="link-card">
+                    <span class="link-icon">📨</span>
+                    <div class="link-title">Temp Mail</div>
+                    <div class="link-desc">disposable</div>
+                </a>
+                <a href="https://your-notebook.com" class="link-card">
+                    <span class="link-icon">📝</span>
+                    <div class="link-title">Notebook</div>
+                    <div class="link-desc">notes</div>
+                </a>
+                <a href="https://music.youtube.com" class="link-card">
+                    <span class="link-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                        </svg>
+                    </span>
+                    <div class="link-title">YT Music</div>
+                    <div class="link-desc">streaming</div>
+                </a>
+                <a href="https://real-debrid.com/speedtest" class="link-card">
+                    <span class="link-icon">⚡</span>
+                    <div class="link-title">Speedtest</div>
+                    <div class="link-desc">network</div>
+                </a>
+                <a href="https://real-debrid.com/" class="link-card">
+                    <span class="link-icon">💨</span>
+                    <div class="link-title">Debrid</div>
+                    <div class="link-desc">download</div>
+                </a>
+                <a href="https://your-admin.com" class="link-card">
+                    <span class="link-icon">⚙️</span>
+                    <div class="link-title">Admin</div>
+                    <div class="link-desc">control</div>
+                </a>
             </div>
         </div>
     </div>
-    
-    <div class="instructions">
-        Type to search • ESC to close • Click 💨 for smoke • NEXUS ready 🌿
-    </div>
-    
+    <div class="instructions">start typing to search</div>
+
     <script>
-        // Wait for DOM to be fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Clock
-            function updateClock() {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('en-US', { 
-                    hour12: false,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
-                const dateString = now.toLocaleDateString('en-US', {
-                    weekday: 'short',
-                    month: 'short',
-                    day: 'numeric'
-                });
-                
-                // Special 4:20 message
-                const time420 = timeString === '04:20:00' || timeString === '16:20:00';
-                const statusText = time420 ? '420 TIME! 🌿💨' : 'STATUS: ONLINE';
-                
-                const clockElement = document.getElementById('clock');
-                if (clockElement) {
-                    clockElement.textContent = `${timeString} :: ${dateString} - ${statusText}`;
-                }
-                
-                if (time420) {
-                    createSmokeEffect();
-                    showNotification('It\'s 420 time! 🌿💨');
-                }
-            }
-            updateClock();
-            setInterval(updateClock, 1000);
+        // Clock
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            const dateString = now.toLocaleDateString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric'
+            });
+            document.getElementById('clock').textContent = `${timeString} · ${dateString}`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Search functionality
+        const searchOverlay = document.getElementById('searchOverlay');
+        const searchInput = document.getElementById('searchInput');
+        const searchSuggestions = document.getElementById('searchSuggestions');
+        const mainContent = document.getElementById('mainContent');
+        let currentSuggestionIndex = -1;
+        let suggestions = [];
+
+        // We'll get suggestions dynamically from search
+
+        // Show search overlay when typing
+        document.addEventListener('keydown', (event) => {
+            // Don't trigger on special keys
+            if (event.ctrlKey || event.altKey || event.metaKey) return;
+            if (event.key === 'Tab' || event.key === 'Shift' || event.key === 'Control' || event.key === 'Alt') return;
+            if (event.key === 'F3' || event.key === 'F5' || event.key === 'F12') return;
             
-            // Create vapor particles (simplified for GitHub Pages)
-            function createVaporParticles() {
-                // Simplified version that won't cause issues
-                console.log('Vapor particles ready');
-            }
-            
-            // Create smoke effect on demand
-            function createSmokeEffect() {
-                const body = document.body;
-                const smoke = document.createElement('div');
-                smoke.style.position = 'fixed';
-                smoke.style.top = '50%';
-                smoke.style.left = '50%';
-                smoke.style.width = '100px';
-                smoke.style.height = '100px';
-                smoke.style.background = 'radial-gradient(circle, rgba(200, 255, 200, 0.6) 0%, transparent 70%)';
-                smoke.style.borderRadius = '50%';
-                smoke.style.filter = 'blur(30px)';
-                smoke.style.pointerEvents = 'none';
-                smoke.style.animation = 'smokeRise 3s ease-out forwards';
-                smoke.style.transform = 'translate(-50%, -50%)';
-                smoke.style.zIndex = '1000';
-                
-                // Add CSS for smoke animation if not already added
-                if (!document.getElementById('smokeCSS')) {
-                    const style = document.createElement('style');
-                    style.id = 'smokeCSS';
-                    style.textContent = `
-                        @keyframes smokeRise {
-                            0% {
-                                transform: translate(-50%, -50%) scale(0.1);
-                                opacity: 0.8;
-                            }
-                            50% {
-                                transform: translate(-50%, -60%) scale(1);
-                                opacity: 0.4;
-                            }
-                            100% {
-                                transform: translate(-50%, -200%) scale(2);
-                                opacity: 0;
-                            }
-                        }
-                    `;
-                    document.head.appendChild(style);
-                }
-                
-                body.appendChild(smoke);
-                
-                // Remove after animation
-                setTimeout(() => smoke.remove(), 3000);
-                
-                // Add multiple smaller smoke puffs
-                for (let i = 0; i < 5; i++) {
+            // If not already in search mode, show overlay
+            if (!searchOverlay.classList.contains('active')) {
+                showSearchOverlay();
+                // Pass the key to the input
+                if (event.key.length === 1) {
                     setTimeout(() => {
-                        const puff = document.createElement('div');
-                        puff.style.position = 'fixed';
-                        puff.style.top = '50%';
-                        puff.style.left = (50 + Math.random() * 20 - 10) + '%';
-                        puff.style.width = '50px';
-                        puff.style.height = '50px';
-                        puff.style.background = 'radial-gradient(circle, rgba(150, 200, 150, 0.3) 0%, transparent 70%)';
-                        puff.style.borderRadius = '50%';
-                        puff.style.filter = 'blur(15px)';
-                        puff.style.pointerEvents = 'none';
-                        puff.style.animation = 'smokeRise 2s ease-out forwards';
-                        puff.style.transform = 'translate(-50%, -50%)';
-                        puff.style.zIndex = '1000';
-                        
-                        body.appendChild(puff);
-                        setTimeout(() => puff.remove(), 2000);
-                    }, i * 300);
+                        searchInput.value = event.key;
+                        searchInput.dispatchEvent(new Event('input'));
+                    }, 100);
                 }
-                
-                showNotification('💨 *puff puff pass* 💨');
             }
+        });
+
+        // Handle escape key
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                hideSearchOverlay();
+            }
+        });
+
+        // Handle enter key and suggestions navigation
+        searchInput.addEventListener('keydown', (event) => {
+            const suggestionItems = searchSuggestions.querySelectorAll('.suggestion-item');
             
-            // Make createSmokeEffect available globally
-            window.createSmokeEffect = createSmokeEffect;
-            
-            // Search functionality
-            const searchOverlay = document.getElementById('searchOverlay');
-            const searchInput = document.getElementById('searchInput');
-            const searchBtn = document.getElementById('searchBtn');
-            
-            function toggleSearch() {
-                if (searchOverlay.classList.contains('active')) {
-                    hideSearch();
+            if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                currentSuggestionIndex = Math.min(currentSuggestionIndex + 1, suggestionItems.length - 1);
+                updateSuggestionHighlight();
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                currentSuggestionIndex = Math.max(currentSuggestionIndex - 1, -1);
+                updateSuggestionHighlight();
+            } else if (event.key === 'Tab') {
+                if (currentSuggestionIndex >= 0 && suggestionItems[currentSuggestionIndex]) {
+                    event.preventDefault();
+                    selectSuggestion(suggestionItems[currentSuggestionIndex].textContent);
+                }
+            } else if (event.key === 'Enter') {
+                if (currentSuggestionIndex >= 0 && suggestionItems[currentSuggestionIndex]) {
+                    selectSuggestion(suggestionItems[currentSuggestionIndex].textContent);
                 } else {
-                    showSearch();
+                    performSearch(searchInput.value);
                 }
             }
+        });
+
+        // Handle search input changes
+        searchInput.addEventListener('input', (event) => {
+            const query = event.target.value;
             
-            function showSearch() {
-                searchOverlay.classList.add('active');
-                setTimeout(() => searchInput.focus(), 300);
-                showNotification('Search activated 🔍');
+            if (query.length === 0) {
+                hideSuggestions();
+            } else {
+                showSuggestions(query);
             }
-            
-            function hideSearch() {
-                searchOverlay.classList.remove('active');
-                searchInput.value = '';
-                showNotification('Search closed');
+        });
+
+        // Hide search overlay when clicking outside
+        searchOverlay.addEventListener('click', (event) => {
+            if (event.target === searchOverlay) {
+                hideSearchOverlay();
             }
-            
-            // Event listeners
-            if (searchBtn) {
-                searchBtn.addEventListener('click', toggleSearch);
-            }
-            
-            // Keyboard shortcuts
-            document.addEventListener('keydown', (e) => {
-                // Type to search
-                if (!searchOverlay.classList.contains('active') && 
-                    !e.ctrlKey && !e.altKey && !e.metaKey &&
-                    e.key.length === 1 && 
-                    !e.target.tagName || e.target.tagName.toLowerCase() !== 'input') {
-                    showSearch();
-                    setTimeout(() => {
-                        searchInput.value = e.key;
-                    }, 50);
-                }
-                
-                // Escape to close
-                if (e.key === 'Escape' && searchOverlay.classList.contains('active')) {
-                    hideSearch();
-                }
-                
-                // Easter egg: Press 'S' for smoke
-                if (e.key.toLowerCase() === 's' && !searchOverlay.classList.contains('active')) {
-                    createSmokeEffect();
-                }
+        });
+
+        function showSearchOverlay() {
+            searchOverlay.classList.add('active');
+            mainContent.classList.add('search-mode');
+            setTimeout(() => {
+                searchInput.focus();
+            }, 300);
+        }
+
+        function hideSearchOverlay() {
+            searchOverlay.classList.remove('active');
+            mainContent.classList.remove('search-mode');
+            searchInput.value = '';
+            hideSuggestions();
+            currentSuggestionIndex = -1;
+        }
+
+        function showSuggestions(query) {
+            // For now, we'll disable suggestions until we can properly fetch them from Startpage
+            hideSuggestions();
+            return;
+        }
+
+        function hideSuggestions() {
+            searchSuggestions.classList.remove('active');
+        }
+
+        function showSuggestionsBox() {
+            searchSuggestions.classList.add('active');
+        }
+
+        function updateSuggestionHighlight() {
+            const suggestionItems = searchSuggestions.querySelectorAll('.suggestion-item');
+            suggestionItems.forEach((item, index) => {
+                item.classList.toggle('highlighted', index === currentSuggestionIndex);
             });
+        }
+
+        function selectSuggestion(suggestion) {
+            searchInput.value = suggestion;
+            hideSuggestions();
+            performSearch(suggestion);
+        }
+
+        // Site shortcuts mapping
+        const siteShortcuts = {
+            'gmail': 'https://gmail.com',
+            'github': 'https://github.com',
+            'reddit': 'https://reddit.com',
+            'weather': 'https://weather.com',
+            'maps': 'https://maps.google.com',
+            'translate': 'https://translate.google.com',
+            'calculator': 'https://www.google.com/search?q=calculator',
+            'timer': 'https://www.google.com/search?q=timer',
+            'calendar': 'https://calendar.google.com',
+            'news': 'https://news.google.com',
+            'amazon': 'https://amazon.com',
+            'netflix': 'https://netflix.com',
+            'spotify': 'https://spotify.com',
+            'twitter': 'https://twitter.com',
+            'instagram': 'https://instagram.com',
+            'facebook': 'https://facebook.com',
+            'linkedin': 'https://linkedin.com',
+            'stackoverflow': 'https://stackoverflow.com',
+            'youtube': 'https://youtube.com',
+            'google drive': 'https://drive.google.com',
+            'dropbox': 'https://dropbox.com',
+            'outlook': 'https://outlook.com',
+            'slack': 'https://slack.com',
+            'discord': 'https://discord.com',
+            'wikipedia': 'https://wikipedia.org',
+            'imdb': 'https://imdb.com',
+            'twitch': 'https://twitch.tv',
+            'pinterest': 'https://pinterest.com',
+            'zoom': 'https://zoom.us',
+            'teams': 'https://teams.microsoft.com'
+        };
+
+        // Enhanced search performance function
+        function performSearch(query) {
+            if (!query.trim()) return;
             
-            // Enhanced search with 420-themed shortcuts
-            const shortcuts = {
-                'g': 'https://github.com',
-                'gmail': 'https://gmail.com',
-                'y': 'https://youtube.com',
-                'yt': 'https://youtube.com',
-                'reddit': 'https://reddit.com',
-                'r': 'https://reddit.com',
-                'claude': 'https://claude.ai',
-                'gpt': 'https://chat.openai.com',
-                'perplexity': 'https://www.perplexity.ai',
-                'gemini': 'https://gemini.google.com',
-                'netflix': 'https://netflix.com',
-                'n': 'https://netflix.com',
-                'discord': 'https://discord.com',
-                'd': 'https://discord.com',
-                // 420-themed shortcuts
-                '420': function() { 
-                    createSmokeEffect(); 
-                    showNotification('Smoke \'em if you got \'em! 🌿'); 
-                },
-                'smoke': function() { 
-                    createSmokeEffect(); 
-                    showNotification('*puff* 💨'); 
-                },
-                'weed': 'https://www.leafly.com',
-                'blaze': function() { 
-                    createSmokeEffect();
-                    showNotification('Blaze it! 🔥💨');
-                }
-            };
+            const lowerQuery = query.toLowerCase().trim();
             
-            if (searchInput) {
-                searchInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        const query = searchInput.value.toLowerCase().trim();
-                        
-                        if (typeof shortcuts[query] === 'function') {
-                            shortcuts[query]();
-                            hideSearch();
-                        } else if (shortcuts[query]) {
-                            window.open(shortcuts[query], '_blank');
-                            hideSearch();
-                            showNotification(`Opening ${query} 💨`);
-                        } else {
-                            // Default search
-                            window.open(`https://www.startpage.com/sp/search?query=${encodeURIComponent(searchInput.value)}`, '_blank');
-                            hideSearch();
-                            showNotification('Searching... 🔍');
-                        }
-                    }
-                });
+            // Check if it's a direct site match
+            if (siteShortcuts[lowerQuery]) {
+                window.open(siteShortcuts[lowerQuery], '_blank');
+                hideSearchOverlay();
+                return;
             }
             
-            // Click outside to close
-            if (searchOverlay) {
-                searchOverlay.addEventListener('click', (e) => {
-                    if (e.target === searchOverlay) {
-                        hideSearch();
-                    }
-                });
+            // Check if it's a partial match
+            const exactMatch = Object.keys(siteShortcuts).find(site => 
+                site.toLowerCase() === lowerQuery
+            );
+            
+            if (exactMatch) {
+                window.open(siteShortcuts[exactMatch], '_blank');
+                hideSearchOverlay();
+                return;
             }
             
-            // Notification system
-            function showNotification(message) {
-                const notification = document.getElementById('notification');
-                if (notification) {
-                    notification.textContent = message;
-                    notification.classList.add('show');
-                    
-                    setTimeout(() => {
-                        notification.classList.remove('show');
-                    }, 3000);
-                }
+            // Otherwise perform a web search using Startpage
+            const searchUrl = `https://www.startpage.com/sp/search?query=${encodeURIComponent(query)}&abp=1&t=night&lui=english&cat=web&abd=1&prfe=bfc85c1d885357c455065cb1ddcee0a65c66627199470e854d8cf578fa2f6ca0deea4cb4fa181162bce2f096d76df7fe86753b93f749e81e69e6c0904008c2923dd5902389bf3777806c92e759`;
+            window.open(searchUrl, '_blank');
+            hideSearchOverlay();
+        }
+
+        // Prevent accidental page navigation when typing
+        window.addEventListener('keydown', (event) => {
+            // Prevent browser shortcuts that might interfere
+            if (event.key === 'F3' || (event.ctrlKey && event.key === 'f')) {
+                event.preventDefault();
+                showSearchOverlay();
             }
-            
-            // Initialize effects
-            createVaporParticles();
-            showNotification('NEXUS online 🌿');
-            
-            // Add enhanced hover effects with smoke
-            document.querySelectorAll('.hub-card').forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    card.style.animation = 'float 2s ease-in-out infinite';
-                    
-                    // Random smoke on hover (10% chance)
-                    if (Math.random() < 0.1) {
-                        createMiniSmoke(card);
-                    }
-                });
-                
-                card.addEventListener('mouseleave', () => {
-                    card.style.animation = '';
-                });
-            });
-            
-            // Create mini smoke effect on card
-            function createMiniSmoke(element) {
-                const rect = element.getBoundingClientRect();
-                const smoke = document.createElement('div');
-                smoke.style.position = 'absolute';
-                smoke.style.top = rect.top + 'px';
-                smoke.style.left = rect.left + rect.width/2 + 'px';
-                smoke.style.width = '30px';
-                smoke.style.height = '30px';
-                smoke.style.background = 'radial-gradient(circle, rgba(100, 200, 100, 0.4) 0%, transparent 70%)';
-                smoke.style.borderRadius = '50%';
-                smoke.style.filter = 'blur(10px)';
-                smoke.style.pointerEvents = 'none';
-                smoke.style.animation = 'smokeRise 1s ease-out forwards';
-                smoke.style.transform = 'translate(-50%, -50%)';
-                smoke.style.zIndex = '1001';
-                
-                document.body.appendChild(smoke);
-                setTimeout(() => smoke.remove(), 1000);
-            }
-            
-            // Console easter eggs
-            console.log('%c 🌿 NEXUS INITIALIZED 💨 ', 'background: #00ff00; color: #000000; font-size: 14px; font-weight: bold;');
-            console.log('%c System online - Smoke \'em if you got \'em! 🌿 ', 'color: #00ff00; font-size: 12px;');
-            console.log('%c Type "420" or "smoke" in search for special effects 💨 ', 'color: #00ffff; font-size: 12px;');
-            console.log('%c Press "S" for instant smoke 🚬 ', 'color: #ffff00; font-size: 12px;');
-            
-            // Random ambient smoke every 30 seconds
-            setInterval(() => {
-                if (Math.random() < 0.3) {
-                    setTimeout(() => createSmokeEffect(), Math.random() * 5000);
-                }
-            }, 30000);
-            
-            // Special 420 time check every minute
-            setInterval(() => {
-                const now = new Date();
-                const time = now.toLocaleTimeString('en-US', { 
-                    hour12: false,
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                
-                if (time === '04:20' || time === '16:20') {
-                    for (let i = 0; i < 5; i++) {
-                        setTimeout(() => createSmokeEffect(), i * 1000);
-                    }
-                    showNotification('🌿 4:20 BLAZE IT! 💨🔥');
-                }
-            }, 60000);
         });
     </script>
 </body>
