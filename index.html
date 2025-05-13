@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html data-darkreader-proxy-injected="true">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html data-darkreader-proxy-injected="true"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
   <meta name="color-scheme" content="dark light">
   <meta name="robots" content="noindex">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -116,683 +115,6 @@
       80% { transform: translateX(-2px); }
     }
 
-    /* Nintendo-style button effects */
-    .command:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--border-glow);
-    }
-
-    /* 8-bit style icons with color cycling */
-    .key {
-      filter: hue-rotate(0deg);
-      animation: rainbow-cycle 3s linear infinite;
-      transition: all var(--transition-speed);
-    }
-
-    @keyframes rainbow-cycle {
-      0% { filter: hue-rotate(0deg) brightness(1.2); }
-      25% { filter: hue-rotate(90deg) brightness(1.2); }
-      50% { filter: hue-rotate(180deg) brightness(1.2); }
-      75% { filter: hue-rotate(270deg) brightness(1.2); }
-      100% { filter: hue-rotate(360deg) brightness(1.2); }
-    }
-  </style>
-  <script>
-    const CONFIG = {
-      commandPathDelimiter: '/',
-      commandSearchDelimiter: ' ',
-      defaultSearchTemplate: 'https://www.startpage.com/sp/search?query=%s&prf=off&ss=off',
-      openLinksInNewTab: false,
-      rainColumns: 200,
-      rainFade: 0.2,
-      rainFrameRate: 1000 / 18,
-      rainResilience: 0.8,
-      rainSpeed: 1,
-      suggestionLimit: 4,
-    };
-    const COMMANDS = new Map([
-      ['📬', {
-        name: 'Tutanota',
-        url: 'https://mail.tutanota.com'
-      }],
-      ['📬 ', {
-        name: 'Temp Mail',
-        url: 'https://zemail.me/'
-      }],
-      ['📬  ', {
-        name: 'Disroot',
-        url: 'https://webmail.disroot.org/'
-      }],
-      ['🛜', {
-        name: 'RSS',
-        url: 'https://rss.chooch.net'
-      }],
-      ['📂', {
-        name: 'Drive',
-        url: 'https://drive.chooch.net'
-      }],
-      ['📔', {
-        name: 'Notebook',
-        url: 'https://notebook.chooch.net'
-      }],
-      ['📺', {
-        name: 'Jellyfin',
-        url: 'https://tv.room300.net'
-      }],
-      ['‍🎵 ', {
-        name: 'Jukebox',
-        url: 'https://jukebox.chooch.net'
-      }],
-      ['🎵', {
-        name: 'YT Music',
-        url: 'https://music.youtube.com'
-      }],
-      ['📺  ', {
-        name: 'Youtube',
-        url: 'https://youtube.com'
-      }],
-      ['📍', {
-        name: 'IP Location',
-        url: 'https://ipleak.net/'
-      }],
-      ['🪛', {
-        name: 'Speedtest',
-        url: 'https://real-debrid.com/speedtest'
-      }],
-      ['📡', {
-        name: 'Seedbox',
-        url: 'https://seedbox.chooch.net'
-      }],
-      ['📡 ', {
-        name: 'Soulseek',
-        url: 'https://soulseek.chooch.net'
-      }],
-      ['🗄️', {
-        name: 'Debrid',
-        url: 'https://real-debrid.com/'
-      }],
-      ['🗑️', {
-        name: 'Bin',
-        url: 'https://pastebin.com/'
-      }],
-      ['📷', {
-        name: 'Photos',
-        url: 'https://photos.chooch.net'
-      }],
-      ['🧑‍💻', {
-        name: 'Admin',
-        url: 'https://admin.chooch.net'
-      }],
-    ]);
-  </script>
-  <template id="commands-template">
-    <style>
-      .commands {
-        columns: 1;
-        list-style: none;
-        margin: 0 auto;
-        max-width: 10rem;
-        padding: 0 0 0 var(--space-1);
-        width: 100vw;
-      }
-
-      .command {
-        display: flex;
-        gap: var(--space-2);
-        outline: 0;
-        padding: var(--space-1);
-        text-decoration: none;
-        border-radius: 8px;
-        transition: all var(--transition-speed);
-        backdrop-filter: blur(5px);
-      }
-
-      .key {
-        color: var(--color-text);
-        display: inline-block;
-        text-align: center;
-        width: 3ch;
-        text-shadow: 0 0 5px currentColor;
-      }
-
-      .name {
-        color: var(--color-text-subtle);
-        transition: color var(--transition-speed);
-      }
-
-      .command:where(:focus, :hover) .name {
-        color: var(--color-text);
-      }
-
-      @media (min-width: 500px) {
-        .commands {
-          columns: 2;
-          max-width: 20rem;
-        }
-      }
-
-      @media (min-width: 700px) {
-        .commands {
-          columns: 3;
-          max-width: 30rem;
-        }
-      }
-
-      @media (min-width: 900px) {
-        .commands {
-          columns: 4;
-          max-width: 40rem;
-        }
-      }
-
-      @media (min-width: 1200px) {
-        .commands {
-          columns: 6;
-          max-width: 60rem;
-        }
-      }
-    </style>
-    <nav>
-      <menu class="commands"></menu>
-    </nav>
-  </template>
-  <template id="command-template">
-    <li>
-      <a class="command" rel="noopener noreferrer">
-        <span class="key"></span>
-        <span class="name"></span>
-      </a>
-    </li>
-  </template>
-  <script type="module">
-    class Commands extends HTMLElement {
-      constructor() {
-        super();
-        this.attachShadow({
-          mode: 'open'
-        });
-        const template = document.getElementById('commands-template');
-        const clone = template.content.cloneNode(true);
-        const commands = clone.querySelector('.commands');
-        const commandTemplate = document.getElementById('command-template');
-        for (const [key, {
-            name,
-            url
-          }] of COMMANDS.entries()) {
-          if (!name || !url) continue;
-          const clone = commandTemplate.content.cloneNode(true);
-          const command = clone.querySelector('.command');
-          command.href = url;
-          if (CONFIG.openLinksInNewTab) command.target = '_blank';
-          clone.querySelector('.key').innerText = key;
-          clone.querySelector('.name').innerText = name;
-          commands.append(clone);
-        }
-        this.shadowRoot.append(clone);
-      }
-    }
-    customElements.define('commands-component', Commands);
-  </script>
-  <template id="search-template">
-    <style>
-      input,
-      button {
-        -moz-appearance: none;
-        -webkit-appearance: none;
-        background: transparent;
-        border: 0;
-        display: block;
-        outline: 0;
-      }
-
-      .dialog {
-        align-items: center;
-        background: var(--color-background-overlay);
-        backdrop-filter: blur(10px);
-        border: none;
-        display: none;
-        flex-direction: column;
-        height: 100%;
-        justify-content: center;
-        left: 0;
-        padding: 0;
-        top: 0;
-        width: 100%;
-      }
-
-      .dialog[open] {
-        display: flex;
-      }
-
-      .form {
-        width: 100%;
-      }
-
-      .input {
-        color: var(--color-text);
-        font-size: var(--font-size-2);
-        font-weight: var(--font-weight-bold);
-        padding: 0;
-        text-align: center;
-        width: 100%;
-        text-shadow: 0 0 10px currentColor;
-      }
-
-      .suggestions {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        justify-content: center;
-        list-style: none;
-        margin: var(--space-2) 0 0;
-        overflow: hidden;
-        padding: 0;
-      }
-
-      .suggestion {
-        color: var(--color-text);
-        cursor: pointer;
-        font-size: var(--font-size-1);
-        padding: var(--space-2);
-        position: relative;
-        transition: color var(--transition-speed);
-        white-space: nowrap;
-        z-index: 1;
-        border-radius: 8px;
-        backdrop-filter: blur(5px);
-      }
-
-      .suggestion:where(:focus, :hover) {
-        color: var(--color-background);
-        box-shadow: var(--border-glow);
-      }
-
-      .suggestion::before {
-        background-color: var(--color-text);
-        bottom: var(--space-2);
-        content: ' ';
-        left: var(--space-2);
-        opacity: 0;
-        position: absolute;
-        right: var(--space-2);
-        top: var(--space-2);
-        transform: translateY(0.5em);
-        transition: all var(--transition-speed);
-        z-index: -1;
-        border-radius: 8px;
-      }
-
-      .suggestion:where(:focus, :hover)::before {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      .match {
-        color: var(--color-text-subtle);
-        transition: color var(--transition-speed);
-      }
-
-      .suggestion:where(:focus, :hover) .match {
-        color: var(--color-background);
-      }
-
-      @media (min-width: 700px) {
-        .suggestions {
-          flex-direction: row;
-        }
-      }
-    </style>
-    <dialog class="dialog">
-      <form autocomplete="off" class="form" method="dialog" spellcheck="false">
-        <input class="input" title="search" type="text">
-        <menu class="suggestions"></menu>
-      </form>
-    </dialog>
-  </template>
-  <template id="suggestion-template">
-    <li>
-      <button class="suggestion"></button>
-    </li>
-  </template>
-  <template id="match-template">
-    <span class="match"></span>
-  </template>
-  <script type="module">
-    class Search extends HTMLElement {
-      #dialog;
-      #form;
-      #input;
-      #suggestions;
-      constructor() {
-        super();
-        this.attachShadow({
-          mode: 'open'
-        });
-        const template = document.getElementById('search-template');
-        const clone = template.content.cloneNode(true);
-        this.#dialog = clone.querySelector('.dialog');
-        this.#form = clone.querySelector('.form');
-        this.#input = clone.querySelector('.input');
-        this.#suggestions = clone.querySelector('.suggestions');
-        this.#form.addEventListener('submit', this.#onSubmit, false);
-        this.#input.addEventListener('input', this.#onInput);
-        this.#suggestions.addEventListener('click', this.#onSuggestionClick);
-        document.addEventListener('keydown', this.#onKeydown);
-        this.shadowRoot.append(clone);
-      }
-      static #attachSearchPrefix(array, {
-        key,
-        splitBy
-      }) {
-        if (!splitBy) return array;
-        return array.map((search) => `${key}${splitBy}${search}`);
-      }
-      static #escapeRegexCharacters(s) {
-        return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-      }
-      static #fetchDuckDuckGoSuggestions(search) {
-        return new Promise((resolve) => {
-          window.autocompleteCallback = (res) => {
-            const suggestions = [];
-            for (const item of res) {
-              if (item.phrase === search.toLowerCase()) continue;
-              suggestions.push(item.phrase);
-            }
-            resolve(suggestions);
-          };
-          const script = document.createElement('script');
-          document.querySelector('head').appendChild(script);
-          script.src = `https://duckduckgo.com/ac/?callback=autocompleteCallback&q=${search}`;
-          script.onload = script.remove;
-        });
-      }
-      static #formatSearchUrl(url, searchPath, search) {
-        if (!searchPath) return url;
-        const [baseUrl] = Search.#splitUrl(url);
-        const urlQuery = encodeURIComponent(search);
-        searchPath = searchPath.replace(/{}/g, urlQuery);
-        return baseUrl + searchPath;
-      }
-      static #hasProtocol(s) {
-        return /^[a-zA-Z]+:\/\//i.test(s);
-      }
-      static #isUrl(s) {
-        return /^((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)$/i.test(s);
-      }
-      static #parseQuery = (raw) => {
-        const query = raw.trim();
-        if (this.#isUrl(query)) {
-          const url = this.#hasProtocol(query) ? query : `https://${query}`;
-          return {
-            query,
-            url
-          };
-        }
-        if (COMMANDS.has(query)) {
-          const {
-            command,
-            key,
-            url
-          } = COMMANDS.get(query);
-          return command ? Search.#parseQuery(command) : {
-            key,
-            query,
-            url
-          };
-        }
-        let splitBy = CONFIG.commandSearchDelimiter;
-        const [searchKey, rawSearch] = query.split(new RegExp(`${splitBy}(.*)`));
-        if (COMMANDS.has(searchKey)) {
-          const {
-            searchTemplate,
-            url: base
-          } = COMMANDS.get(searchKey);
-          const search = rawSearch.trim();
-          const url = Search.#formatSearchUrl(base, searchTemplate, search);
-          return {
-            key: searchKey,
-            query,
-            search,
-            splitBy,
-            url
-          };
-        }
-        splitBy = CONFIG.commandPathDelimiter;
-        const [pathKey, path] = query.split(new RegExp(`${splitBy}(.*)`));
-        if (COMMANDS.has(pathKey)) {
-          const {
-            url: base
-          } = COMMANDS.get(pathKey);
-          const [baseUrl] = Search.#splitUrl(base);
-          const url = `${baseUrl}/${path}`;
-          return {
-            key: pathKey,
-            path,
-            query,
-            splitBy,
-            url
-          };
-        }
-        const [baseUrl, rest] = Search.#splitUrl(CONFIG.defaultSearchTemplate);
-        const url = Search.#formatSearchUrl(baseUrl, rest, query);
-        return {
-          query,
-          search: query,
-          url
-        };
-      };
-      static #splitUrl(url) {
-        const parser = document.createElement('a');
-        parser.href = url;
-        const baseUrl = `${parser.protocol}//${parser.hostname}`;
-        const rest = `${parser.pathname}${parser.search}`;
-        return [baseUrl, rest];
-      }
-      #close() {
-        this.#input.value = '';
-        this.#input.blur();
-        this.#dialog.close();
-        this.#suggestions.innerHTML = '';
-      }
-      #execute(query) {
-        const {
-          url
-        } = Search.#parseQuery(query);
-        const target = CONFIG.openLinksInNewTab ? '_blank' : '_self';
-        window.open(url, target, 'noopener noreferrer');
-        this.#close();
-      }
-      #focusNextSuggestion(previous = false) {
-        const active = this.shadowRoot.activeElement;
-        let nextIndex;
-        if (active.dataset.index) {
-          const activeIndex = Number(active.dataset.index);
-          nextIndex = previous ? activeIndex - 1 : activeIndex + 1;
-        } else {
-          nextIndex = previous ? this.#suggestions.childElementCount - 1 : 0;
-        }
-        const next = this.#suggestions.children[nextIndex];
-        if (next) next.querySelector('.suggestion').focus();
-        else this.#input.focus();
-      }
-      #onInput = async () => {
-        const oq = Search.#parseQuery(this.#input.value);
-        if (!oq.query) {
-          this.#close();
-          return;
-        }
-        let suggestions = COMMANDS.get(oq.query)?.suggestions ?? [];
-        if (oq.search && suggestions.length < CONFIG.suggestionLimit) {
-          const res = await Search.#fetchDuckDuckGoSuggestions(oq.search);
-          const formatted = Search.#attachSearchPrefix(res, oq);
-          suggestions = suggestions.concat(formatted);
-        }
-        const nq = Search.#parseQuery(this.#input.value);
-        if (nq.query !== oq.query) return;
-        this.#renderSuggestions(suggestions, oq.query);
-      };
-      #onKeydown = (e) => {
-        if (!this.#dialog.open) {
-          this.#dialog.show();
-          this.#input.focus();
-          requestAnimationFrame(() => {
-            // close the search dialog before the next repaint if a character is
-            // not produced (e.g. if you type shift, control, alt etc.)
-            if (!this.#input.value) this.#close();
-          });
-          return;
-        }
-        if (e.key === 'Escape') {
-          this.#close();
-          return;
-        }
-        const alt = e.altKey ? 'alt-' : '';
-        const ctrl = e.ctrlKey ? 'ctrl-' : '';
-        const meta = e.metaKey ? 'meta-' : '';
-        const shift = e.shiftKey ? 'shift-' : '';
-        const modifierPrefixedKey = `${alt}${ctrl}${meta}${shift}${e.key}`;
-        if (/^(ArrowDown|Tab|ctrl-n)$/.test(modifierPrefixedKey)) {
-          e.preventDefault();
-          this.#focusNextSuggestion();
-          return;
-        }
-        if (/^(ArrowUp|ctrl-p|shift-Tab)$/.test(modifierPrefixedKey)) {
-          e.preventDefault();
-          this.#focusNextSuggestion(true);
-        }
-      };
-      #onSubmit = () => {
-        this.#execute(this.#input.value);
-      };
-      #onSuggestionClick = (e) => {
-        const ref = e.target.closest('.suggestion');
-        if (!ref) return;
-        this.#execute(ref.dataset.suggestion);
-      };
-      #renderSuggestions(suggestions, query) {
-        this.#suggestions.innerHTML = '';
-        const sliced = suggestions.slice(0, CONFIG.suggestionLimit);
-        const template = document.getElementById('suggestion-template');
-        for (const [index, suggestion] of sliced.entries()) {
-          const clone = template.content.cloneNode(true);
-          const ref = clone.querySelector('.suggestion');
-          ref.dataset.index = index;
-          ref.dataset.suggestion = suggestion;
-          const escapedQuery = Search.#escapeRegexCharacters(query);
-          const matched = suggestion.match(new RegExp(escapedQuery, 'i'));
-          if (matched) {
-            const template = document.getElementById('match-template');
-            const clone = template.content.cloneNode(true);
-            const matchRef = clone.querySelector('.match');
-            const pre = suggestion.slice(0, matched.index);
-            const post = suggestion.slice(matched.index + matched[0].length);
-            matchRef.innerText = matched[0];
-            matchRef.insertAdjacentHTML('beforebegin', pre);
-            matchRef.insertAdjacentHTML('afterend', post);
-            ref.append(clone);
-          } else {
-            ref.innerText = suggestion;
-          }
-          this.#suggestions.append(clone);
-        }
-      }
-    }
-    customElements.define('search-component', Search);
-  </script>
-  <template id="rain-template">
-    <style>
-      canvas {
-        left: 0;
-        position: absolute;
-        top: 0;
-        z-index: -1;
-      }
-    </style>
-    <canvas class="rain"></canvas>
-  </template>
-  <script type="module">
-    class Rain extends HTMLElement {
-      #backgroundColor;
-      #canvas;
-      #ctx;
-      #drops;
-      #lastRender;
-      #rainColor;
-      #rainHeight;
-      #rainWidth;
-      constructor() {
-        super();
-        this.attachShadow({
-          mode: 'open'
-        });
-        const template = document.getElementById('rain-template');
-        const clone = template.content.cloneNode(true);
-        this.#canvas = clone.querySelector('.rain');
-        this.#ctx = this.#canvas.getContext('2d', {
-          alpha: false
-        });
-        this.#renderCanvas();
-        const rerender = Rain.debounce(this.#renderCanvas, CONFIG.rainFrameRate);
-        const mq = '(prefers-color-scheme: light)';
-        window.matchMedia(mq).addEventListener('change', rerender);
-        window.addEventListener('resize', rerender);
-        this.shadowRoot.append(clone);
-      }
-      static cssVar(name) {
-        return getComputedStyle(document.body).getPropertyValue(name);
-      }
-      static debounce(fn, delay) {
-        let timeout;
-        return () => {
-          clearTimeout(timeout);
-          timeout = setTimeout(() => fn.apply(this, arguments), delay);
-        };
-      }
-      #renderCanvas = () => {
-        this.#canvas.height = window.innerHeight;
-        this.#canvas.width = window.innerWidth;
-        this.#rainWidth = Math.ceil(this.#canvas.width / CONFIG.rainColumns);
-        this.#rainHeight = this.#rainWidth * CONFIG.rainSpeed;
-        this.#backgroundColor = Rain.cssVar('--color-background');
-        this.#rainColor = Rain.cssVar('--color-rain');
-        this.#ctx.fillStyle = this.#backgroundColor;
-        this.#ctx.fillRect(0, 0, this.#canvas.width, this.#canvas.height);
-        this.#drops = new Array(CONFIG.rainColumns).fill(0);
-        this.#lastRender = performance.now();
-        requestAnimationFrame(this.#renderRain);
-      };
-      #renderRain = (timestamp) => {
-        if (timestamp - this.#lastRender >= CONFIG.rainFrameRate) {
-          this.#ctx.fillStyle = this.#backgroundColor;
-          this.#ctx.globalAlpha = CONFIG.rainFade;
-          this.#ctx.fillRect(0, 0, this.#canvas.width, this.#canvas.height);
-          for (let i = 0; i < this.#drops.length; i++) {
-            this.#ctx.fillStyle = this.#rainColor;
-            this.#ctx.globalAlpha = 1;
-            const x = i * this.#rainWidth;
-            const y = this.#drops[i] * this.#rainHeight;
-            this.#ctx.fillRect(x, y, this.#rainWidth, this.#rainHeight);
-            if (this.#drops[i] <= 4) {
-              // fully fade out previous rain drop streak
-              this.#ctx.fillStyle = this.#backgroundColor;
-              this.#ctx.globalAlpha = this.#drops[i] === 4 ? 1 : 0.4;
-              const eraseY = y + this.#rainHeight;
-              const eraseHeight = this.#canvas.height - eraseY;
-              this.#ctx.fillRect(x, eraseY, this.#rainWidth, eraseHeight);
-            }
-            const reset = Math.random() > CONFIG.rainResilience;
-            if (reset || y > this.#canvas.height) this.#drops[i] = 0;
-            else this.#drops[i]++;
-          }
-          this.#lastRender = timestamp;
-        }
-        requestAnimationFrame(this.#renderRain);
-      };
-    }
-    customElements.define('rain-component', Rain);
-  </script>
-  <style>
     html {
       background-color: var(--color-background);
       font-family: var(--font-family);
@@ -818,7 +140,7 @@
     }
 
     h1 {
-      margin: 0 0 var(--space-3) 0;
+      margin: 0 0 calc(var(--space-2) * 0.8) 0;
       text-align: center;
       position: relative;
     }
@@ -830,6 +152,478 @@
       margin-top: var(--space-1);
       text-align: center;
       display: block;
+    }
+
+    /* Category Headers */
+    .category-title {
+      color: var(--color-text);
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-bold);
+      text-align: center;
+      margin: var(--space-3) 0 var(--space-2) 0;
+      text-shadow: 0 0 10px currentColor;
+      position: relative;
+      text-transform: uppercase;
+    }
+
+    .category-title::before {
+      content: '▶';
+      margin-right: var(--space-1);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .category-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--color-text), transparent);
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 5px var(--color-text); }
+      50% { box-shadow: 0 0 20px var(--color-text); }
+    }
+
+    /* Commands Grid - Hub Style */
+    .command-section {
+      margin-bottom: calc(var(--space-2) * 0.4);
+      width: 100%;
+      max-width: 65rem;
+    }
+
+    .commands {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: calc(var(--space-2) * 0.6);
+      list-style: none;
+      margin: 0;
+      padding: 0 0 0 var(--space-1);
+      width: 100%;
+      margin-bottom: calc(var(--space-1) * 0.15);
+      justify-items: start;
+      max-width: 60rem;
+    }
+
+    .command {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: calc(var(--space-1) * 0.5);
+      outline: 0;
+      padding: calc(var(--space-2) * 0.75);
+      text-decoration: none;
+      border-radius: 15px;
+      transition: all var(--transition-speed);
+      backdrop-filter: blur(10px);
+      background: linear-gradient(135deg, rgba(45, 45, 45, 0.2), rgba(26, 26, 26, 0.8));
+      border: 1px solid rgba(0, 255, 65, 0.2);
+      aspect-ratio: 1;
+      width: 110px;
+      height: 110px;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .command::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
+      transition: left 0.6s;
+    }
+
+    .command:hover::before {
+      left: 100%;
+    }
+
+    .command:where(:focus, :hover) {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(0, 255, 65, 0.3),
+        inset 0 0 20px rgba(0, 255, 65, 0.1);
+      border-color: var(--color-text);
+    }
+
+    /* Custom Service Icons */
+    .custom-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* Tutanota */
+    .icon-tutanota {
+      background: linear-gradient(45deg, #8B4513, #A0522D);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-tutanota::before {
+      content: '✉️';
+    }
+
+    /* Temp Mail */
+    .icon-tempmail {
+      background: linear-gradient(45deg, #FF6347, #FF7F7F);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-tempmail::before {
+      content: '📧';
+    }
+
+    /* Disroot */
+    .icon-disroot {
+      background: linear-gradient(45deg, #9370DB, #BA55D3);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-disroot::before {
+      content: '📬';
+    }
+
+    /* YouTube */
+    .icon-youtube {
+      background: linear-gradient(45deg, #FF0000, #CC0000);
+      font-size: 1.5rem;
+      color: white;
+    }
+    .icon-youtube::before {
+      content: '▶️';
+    }
+
+    /* YT Music */
+    .icon-ytmusic {
+      background: linear-gradient(45deg, #1DB954, #1ED760);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-ytmusic::before {
+      content: '🎵';
+    }
+
+    /* Jellyfin */
+    .icon-jellyfin {
+      background: linear-gradient(45deg, #00A4DC, #0099CC);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-jellyfin::before {
+      content: '📺';
+    }
+
+    /* Jukebox */
+    .icon-jukebox {
+      background: linear-gradient(45deg, #FF6B6B, #FF8E8E);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-jukebox::before {
+      content: '🎶';
+    }
+
+    /* Drive */
+    .icon-drive {
+      background: linear-gradient(45deg, #4285F4, #5A9AF5);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-drive::before {
+      content: '📁';
+    }
+
+    /* Photos */
+    .icon-photos {
+      background: linear-gradient(45deg, #FBBC04, #FCC02B);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-photos::before {
+      content: '📸';
+    }
+
+    /* Notebook */
+    .icon-notebook {
+      background: linear-gradient(45deg, #34A853, #46B564);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-notebook::before {
+      content: '📔';
+    }
+
+    /* Real-Debrid */
+    .icon-realdebrid {
+      background: linear-gradient(45deg, #6A5ACD, #7B68EE);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-realdebrid::before {
+      content: '⚡';
+    }
+
+    /* Pastebin */
+    .icon-pastebin {
+      background: linear-gradient(45deg, #2E8B57, #3CB371);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-pastebin::before {
+      content: '📋';
+    }
+
+    /* IP Location */
+    .icon-iplocation {
+      background: linear-gradient(45deg, #FF4500, #FF6347);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-iplocation::before {
+      content: '🌐';
+    }
+
+    /* Speedtest */
+    .icon-speedtest {
+      background: linear-gradient(45deg, #EA4335, #E45A4F);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-speedtest::before {
+      content: '⚡';
+    }
+
+    /* RSS */
+    .icon-rss {
+      background: linear-gradient(45deg, #FF6600, #FF7F00);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-rss::before {
+      content: '📡';
+    }
+
+    /* Seedbox */
+    .icon-seedbox {
+      background: linear-gradient(45deg, #228B22, #32CD32);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-seedbox::before {
+      content: '📦';
+    }
+
+    /* Soulseek */
+    .icon-soulseek {
+      background: linear-gradient(45deg, #8A2BE2, #9932CC);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-soulseek::before {
+      content: '🎵';
+    }
+
+    /* Gmail */
+    .icon-gmail {
+      background: linear-gradient(45deg, #EA4335, #FBBC04);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-gmail::before {
+      content: '✉️';
+    }
+
+    /* Reddit */
+    .icon-reddit {
+      background: linear-gradient(45deg, #FF4500, #FF6347);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-reddit::before {
+      content: '👽';
+    }
+
+    /* SteamRip */
+    .icon-steamrip {
+      background: linear-gradient(45deg, #171A21, #2A475E);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-steamrip::before {
+      content: '🎮';
+    }
+
+    /* Bitwarden */
+    .icon-bitwarden {
+      background: linear-gradient(45deg, #175DDC, #3567FC);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-bitwarden::before {
+      content: '🔐';
+    }
+
+    /* ProtonMail */
+    .icon-protonmail {
+      background: linear-gradient(45deg, #8B89CC, #6D4AFF);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-protonmail::before {
+      content: '🔒';
+    }
+
+    /* Tor Browser */
+    .icon-tor {
+      background: linear-gradient(45deg, #7D4698, #9A5FC9);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-tor::before {
+      content: '🌐';
+    }
+
+    /* AdGuard */
+    .icon-adguard {
+      background: linear-gradient(45deg, #66BB6A, #4CAF50);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-adguard::before {
+      content: '🛡️';
+    }
+
+    /* GitHub */
+    .icon-github {
+      background: linear-gradient(45deg, #24292E, #333842);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-github::before {
+      content: '🐙';
+    }
+
+    /* GitLab */
+    .icon-gitlab {
+      background: linear-gradient(45deg, #FC6D26, #FCA326);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-gitlab::before {
+      content: '🦊';
+    }
+
+    /* VS Code */
+    .icon-vscode {
+      background: linear-gradient(45deg, #007ACC, #0099FF);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-vscode::before {
+      content: '💻';
+    }
+
+    /* Notion */
+    .icon-notion {
+      background: linear-gradient(45deg, #FFFFFF, #F7F7F7);
+      font-size: 1.8rem;
+      color: #333;
+    }
+    .icon-notion::before {
+      content: '📝';
+    }
+
+    /* LibGen */
+    .icon-libgen {
+      background: linear-gradient(45deg, #2E8B57, #3CB371);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-libgen::before {
+      content: '📚';
+    }
+
+    /* Z-Library */
+    .icon-zlibrary {
+      background: linear-gradient(45deg, #004080, #0066CC);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-zlibrary::before {
+      content: '📖';
+    }
+
+    /* Gutenberg */
+    .icon-gutenberg {
+      background: linear-gradient(45deg, #8B4513, #CD853F);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-gutenberg::before {
+      content: '📜';
+    }
+
+    /* Udemy */
+    .icon-udemy {
+      background: linear-gradient(45deg, #EC5252, #A435F0);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-udemy::before {
+      content: '🎯';
+    }
+
+    /* Coursera */
+    .icon-coursera {
+      background: linear-gradient(45deg, #0066CC, #0080FF);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .icon-coursera::before {
+      content: '🎓';
+    }
+
+    .name {
+      color: var(--color-text-subtle);
+      transition: color var(--transition-speed);
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .command:where(:focus, :hover) .name {
+      color: var(--color-text);
+      text-shadow: 0 0 5px currentColor;
+    }
+
+    /* Rain Canvas */
+    .rain-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      pointer-events: none;
     }
 
     /* Gaming controller easter egg */
@@ -893,6 +687,131 @@
       pointer-events: none;
       z-index: 1000;
     }
+
+    @media (max-width: 500px) {
+      .commands {
+        grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+      }
+      
+      .command {
+        width: 95px;
+        height: 95px;
+        padding: calc(var(--space-1) * 0.75);
+      }
+      
+      .custom-icon {
+        width: 32px;
+        height: 32px;
+      }
+      
+      .name {
+        font-size: 0.75rem;
+      }
+    }
+    
+    /* Search Dialog */
+    .dialog {
+      align-items: center;
+      background: var(--color-background-overlay);
+      backdrop-filter: blur(10px);
+      border: none;
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      justify-content: center;
+      left: 0;
+      padding: 0;
+      top: 0;
+      width: 100%;
+      position: fixed;
+      z-index: 1000;
+    }
+
+    .dialog[open] {
+      display: flex;
+    }
+
+    .form {
+      width: 100%;
+    }
+
+    .input {
+      color: var(--color-text);
+      font-size: var(--font-size-2);
+      font-weight: var(--font-weight-bold);
+      padding: 0;
+      text-align: center;
+      width: 100%;
+      text-shadow: 0 0 10px currentColor;
+      background: transparent;
+      border: 0;
+      outline: 0;
+    }
+
+    .suggestions {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
+      list-style: none;
+      margin: var(--space-2) 0 0;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .suggestion {
+      color: var(--color-text);
+      cursor: pointer;
+      font-size: var(--font-size-1);
+      padding: var(--space-2);
+      position: relative;
+      transition: color var(--transition-speed);
+      white-space: nowrap;
+      z-index: 1;
+      border-radius: 8px;
+      backdrop-filter: blur(5px);
+    }
+
+    .suggestion:where(:focus, :hover) {
+      color: var(--color-background);
+      box-shadow: var(--border-glow);
+    }
+
+    .suggestion::before {
+      background-color: var(--color-text);
+      bottom: var(--space-2);
+      content: ' ';
+      left: var(--space-2);
+      opacity: 0;
+      position: absolute;
+      right: var(--space-2);
+      top: var(--space-2);
+      transform: translateY(0.5em);
+      transition: all var(--transition-speed);
+      z-index: -1;
+      border-radius: 8px;
+    }
+
+    .suggestion:where(:focus, :hover)::before {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .match {
+      color: var(--color-text-subtle);
+      transition: color var(--transition-speed);
+    }
+
+    .suggestion:where(:focus, :hover) .match {
+      color: var(--color-background);
+    }
+
+    @media (min-width: 700px) {
+      .suggestions {
+        flex-direction: row;
+      }
+    }
   </style>
 </head>
 <body class="scanlines">
@@ -901,52 +820,322 @@
     <h1 class="glitch" data-text="Chooch.net">Chooch.net</h1>
     <span class="subtitle">  </span>
     
-    <rain-component></rain-component>
-    <commands-component></commands-component>
-    <search-component></search-component>
+    <canvas class="rain-canvas"></canvas>
+    
+    <!-- Email & Communications Section -->
+    <div class="command-section">
+      <h2 class="category-title">📧 Email & Communications</h2>
+      <nav>
+        <menu class="commands" id="email-commands"></menu>
+      </nav>
+    </div>
+
+    <!-- Entertainment Section -->
+    <div class="command-section">
+      <h2 class="category-title">🎬 Entertainment</h2>
+      <nav>
+        <menu class="commands" id="entertainment-commands"></menu>
+      </nav>
+    </div>
+
+    <!-- Files & Storage Section -->
+    <div class="command-section">
+      <h2 class="category-title">📁 Files & Storage</h2>
+      <nav>
+        <menu class="commands" id="files-commands"></menu>
+      </nav>
+    </div>
+
+    <!-- Network & Tools Section -->
+    <div class="command-section">
+      <h2 class="category-title">🛠️ Network & Tools</h2>
+      <nav>
+        <menu class="commands" id="tools-commands"></menu>
+      </nav>
+    </div>
+
+    <!-- Torrenting Section -->
+    <div class="command-section">
+      <h2 class="category-title">🏴‍☠️ Torrenting</h2>
+      <nav>
+        <menu class="commands" id="torrenting-commands"></menu>
+      </nav>
+    </div>
+
+    <!-- Security & Privacy Section -->
+    <div class="command-section">
+      <h2 class="category-title">🔐 Security & Privacy</h2>
+      <nav>
+        <menu class="commands" id="security-commands"></menu>
+      </nav>
+    </div>
+
+    <!-- Developer Tools Section -->
+    <div class="command-section">
+      <h2 class="category-title">🛠️ Developer Tools</h2>
+      <nav>
+        <menu class="commands" id="devtools-commands"></menu>
+      </nav>
+    </div>
+
+    <!-- Research & Learning Section -->
+    <div class="command-section">
+      <h2 class="category-title">📚 Research & Learning</h2>
+      <nav>
+        <menu class="commands" id="research-commands"></menu>
+      </nav>
+    </div>
+    
+    <dialog class="dialog" id="search-dialog">
+      <form autocomplete="off" class="form" method="dialog" spellcheck="false">
+        <input class="input" title="search" type="text" id="search-input">
+        <menu class="suggestions" id="suggestions-container"></menu>
+      </form>
+    </dialog>
     
     <div class="konami">↑↑↓↓←→←→BA</div>
   </main>
 
   <script>
-    // Add floating particles effect
-    function createParticle() {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      particle.style.left = Math.random() * window.innerWidth + 'px';
-      particle.style.animationDelay = Math.random() * 2 + 's';
-      particle.style.animationDuration = (Math.random() * 4 + 2) + 's';
-      document.body.appendChild(particle);
-      
-      setTimeout(() => {
-        particle.remove();
-      }, 6000);
+    const CONFIG = {
+      commandPathDelimiter: '/',
+      commandSearchDelimiter: ' ',
+      defaultSearchTemplate: 'https://www.startpage.com/sp/search?query=%s&prf=off&ss=off',
+      openLinksInNewTab: false,
+      rainColumns: 200,
+      rainFade: 0.2,
+      rainFrameRate: 1000 / 18,
+      rainResilience: 0.8,
+      rainSpeed: 1,
+      suggestionLimit: 4,
+    };
+
+    const SERVICES = {
+      email: [
+        { name: 'Tutanota', url: 'https://mail.tutanota.com', iconClass: 'icon-tutanota' },
+        { name: 'Disroot', url: 'https://webmail.disroot.org/', iconClass: 'icon-disroot' },
+        { name: 'Gmail', url: 'https://gmail.com', iconClass: 'icon-gmail' },
+        { name: 'Temp Mail', url: 'https://zemail.me/', iconClass: 'icon-tempmail' }
+      ],
+      entertainment: [
+        { name: 'YouTube', url: 'https://youtube.com', iconClass: 'icon-youtube' },
+        { name: 'YT Music', url: 'https://music.youtube.com', iconClass: 'icon-ytmusic' },
+        { name: 'Jellyfin', url: 'https://tv.room300.net', iconClass: 'icon-jellyfin' },
+        { name: 'Jukebox', url: 'https://jukebox.chooch.net', iconClass: 'icon-jukebox' },
+        { name: 'Reddit', url: 'https://reddit.com', iconClass: 'icon-reddit' }
+      ],
+      files: [
+        { name: 'Drive', url: 'https://drive.chooch.net', iconClass: 'icon-drive' },
+        { name: 'Photos', url: 'https://photos.chooch.net', iconClass: 'icon-photos' },
+        { name: 'Notebook', url: 'https://notebook.chooch.net', iconClass: 'icon-notebook' },
+        { name: 'Pastebin', url: 'https://pastebin.com/', iconClass: 'icon-pastebin' }
+      ],
+      tools: [
+        { name: 'IP Location', url: 'https://ipleak.net/', iconClass: 'icon-iplocation' },
+        { name: 'Speedtest', url: 'https://real-debrid.com/speedtest', iconClass: 'icon-speedtest' },
+        { name: 'RSS', url: 'https://rss.chooch.net', iconClass: 'icon-rss' },
+        { name: 'AirVPN', url: 'https://airvpn.org/', iconClass: 'icon-airvpn' }
+      ],
+      torrenting: [
+        { name: 'Real-Debrid', url: 'https://real-debrid.com/', iconClass: 'icon-realdebrid' },
+        { name: 'Seedbox', url: 'https://seedbox.chooch.net', iconClass: 'icon-seedbox' },
+        { name: 'Soulseek', url: 'https://soulseek.chooch.net', iconClass: 'icon-soulseek' },
+        { name: 'SteamRip', url: 'https://steamrip.com/', iconClass: 'icon-steamrip' }
+      ],
+      security: [
+        { name: 'Bitwarden', url: 'https://bitwarden.com/', iconClass: 'icon-bitwarden' },
+        { name: 'ProtonMail', url: 'https://proton.me/mail', iconClass: 'icon-protonmail' },
+        { name: 'AdGuard', url: 'https://adguard.com/', iconClass: 'icon-adguard' }
+      ],
+      devtools: [
+        { name: 'GitHub', url: 'https://github.com/', iconClass: 'icon-github' },
+        { name: 'GitLab', url: 'https://gitlab.com/', iconClass: 'icon-gitlab' },
+        { name: 'VS Code', url: 'https://vscode.dev/', iconClass: 'icon-vscode' },
+        { name: 'Notion', url: 'https://notion.so/', iconClass: 'icon-notion' }
+      ],
+      research: [
+        { name: 'LibGen', url: 'https://libgen.is/', iconClass: 'icon-libgen' },
+        { name: 'Udemy', url: 'https://udemy.com/', iconClass: 'icon-udemy' },
+        { name: 'FMHY', url: 'https://fmhy.net/', iconClass: 'icon-fmhy' }
+      ]
+    };
+
+    // Initialize Commands by Category
+    function initCommands() {
+      const categories = {
+        'email-commands': SERVICES.email,
+        'entertainment-commands': SERVICES.entertainment,
+        'files-commands': SERVICES.files,
+        'tools-commands': SERVICES.tools,
+        'torrenting-commands': SERVICES.torrenting,
+        'security-commands': SERVICES.security,
+        'devtools-commands': SERVICES.devtools,
+        'research-commands': SERVICES.research
+      };
+
+      for (const [containerId, services] of Object.entries(categories)) {
+        const container = document.getElementById(containerId);
+        if (!container) {
+          console.error(`Container ${containerId} not found`);
+          continue;
+        }
+        
+        services.forEach(service => {
+          const li = document.createElement('li');
+          const link = document.createElement('a');
+          link.className = 'command';
+          link.href = service.url;
+          link.rel = 'noopener noreferrer';
+          if (CONFIG.openLinksInNewTab) link.target = '_blank';
+          
+          const icon = document.createElement('div');
+          icon.className = `custom-icon ${service.iconClass}`;
+          icon.setAttribute('aria-label', service.name);
+          
+          const name_span = document.createElement('span');
+          name_span.className = 'name';
+          name_span.textContent = service.name;
+          
+          link.appendChild(icon);
+          link.appendChild(name_span);
+          li.appendChild(link);
+          container.appendChild(li);
+        });
+      }
     }
 
-    // Create particles periodically
-    setInterval(createParticle, 800);
-
-    // Konami code easter egg
-    let konamiCode = [];
-    const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // ↑↑↓↓←→←→BA
-    
-    document.addEventListener('keydown', (e) => {
-      konamiCode.push(e.keyCode);
-      konamiCode = konamiCode.slice(-konami.length);
-      
-      if (konamiCode.join(',') === konami.join(',')) {
-        // Activate special Room300 mode
-        document.body.style.filter = 'hue-rotate(90deg) saturate(1.5)';
-        setTimeout(() => {
-          document.body.style.filter = '';
-        }, 3000);
+    // Rain Effect
+    class Rain {
+      constructor() {
+        this.canvas = document.querySelector('.rain-canvas');
+        this.ctx = this.canvas.getContext('2d', { alpha: false });
+        this.renderCanvas();
+        
+        const rerender = this.debounce(this.renderCanvas.bind(this), CONFIG.rainFrameRate);
+        window.addEventListener('resize', rerender);
       }
-    });
+      
+      static cssVar(name) {
+        return getComputedStyle(document.body).getPropertyValue(name);
+      }
+      
+      debounce(fn, delay) {
+        let timeout;
+        return () => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => fn.apply(this, arguments), delay);
+        };
+      }
+      
+      renderCanvas() {
+        this.canvas.height = window.innerHeight;
+        this.canvas.width = window.innerWidth;
+        this.rainWidth = Math.ceil(this.canvas.width / CONFIG.rainColumns);
+        this.rainHeight = this.rainWidth * CONFIG.rainSpeed;
+        this.backgroundColor = Rain.cssVar('--color-background');
+        this.rainColor = Rain.cssVar('--color-rain');
+        this.ctx.fillStyle = this.backgroundColor;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.drops = new Array(CONFIG.rainColumns).fill(0);
+        this.lastRender = performance.now();
+        requestAnimationFrame(this.renderRain.bind(this));
+      }
+      
+      renderRain(timestamp) {
+        if (timestamp - this.lastRender >= CONFIG.rainFrameRate) {
+          this.ctx.fillStyle = this.backgroundColor;
+          this.ctx.globalAlpha = CONFIG.rainFade; 
+          this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+          
+          for (let i = 0; i < this.drops.length; i++) {
+            this.ctx.fillStyle = this.rainColor;
+            this.ctx.globalAlpha = 1;
+            const x = i * this.rainWidth;
+            const y = this.drops[i] * this.rainHeight;
+            this.ctx.fillRect(x, y, this.rainWidth, this.rainHeight);
+            
+            if (this.drops[i] <= 4) {
+              this.ctx.fillStyle = this.backgroundColor;
+              this.ctx.globalAlpha = this.drops[i] === 4 ? 1 : 0.4;
+              const eraseY = y + this.rainHeight;
+              const eraseHeight = this.canvas.height - eraseY;
+              this.ctx.fillRect(x, eraseY, this.rainWidth, eraseHeight);
+            }
+            
+            const reset = Math.random() > CONFIG.rainResilience;
+            if (reset || y > this.canvas.height) this.drops[i] = 0;
+            else this.drops[i]++;
+          }
+          this.lastRender = timestamp;
+        }
+        requestAnimationFrame(this.renderRain.bind(this));
+      }
+    }
 
-    // Add some nostalgic comments
-    console.log('Room300 - Where legends were made 🎮');
-    console.log('FMS Class of 2024 🎓');
-    console.log('Best times with the best friends 👬');
+    // Search functionality (simplified for this context)
+    class Search {
+      constructor() {
+        this.dialog = document.getElementById('search-dialog');
+        this.input = document.getElementById('search-input');
+        
+        document.addEventListener('keydown', (e) => {
+          if (!this.dialog.open && !e.altKey && !e.ctrlKey && !e.metaKey) {
+            this.dialog.show();
+            this.input.focus();
+          }
+          if (e.key === 'Escape' && this.dialog.open) {
+            this.dialog.close();
+            this.input.value = '';
+          }
+        });
+      }
+    }
+
+    // Initialize everything
+    document.addEventListener('DOMContentLoaded', () => {
+      initCommands();
+      new Rain();
+      new Search();
+      
+      // Floating particles effect
+      function createParticle() {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * window.innerWidth + 'px';
+        particle.style.animationDelay = Math.random() * 2 + 's';
+        particle.style.animationDuration = (Math.random() * 4 + 2) + 's';
+        document.body.appendChild(particle);
+        
+        setTimeout(() => {
+          particle.remove();
+        }, 6000);
+      }
+      
+      // Create particles periodically
+      setInterval(createParticle, 800);
+      
+      // Konami code easter egg
+      let konamiCode = [];
+      const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // ↑↑↓↓←→←→BA
+      
+      document.addEventListener('keydown', (e) => {
+        konamiCode.push(e.keyCode);
+        konamiCode = konamiCode.slice(-konami.length);
+        
+        if (konamiCode.join(',') === konami.join(',')) {
+          // Activate special Room300 mode
+          document.body.style.filter = 'hue-rotate(90deg) saturate(1.5)';
+          setTimeout(() => {
+            document.body.style.filter = '';
+          }, 3000);
+        }
+      });
+      
+      // Add some nostalgic comments
+      console.log('Room300 - Where legends were made 🎮');
+      console.log('FMS Class of 2024 🎓');
+      console.log('Best times with the best friends 👬');
+    });
   </script>
-</body>
-</html>
+
+</body></html>
