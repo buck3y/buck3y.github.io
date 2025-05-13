@@ -205,9 +205,10 @@
         .links-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 1rem;
-            max-width: 1000px;
+            gap: 2rem;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 0 2rem;
         }
 
         .link-card {
@@ -215,7 +216,7 @@
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
-            padding: 1rem;
+            padding: 1.5rem 1rem;
             text-decoration: none;
             color: #ffffff;
             transition: all 0.3s ease;
@@ -225,8 +226,9 @@
             flex-direction: column;
             align-items: center;
             gap: 0.8rem;
-            min-height: 100px;
+            min-height: 120px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            width: 100%;
         }
 
         .link-card:hover {
@@ -273,43 +275,24 @@
 
         /* Search functionality */
         .search-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 500px;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-        }
-
-        .search-container.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .search-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(15px);
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .search-overlay.active {
-            opacity: 1;
-            visibility: visible;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .search-box {
+            position: relative;
+            background: transparent;
+            backdrop-filter: none;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            box-shadow: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box.active {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, 0.12);
@@ -327,10 +310,59 @@
             color: #ffffff;
             font-family: 'JetBrains Mono', monospace;
             font-weight: 400;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .search-input.active {
+            text-align: left;
         }
 
         .search-input::placeholder {
             color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 2;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .search-suggestions.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .suggestion-item {
+            padding: 0.75rem 1rem;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 300;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .suggestion-item:hover,
+        .suggestion-item.highlighted {
+            background: rgba(255, 255, 255, 0.08);
+            color: #00ff00;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
         }
 
         .instructions {
@@ -344,22 +376,32 @@
         }
 
         /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .links-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 1.5rem;
+                padding: 0 1.5rem;
+            }
+        }
+
         @media (max-width: 1024px) {
             .links-grid {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 0.8rem;
+                gap: 1.2rem;
+                padding: 0 1rem;
             }
         }
 
         @media (max-width: 768px) {
             .links-grid {
                 grid-template-columns: repeat(3, 1fr);
-                gap: 0.6rem;
+                gap: 1rem;
+                padding: 0 0.5rem;
             }
             
             .link-card {
-                padding: 0.8rem;
-                min-height: 80px;
+                padding: 1rem 0.8rem;
+                min-height: 100px;
             }
 
             .link-icon {
@@ -382,6 +424,7 @@
             
             .links-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
             }
         }
     </style>
@@ -400,6 +443,14 @@
             <div class="subtitle">digital hub</div>
             <div class="clock" id="clock"></div>
         </header>
+
+        <!-- Search Box -->
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="what time is it">
+                <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+        </div>
 
         <div class="links-grid">
             <a href="https://tutanota.com" class="link-card">
@@ -453,7 +504,6 @@
             <a href="https://your-jukebox.com" class="link-card">
                 <span class="link-icon">🎵</span>
                 <div class="link-title">Jukebox</div>
-                <div class="link-title">Your</div>
                 <div class="link-desc">tunes</div>
             </a>
 
@@ -513,15 +563,7 @@
         </div>
     </div>
 
-    <!-- Search -->
-    <div class="search-overlay" id="searchOverlay"></div>
-    <div class="search-container" id="searchContainer">
-        <div class="search-box">
-            <input type="text" class="search-input" id="searchInput" placeholder="search...">
-        </div>
-    </div>
-
-    <div class="instructions">start typing to search</div>
+    <div class="instructions">type to search</div>
 
     <script>
         // Clock
@@ -601,61 +643,154 @@
             setTimeout(createFogParticle, i * 50);
         }
 
-        // Search functionality
-        const searchOverlay = document.getElementById('searchOverlay');
-        const searchContainer = document.getElementById('searchContainer');
+        // Search functionality with auto-suggestions
         const searchInput = document.getElementById('searchInput');
-        let searchVisible = false;
+        const searchSuggestions = document.getElementById('searchSuggestions');
+        const searchBox = document.querySelector('.search-box');
+        let currentSuggestionIndex = -1;
+        let suggestions = [];
+        let isSearchActive = false;
+        
+        // Common time-related search suggestions
+        const commonSuggestions = [
+            'what time is it in japan',
+            'what time is it in london',
+            'what time is it in portland oregon',
+            'what time is it in australia',
+            'what time is it in new york',
+            'what time is it in california',
+            'what time is it in paris',
+            'what time is it in tokyo',
+        ];
 
-        document.addEventListener('keydown', (e) => {
-            if (searchVisible || e.ctrlKey || e.metaKey || e.altKey) return;
-            
-            if (e.key.length === 1 && /[a-zA-Z0-9]/.test(e.key)) {
-                showSearch();
-                setTimeout(() => {
-                    searchInput.value = e.key;
-                    searchInput.focus();
-                }, 50);
+        function activateSearch() {
+            if (!isSearchActive) {
+                isSearchActive = true;
+                searchBox.classList.add('active');
+                searchInput.classList.add('active');
             }
+        }
+
+        function deactivateSearch() {
+            if (isSearchActive && searchInput.value.trim() === '') {
+                isSearchActive = false;
+                searchBox.classList.remove('active');
+                searchInput.classList.remove('active');
+                hideSuggestions();
+            }
+        }
+
+        function showSuggestions(query) {
+            if (query.length === 0) {
+                hideSuggestions();
+                return;
+            }
+
+            // Filter suggestions based on query
+            suggestions = commonSuggestions.filter(suggestion => 
+                suggestion.toLowerCase().includes(query.toLowerCase())
+            );
+
+            if (suggestions.length === 0) {
+                hideSuggestions();
+                return;
+            }
+
+            searchSuggestions.innerHTML = '';
+            suggestions.forEach((suggestion, index) => {
+                const suggestionElement = document.createElement('div');
+                suggestionElement.className = 'suggestion-item';
+                suggestionElement.textContent = suggestion;
+                suggestionElement.addEventListener('click', () => {
+                    searchInput.value = suggestion;
+                    performSearch(suggestion);
+                });
+                searchSuggestions.appendChild(suggestionElement);
+            });
+
+            searchSuggestions.classList.add('active');
+            currentSuggestionIndex = -1;
+        }
+
+        function hideSuggestions() {
+            searchSuggestions.classList.remove('active');
+            suggestions = [];
+            currentSuggestionIndex = -1;
+        }
+
+        function highlightSuggestion(index) {
+            const suggestionItems = searchSuggestions.querySelectorAll('.suggestion-item');
+            suggestionItems.forEach(item => item.classList.remove('highlighted'));
+            
+            if (index >= 0 && index < suggestionItems.length) {
+                suggestionItems[index].classList.add('highlighted');
+            }
+        }
+
+        function performSearch(query) {
+            const searchUrl = `https://www.startpage.com/sp/search?query=${encodeURIComponent(query)}&abp=1&t=night&lui=english&cat=web&abd=1&prfe=bfc85c1d885357c455065cb1ddcee0a65c66627199470e854d8cf578fa2f6ca0deea4cb4fa181162bce2f096d76df7fe86753b93f749e81e69e6c0904008c2923dd5902389bf3777806c92e759`;
+            window.location.href = searchUrl;
+        }
+
+        // Search input event listeners
+        searchInput.addEventListener('focus', () => {
+            activateSearch();
         });
 
-        function showSearch() {
-            searchVisible = true;
-            searchOverlay.classList.add('active');
-            searchContainer.classList.add('active');
-        }
+        searchInput.addEventListener('blur', () => {
+            // Delay deactivation to allow for suggestion clicks
+            setTimeout(() => {
+                if (!searchSuggestions.matches(':hover')) {
+                    deactivateSearch();
+                }
+            }, 200);
+        });
 
-        function hideSearch() {
-            searchVisible = false;
-            searchOverlay.classList.remove('active');
-            searchContainer.classList.remove('active');
-            searchInput.blur();
-            searchInput.value = '';
-        }
+        searchInput.addEventListener('input', (e) => {
+            const value = e.target.value;
+            if (value.length > 0) {
+                activateSearch();
+            }
+            showSuggestions(value);
+        });
 
         searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                hideSearch();
-            } else if (e.key === 'Enter') {
-                const query = searchInput.value.trim();
-                if (query) {
-                    if (query.includes('.') && !query.includes(' ')) {
-                        const url = query.startsWith('http') ? query : `https://${query}`;
-                        window.location.href = url;
-                    } else {
-                        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-                    }
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (currentSuggestionIndex < suggestions.length - 1) {
+                    currentSuggestionIndex++;
+                    highlightSuggestion(currentSuggestionIndex);
                 }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (currentSuggestionIndex > 0) {
+                    currentSuggestionIndex--;
+                    highlightSuggestion(currentSuggestionIndex);
+                }
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (currentSuggestionIndex >= 0 && currentSuggestionIndex < suggestions.length) {
+                    const selectedSuggestion = suggestions[currentSuggestionIndex];
+                    searchInput.value = selectedSuggestion;
+                    performSearch(selectedSuggestion);
+                } else {
+                    performSearch(searchInput.value);
+                }
+            } else if (e.key === 'Escape') {
+                hideSuggestions();
+                searchInput.blur();
             }
         });
 
-        searchOverlay.addEventListener('click', hideSearch);
-
+        // Hide suggestions when clicking outside
         document.addEventListener('click', (e) => {
-            if (searchVisible && !searchContainer.contains(e.target)) {
-                hideSearch();
+            if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
+                hideSuggestions();
             }
         });
+
+        // Don't auto-focus search input when page loads
+        // searchInput.focus();
     </script>
 </body>
 </html>
