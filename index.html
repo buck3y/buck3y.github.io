@@ -17,128 +17,161 @@
             background: #080808;
             color: #ffffff;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* Heavy smoke background layers */
-        .smoke-bg {
+        /* Fog machine effects */
+        .fog-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(60, 60, 60, 0.4) 0%, transparent 40%),
-                radial-gradient(circle at 90% 30%, rgba(40, 40, 40, 0.5) 0%, transparent 45%),
-                radial-gradient(circle at 30% 70%, rgba(70, 70, 70, 0.3) 0%, transparent 35%),
-                radial-gradient(circle at 70% 80%, rgba(50, 50, 50, 0.4) 0%, transparent 40%),
-                radial-gradient(circle at 50% 10%, rgba(45, 45, 45, 0.3) 0%, transparent 30%);
-            z-index: -4;
-            animation: smokeShift 30s ease-in-out infinite;
-        }
-
-        @keyframes smokeShift {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(-20px, -15px) scale(1.05); }
-            50% { transform: translate(15px, -10px) scale(0.98); }
-            75% { transform: translate(-10px, 20px) scale(1.02); }
-        }
-
-        .smoke-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                linear-gradient(45deg, rgba(0,0,0,0.6), rgba(30,30,30,0.3), rgba(0,0,0,0.5)),
-                linear-gradient(120deg, rgba(20,20,20,0.4), rgba(0,0,0,0.7));
-            z-index: -3;
-            animation: smokeOverlay 25s ease-in-out infinite;
-        }
-
-        @keyframes smokeOverlay {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 0.9; }
-        }
-
-        /* Realistic smoke particles */
-        .smoke-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
+            z-index: -1;
             overflow: hidden;
         }
 
-        .smoke-particle {
+        .fog-layer {
             position: absolute;
-            background: radial-gradient(circle, rgba(90,90,90,0.6) 0%, rgba(60,60,60,0.4) 30%, transparent 70%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, 
+                rgba(220, 220, 220, 0.1) 0%, 
+                rgba(150, 150, 150, 0.08) 20%, 
+                rgba(100, 100, 100, 0.06) 40%, 
+                rgba(70, 70, 70, 0.04) 60%, 
+                rgba(30, 30, 30, 0.02) 80%, 
+                transparent 100%);
+            animation: fogMove1 30s linear infinite;
+        }
+
+        .fog-layer:nth-child(2) {
+            animation: fogMove2 25s linear infinite reverse;
+            background: radial-gradient(ellipse at center, 
+                rgba(200, 200, 200, 0.08) 0%, 
+                rgba(120, 120, 120, 0.06) 25%, 
+                rgba(80, 80, 80, 0.04) 50%, 
+                rgba(50, 50, 50, 0.03) 75%, 
+                transparent 100%);
+        }
+
+        .fog-layer:nth-child(3) {
+            animation: fogMove3 35s linear infinite;
+            background: radial-gradient(ellipse at center, 
+                rgba(180, 180, 180, 0.09) 0%, 
+                rgba(110, 110, 110, 0.07) 20%, 
+                rgba(70, 70, 70, 0.05) 40%, 
+                rgba(40, 40, 40, 0.03) 60%, 
+                transparent 100%);
+        }
+
+        @keyframes fogMove1 {
+            0% { transform: translateX(-100%) translateY(0%) scale(1); }
+            100% { transform: translateX(100%) translateY(-10%) scale(1.5); }
+        }
+
+        @keyframes fogMove2 {
+            0% { transform: translateX(100%) translateY(5%) scale(1.2); }
+            100% { transform: translateX(-100%) translateY(-5%) scale(1.8); }
+        }
+
+        @keyframes fogMove3 {
+            0% { transform: translateX(-100%) translateY(-5%) scale(0.8); }
+            100% { transform: translateX(100%) translateY(10%) scale(2); }
+        }
+
+        /* Dynamic fog particles */
+        .fog-particle {
+            position: absolute;
+            background: radial-gradient(circle at center, 
+                rgba(255, 255, 255, 0.15) 0%, 
+                rgba(200, 200, 200, 0.1) 20%, 
+                rgba(150, 150, 150, 0.08) 40%, 
+                rgba(100, 100, 100, 0.06) 60%, 
+                rgba(50, 50, 50, 0.04) 80%, 
+                transparent 100%);
             border-radius: 50%;
-            filter: blur(1.5px);
+            filter: blur(2px);
             opacity: 0;
         }
 
-        .smoke-large {
-            animation: smokeLarge 20s infinite linear;
+        .fog-particle.large {
+            animation: fogParticleLarge 15s infinite linear;
         }
 
-        .smoke-medium {
-            animation: smokeMedium 15s infinite linear;
+        .fog-particle.medium {
+            animation: fogParticleMedium 12s infinite linear;
         }
 
-        .smoke-small {
-            animation: smokeSmall 12s infinite linear;
+        .fog-particle.small {
+            animation: fogParticleSmall 10s infinite linear;
         }
 
-        @keyframes smokeLarge {
+        @keyframes fogParticleLarge {
             0% {
-                transform: translateY(110vh) translateX(0px) rotate(0deg) scale(0.8);
+                transform: translateX(-200px) translateY(0) rotate(0deg) scale(0.5);
                 opacity: 0;
             }
-            5% { opacity: 0.4; }
-            15% { opacity: 0.6; }
-            85% { opacity: 0.3; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.3; }
             100% {
-                transform: translateY(-10vh) translateX(100px) rotate(180deg) scale(2.5);
+                transform: translateX(calc(100vw + 200px)) translateY(-100px) rotate(180deg) scale(3);
                 opacity: 0;
             }
         }
 
-        @keyframes smokeMedium {
+        @keyframes fogParticleMedium {
             0% {
-                transform: translateY(110vh) translateX(0px) rotate(0deg) scale(0.6);
+                transform: translateX(-150px) translateY(50px) rotate(0deg) scale(0.4);
                 opacity: 0;
             }
-            8% { opacity: 0.5; }
-            20% { opacity: 0.7; }
-            80% { opacity: 0.4; }
+            15% { opacity: 0.7; }
+            85% { opacity: 0.4; }
             100% {
-                transform: translateY(-5vh) translateX(-80px) rotate(-90deg) scale(2);
+                transform: translateX(calc(100vw + 150px)) translateY(-50px) rotate(-90deg) scale(2.5);
                 opacity: 0;
             }
         }
 
-        @keyframes smokeSmall {
+        @keyframes fogParticleSmall {
             0% {
-                transform: translateY(110vh) translateX(0px) rotate(0deg) scale(0.4);
+                transform: translateX(-100px) translateY(-20px) rotate(0deg) scale(0.3);
                 opacity: 0;
             }
-            10% { opacity: 0.6; }
-            25% { opacity: 0.8; }
-            75% { opacity: 0.5; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.5; }
             100% {
-                transform: translateY(-2vh) translateX(60px) rotate(270deg) scale(1.5);
+                transform: translateX(calc(100vw + 100px)) translateY(30px) rotate(90deg) scale(2);
                 opacity: 0;
             }
+        }
+
+        /* Heavy fog overlay */
+        .fog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, rgba(0,0,0,0.3), rgba(80,80,80,0.1), rgba(0,0,0,0.4)),
+                linear-gradient(120deg, rgba(60,60,60,0.2), rgba(0,0,0,0.6));
+            z-index: -1;
+            animation: fogOverlayShift 20s ease-in-out infinite;
+        }
+
+        @keyframes fogOverlayShift {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.9; }
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem 1rem;
+            z-index: 1;
+            position: relative;
         }
 
         header {
@@ -152,6 +185,7 @@
             letter-spacing: -0.5px;
             margin-bottom: 0.5rem;
             color: #f0f0f0;
+            text-shadow: 0 0 10px rgba(255,255,255,0.1);
         }
 
         .subtitle {
@@ -167,33 +201,39 @@
             font-weight: 300;
         }
 
-        /* Landscape oriented, smaller link grid */
+        /* 6-column grid layout */
         .links-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 0.8rem;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1rem;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         .link-card {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 8px;
-            padding: 0.6rem 0.8rem;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1rem;
             text-decoration: none;
             color: #ffffff;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 0.8rem;
+            min-height: 100px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
         .link-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-1px);
-            border-color: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.4);
         }
 
         .link-card::before {
@@ -203,7 +243,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
             transition: left 0.5s ease;
         }
 
@@ -212,26 +252,22 @@
         }
 
         .link-icon {
-            font-size: 1.2rem;
+            font-size: 1.8rem;
             flex-shrink: 0;
         }
 
-        .link-content {
-            flex: 1;
-            min-width: 0;
-        }
-
         .link-title {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 500;
+            text-align: center;
             line-height: 1.2;
-            margin-bottom: 0.1rem;
         }
 
         .link-desc {
-            font-size: 0.65rem;
-            opacity: 0.5;
+            font-size: 0.7rem;
+            opacity: 0.6;
             font-weight: 300;
+            text-align: center;
             line-height: 1.1;
         }
 
@@ -274,11 +310,12 @@
         }
 
         .search-box {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 25px;
             padding: 1rem 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .search-input {
@@ -306,19 +343,27 @@
             font-weight: 300;
         }
 
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .links-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0.8rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .links-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(3, 1fr);
                 gap: 0.6rem;
             }
             
             .link-card {
-                padding: 0.5rem 0.7rem;
-                gap: 0.6rem;
+                padding: 0.8rem;
+                min-height: 80px;
             }
 
             .link-icon {
-                font-size: 1rem;
+                font-size: 1.5rem;
             }
 
             .link-title {
@@ -334,13 +379,20 @@
             .container {
                 padding: 1.5rem 0.8rem;
             }
+            
+            .links-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="smoke-bg"></div>
-    <div class="smoke-overlay"></div>
-    <div class="smoke-container" id="smokeContainer"></div>
+    <div class="fog-container" id="fogContainer">
+        <div class="fog-layer"></div>
+        <div class="fog-layer"></div>
+        <div class="fog-layer"></div>
+    </div>
+    <div class="fog-overlay"></div>
 
     <div class="container">
         <header>
@@ -350,154 +402,113 @@
         </header>
 
         <div class="links-grid">
-            <!-- Row 1 -->
             <a href="https://tutanota.com" class="link-card">
                 <span class="link-icon">📧</span>
-                <div class="link-content">
-                    <div class="link-title">tutanota</div>
-                    <div class="link-desc">secure mail</div>
-                </div>
+                <div class="link-title">Tutanota</div>
+                <div class="link-desc">secure mail</div>
+            </a>
+
+            <a href="https://your-rss.com" class="link-card">
+                <span class="link-icon">📡</span>
+                <div class="link-title">RSS</div>
+                <div class="link-desc">feeds</div>
             </a>
 
             <a href="https://your-jellyfin.com" class="link-card">
                 <span class="link-icon">🎬</span>
-                <div class="link-content">
-                    <div class="link-title">jellyfin</div>
-                    <div class="link-desc">media</div>
-                </div>
-            </a>
-
-            <a href="https://your-seedbox.com" class="link-card">
-                <span class="link-icon">🌱</span>
-                <div class="link-content">
-                    <div class="link-title">seedbox</div>
-                    <div class="link-desc">torrents</div>
-                </div>
-            </a>
-
-            <!-- Row 2 -->
-            <a href="https://temp-mail.org" class="link-card">
-                <span class="link-icon">📨</span>
-                <div class="link-content">
-                    <div class="link-title">temp mail</div>
-                    <div class="link-desc">disposable</div>
-                </div>
-            </a>
-
-            <a href="https://your-jukebox.com" class="link-card">
-                <span class="link-icon">🎵</span>
-                <div class="link-content">
-                    <div class="link-title">jukebox</div>
-                    <div class="link-desc">tunes</div>
-                </div>
-            </a>
-
-            <a href="https://your-soulseek.com" class="link-card">
-                <span class="link-icon">🔍</span>
-                <div class="link-content">
-                    <div class="link-title">soulseek</div>
-                    <div class="link-desc">p2p</div>
-                </div>
-            </a>
-
-            <!-- Row 3 -->
-            <a href="https://discord.com" class="link-card">
-                <span class="link-icon">💬</span>
-                <div class="link-content">
-                    <div class="link-title">discord</div>
-                    <div class="link-desc">chat</div>
-                </div>
-            </a>
-
-            <a href="https://music.youtube.com" class="link-card">
-                <span class="link-icon">🎶</span>
-                <div class="link-content">
-                    <div class="link-title">yt music</div>
-                    <div class="link-desc">streaming</div>
-                </div>
-            </a>
-
-            <a href="https://your-debrid.com" class="link-card">
-                <span class="link-icon">💨</span>
-                <div class="link-content">
-                    <div class="link-title">debrid</div>
-                    <div class="link-desc">download</div>
-                </div>
-            </a>
-
-            <!-- Row 4 -->
-            <a href="https://your-rss.com" class="link-card">
-                <span class="link-icon">📡</span>
-                <div class="link-content">
-                    <div class="link-title">rss</div>
-                    <div class="link-desc">feeds</div>
-                </div>
+                <div class="link-title">Jellyfin</div>
+                <div class="link-desc">media</div>
             </a>
 
             <a href="https://youtube.com" class="link-card">
                 <span class="link-icon">📺</span>
-                <div class="link-content">
-                    <div class="link-title">youtube</div>
-                    <div class="link-desc">videos</div>
-                </div>
+                <div class="link-title">Youtube</div>
+                <div class="link-desc">videos</div>
+            </a>
+
+            <a href="https://your-seedbox.com" class="link-card">
+                <span class="link-icon">🌱</span>
+                <div class="link-title">Seedbox</div>
+                <div class="link-desc">torrents</div>
             </a>
 
             <a href="https://your-bin.com" class="link-card">
                 <span class="link-icon">🗂️</span>
-                <div class="link-content">
-                    <div class="link-title">bin</div>
-                    <div class="link-desc">storage</div>
-                </div>
+                <div class="link-title">Bin</div>
+                <div class="link-desc">storage</div>
             </a>
 
-            <!-- Row 5 -->
+            <a href="https://temp-mail.org" class="link-card">
+                <span class="link-icon">📨</span>
+                <div class="link-title">Temp Mail</div>
+                <div class="link-desc">disposable</div>
+            </a>
+
             <a href="https://drive.google.com" class="link-card">
                 <span class="link-icon">☁️</span>
-                <div class="link-content">
-                    <div class="link-title">drive</div>
-                    <div class="link-desc">cloud</div>
-                </div>
+                <div class="link-title">Drive</div>
+                <div class="link-desc">cloud</div>
+            </a>
+
+            <a href="https://your-jukebox.com" class="link-card">
+                <span class="link-icon">🎵</span>
+                <div class="link-title">Jukebox</div>
+                <div class="link-title">Your</div>
+                <div class="link-desc">tunes</div>
             </a>
 
             <a href="https://iplocation.net" class="link-card">
                 <span class="link-icon">🌍</span>
-                <div class="link-content">
-                    <div class="link-title">ip location</div>
-                    <div class="link-desc">geo</div>
-                </div>
+                <div class="link-title">IP Location</div>
+                <div class="link-desc">geo</div>
+            </a>
+
+            <a href="https://your-soulseek.com" class="link-card">
+                <span class="link-icon">🔍</span>
+                <div class="link-title">Soulseek</div>
+                <div class="link-desc">p2p</div>
             </a>
 
             <a href="https://photos.google.com" class="link-card">
                 <span class="link-icon">📸</span>
-                <div class="link-content">
-                    <div class="link-title">photos</div>
-                    <div class="link-desc">gallery</div>
-                </div>
+                <div class="link-title">Photos</div>
+                <div class="link-desc">gallery</div>
             </a>
 
-            <!-- Row 6 -->
+            <a href="https://discord.com" class="link-card">
+                <span class="link-icon">💬</span>
+                <div class="link-title">Discord</div>
+                <div class="link-desc">chat</div>
+            </a>
+
             <a href="https://your-notebook.com" class="link-card">
                 <span class="link-icon">📝</span>
-                <div class="link-content">
-                    <div class="link-title">notebook</div>
-                    <div class="link-desc">notes</div>
-                </div>
+                <div class="link-title">Notebook</div>
+                <div class="link-desc">notes</div>
+            </a>
+
+            <a href="https://music.youtube.com" class="link-card">
+                <span class="link-icon">🎶</span>
+                <div class="link-title">YT Music</div>
+                <div class="link-desc">streaming</div>
             </a>
 
             <a href="https://speedtest.net" class="link-card">
                 <span class="link-icon">⚡</span>
-                <div class="link-content">
-                    <div class="link-title">speedtest</div>
-                    <div class="link-desc">network</div>
-                </div>
+                <div class="link-title">Speedtest</div>
+                <div class="link-desc">network</div>
+            </a>
+
+            <a href="https://your-debrid.com" class="link-card">
+                <span class="link-icon">💨</span>
+                <div class="link-title">Debrid</div>
+                <div class="link-desc">download</div>
             </a>
 
             <a href="https://your-admin.com" class="link-card">
                 <span class="link-icon">⚙️</span>
-                <div class="link-content">
-                    <div class="link-title">admin</div>
-                    <div class="link-desc">control</div>
-                </div>
+                <div class="link-title">Admin</div>
+                <div class="link-desc">control</div>
             </a>
         </div>
     </div>
@@ -532,61 +543,62 @@
         updateClock();
         setInterval(updateClock, 1000);
 
-        // Create lots of realistic smoke
-        function createSmoke() {
-            const smokeContainer = document.getElementById('smokeContainer');
+        // Create intense fog machine effect
+        function createFogParticle() {
+            const fogContainer = document.getElementById('fogContainer');
             
-            // Create different sizes of smoke
+            // Create different sizes of fog particles
             const sizes = ['small', 'medium', 'large'];
             const sizeClass = sizes[Math.floor(Math.random() * sizes.length)];
             
             const particle = document.createElement('div');
-            particle.className = `smoke-particle smoke-${sizeClass}`;
+            particle.className = `fog-particle ${sizeClass}`;
             
             // Different sizes based on class
             let size;
             switch(sizeClass) {
                 case 'small':
-                    size = Math.random() * 30 + 15;
+                    size = Math.random() * 80 + 40;
                     break;
                 case 'medium':
-                    size = Math.random() * 50 + 30;
+                    size = Math.random() * 120 + 80;
                     break;
                 case 'large':
-                    size = Math.random() * 80 + 50;
+                    size = Math.random() * 200 + 120;
                     break;
             }
             
             particle.style.width = size + 'px';
             particle.style.height = size + 'px';
-            particle.style.left = Math.random() * (window.innerWidth + 200) - 100 + 'px';
-            particle.style.animationDelay = Math.random() * 5 + 's';
+            particle.style.left = '-200px';
+            particle.style.top = Math.random() * window.innerHeight + 'px';
+            particle.style.animationDelay = Math.random() * 2 + 's';
             
             // Random duration based on size
             const duration = sizeClass === 'large' ? 
-                Math.random() * 5 + 18 : 
+                Math.random() * 5 + 13 : 
                 sizeClass === 'medium' ? 
-                Math.random() * 3 + 13 : 
-                Math.random() * 2 + 10;
+                Math.random() * 3 + 10 : 
+                Math.random() * 2 + 8;
             
             particle.style.animationDuration = duration + 's';
             
-            smokeContainer.appendChild(particle);
+            fogContainer.appendChild(particle);
             
             // Remove after animation
             setTimeout(() => {
                 if (particle.parentNode) {
                     particle.remove();
                 }
-            }, duration * 1000 + 2000);
+            }, duration * 1000 + 1000);
         }
 
-        // Create smoke more frequently for heavy effect
-        setInterval(createSmoke, 300);
+        // Create fog particles frequently for intense effect
+        setInterval(createFogParticle, 200);
         
-        // Initial burst of smoke
-        for(let i = 0; i < 10; i++) {
-            setTimeout(createSmoke, i * 100);
+        // Initial burst of fog
+        for(let i = 0; i < 15; i++) {
+            setTimeout(createFogParticle, i * 50);
         }
 
         // Search functionality
@@ -618,12 +630,12 @@
             searchOverlay.classList.remove('active');
             searchContainer.classList.remove('active');
             searchInput.blur();
+            searchInput.value = '';
         }
 
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 hideSearch();
-                searchInput.value = '';
             } else if (e.key === 'Enter') {
                 const query = searchInput.value.trim();
                 if (query) {
@@ -638,6 +650,12 @@
         });
 
         searchOverlay.addEventListener('click', hideSearch);
+
+        document.addEventListener('click', (e) => {
+            if (searchVisible && !searchContainer.contains(e.target)) {
+                hideSearch();
+            }
+        });
     </script>
 </body>
 </html>
