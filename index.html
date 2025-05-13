@@ -11,7 +11,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'JetBrains Mono', monospace;
             background: #080808;
@@ -20,8 +19,7 @@
             overflow: hidden;
             position: relative;
         }
-
-        /* Fog machine effects */
+        /* Ultra-dense fog machine effects */
         .fog-container {
             position: fixed;
             top: 0;
@@ -31,123 +29,191 @@
             z-index: -1;
             overflow: hidden;
         }
-
         .fog-layer {
             position: absolute;
             width: 100%;
             height: 100%;
             background: radial-gradient(ellipse at center, 
-                rgba(220, 220, 220, 0.1) 0%, 
-                rgba(150, 150, 150, 0.08) 20%, 
-                rgba(100, 100, 100, 0.06) 40%, 
-                rgba(70, 70, 70, 0.04) 60%, 
-                rgba(30, 30, 30, 0.02) 80%, 
+                rgba(220, 220, 220, 0.3) 0%, 
+                rgba(180, 180, 180, 0.25) 10%, 
+                rgba(150, 150, 150, 0.2) 20%, 
+                rgba(120, 120, 120, 0.15) 30%, 
+                rgba(100, 100, 100, 0.12) 40%, 
+                rgba(70, 70, 70, 0.08) 60%, 
+                rgba(30, 30, 30, 0.04) 80%, 
                 transparent 100%);
-            animation: fogMove1 30s linear infinite;
+            animation: fogMove1 20s linear infinite;
         }
-
         .fog-layer:nth-child(2) {
-            animation: fogMove2 25s linear infinite reverse;
+            animation: fogMove2 18s linear infinite reverse;
             background: radial-gradient(ellipse at center, 
-                rgba(200, 200, 200, 0.08) 0%, 
-                rgba(120, 120, 120, 0.06) 25%, 
-                rgba(80, 80, 80, 0.04) 50%, 
-                rgba(50, 50, 50, 0.03) 75%, 
+                rgba(200, 200, 200, 0.28) 0%, 
+                rgba(160, 160, 160, 0.22) 15%, 
+                rgba(120, 120, 120, 0.18) 30%, 
+                rgba(80, 80, 80, 0.12) 50%, 
+                rgba(50, 50, 50, 0.08) 75%, 
                 transparent 100%);
         }
-
         .fog-layer:nth-child(3) {
-            animation: fogMove3 35s linear infinite;
+            animation: fogMove3 22s linear infinite;
             background: radial-gradient(ellipse at center, 
-                rgba(180, 180, 180, 0.09) 0%, 
-                rgba(110, 110, 110, 0.07) 20%, 
-                rgba(70, 70, 70, 0.05) 40%, 
-                rgba(40, 40, 40, 0.03) 60%, 
+                rgba(180, 180, 180, 0.32) 0%, 
+                rgba(140, 140, 140, 0.26) 12%, 
+                rgba(110, 110, 110, 0.2) 25%, 
+                rgba(70, 70, 70, 0.15) 40%, 
+                rgba(40, 40, 40, 0.1) 60%, 
                 transparent 100%);
         }
-
+        .fog-layer:nth-child(4) {
+            animation: fogMove4 25s linear infinite reverse;
+            background: radial-gradient(ellipse at center, 
+                rgba(240, 240, 240, 0.25) 0%, 
+                rgba(190, 190, 190, 0.2) 20%, 
+                rgba(140, 140, 140, 0.16) 35%, 
+                rgba(90, 90, 90, 0.12) 55%, 
+                rgba(60, 60, 60, 0.08) 75%, 
+                transparent 100%);
+        }
+        .fog-layer:nth-child(5) {
+            animation: fogMove5 15s linear infinite;
+            background: radial-gradient(ellipse at center, 
+                rgba(210, 210, 210, 0.35) 0%, 
+                rgba(170, 170, 170, 0.28) 8%, 
+                rgba(130, 130, 130, 0.22) 18%, 
+                rgba(100, 100, 100, 0.18) 30%, 
+                rgba(60, 60, 60, 0.12) 45%, 
+                rgba(30, 30, 30, 0.06) 70%, 
+                transparent 100%);
+        }
+        .fog-layer:nth-child(6) {
+            animation: fogMove6 28s linear infinite reverse;
+            background: radial-gradient(ellipse at center, 
+                rgba(160, 160, 160, 0.4) 0%, 
+                rgba(130, 130, 130, 0.32) 5%, 
+                rgba(100, 100, 100, 0.25) 12%, 
+                rgba(80, 80, 80, 0.2) 25%, 
+                rgba(50, 50, 50, 0.15) 40%, 
+                rgba(20, 20, 20, 0.08) 65%, 
+                transparent 100%);
+        }
         @keyframes fogMove1 {
-            0% { transform: translateX(-100%) translateY(0%) scale(1); }
-            100% { transform: translateX(100%) translateY(-10%) scale(1.5); }
+            0% { transform: translateX(-150%) translateY(-20%) scale(0.8); }
+            100% { transform: translateX(150%) translateY(15%) scale(2.5); }
         }
-
         @keyframes fogMove2 {
-            0% { transform: translateX(100%) translateY(5%) scale(1.2); }
-            100% { transform: translateX(-100%) translateY(-5%) scale(1.8); }
+            0% { transform: translateX(150%) translateY(10%) scale(1.3); }
+            100% { transform: translateX(-150%) translateY(-25%) scale(3); }
         }
-
         @keyframes fogMove3 {
-            0% { transform: translateX(-100%) translateY(-5%) scale(0.8); }
-            100% { transform: translateX(100%) translateY(10%) scale(2); }
+            0% { transform: translateX(-150%) translateY(-30%) scale(0.6); }
+            100% { transform: translateX(150%) translateY(20%) scale(3.2); }
         }
-
-        /* Dynamic fog particles */
+        @keyframes fogMove4 {
+            0% { transform: translateX(150%) translateY(-10%) scale(1.1); }
+            100% { transform: translateX(-150%) translateY(30%) scale(2.8); }
+        }
+        @keyframes fogMove5 {
+            0% { transform: translateX(-150%) translateY(20%) scale(0.9); }
+            100% { transform: translateX(150%) translateY(-15%) scale(3.5); }
+        }
+        @keyframes fogMove6 {
+            0% { transform: translateX(150%) translateY(-35%) scale(0.7); }
+            100% { transform: translateX(-150%) translateY(25%) scale(4); }
+        }
+        /* Mega dynamic fog particles */
         .fog-particle {
             position: absolute;
             background: radial-gradient(circle at center, 
-                rgba(255, 255, 255, 0.15) 0%, 
-                rgba(200, 200, 200, 0.1) 20%, 
-                rgba(150, 150, 150, 0.08) 40%, 
-                rgba(100, 100, 100, 0.06) 60%, 
-                rgba(50, 50, 50, 0.04) 80%, 
+                rgba(255, 255, 255, 0.35) 0%, 
+                rgba(230, 230, 230, 0.3) 5%, 
+                rgba(200, 200, 200, 0.25) 12%, 
+                rgba(180, 180, 180, 0.2) 20%, 
+                rgba(150, 150, 150, 0.15) 30%, 
+                rgba(120, 120, 120, 0.12) 40%, 
+                rgba(100, 100, 100, 0.1) 50%, 
+                rgba(70, 70, 70, 0.08) 65%, 
+                rgba(50, 50, 50, 0.05) 80%, 
                 transparent 100%);
             border-radius: 50%;
-            filter: blur(2px);
+            filter: blur(3px);
             opacity: 0;
         }
-
         .fog-particle.large {
-            animation: fogParticleLarge 15s infinite linear;
+            animation: fogParticleLarge 12s infinite linear;
         }
-
         .fog-particle.medium {
-            animation: fogParticleMedium 12s infinite linear;
+            animation: fogParticleMedium 10s infinite linear;
         }
-
         .fog-particle.small {
-            animation: fogParticleSmall 10s infinite linear;
+            animation: fogParticleSmall 8s infinite linear;
         }
-
+        .fog-particle.xl {
+            animation: fogParticleXL 15s infinite linear;
+        }
+        .fog-particle.xxl {
+            animation: fogParticleXXL 18s infinite linear;
+        }
         @keyframes fogParticleLarge {
             0% {
-                transform: translateX(-200px) translateY(0) rotate(0deg) scale(0.5);
+                transform: translateX(-300px) translateY(-50px) rotate(0deg) scale(0.3);
                 opacity: 0;
             }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.3; }
+            5% { opacity: 0.9; }
+            95% { opacity: 0.2; }
             100% {
-                transform: translateX(calc(100vw + 200px)) translateY(-100px) rotate(180deg) scale(3);
+                transform: translateX(calc(100vw + 300px)) translateY(-150px) rotate(120deg) scale(4);
                 opacity: 0;
             }
         }
-
         @keyframes fogParticleMedium {
             0% {
-                transform: translateX(-150px) translateY(50px) rotate(0deg) scale(0.4);
+                transform: translateX(-250px) translateY(30px) rotate(0deg) scale(0.4);
                 opacity: 0;
             }
-            15% { opacity: 0.7; }
-            85% { opacity: 0.4; }
+            8% { opacity: 0.8; }
+            92% { opacity: 0.3; }
             100% {
-                transform: translateX(calc(100vw + 150px)) translateY(-50px) rotate(-90deg) scale(2.5);
+                transform: translateX(calc(100vw + 250px)) translateY(-80px) rotate(-150deg) scale(3.5);
                 opacity: 0;
             }
         }
-
         @keyframes fogParticleSmall {
             0% {
-                transform: translateX(-100px) translateY(-20px) rotate(0deg) scale(0.3);
+                transform: translateX(-200px) translateY(-30px) rotate(0deg) scale(0.5);
                 opacity: 0;
             }
-            20% { opacity: 0.6; }
-            80% { opacity: 0.5; }
+            12% { opacity: 0.7; }
+            88% { opacity: 0.4; }
             100% {
-                transform: translateX(calc(100vw + 100px)) translateY(30px) rotate(90deg) scale(2);
+                transform: translateX(calc(100vw + 200px)) translateY(50px) rotate(90deg) scale(3);
                 opacity: 0;
             }
         }
-
-        /* Heavy fog overlay */
+        @keyframes fogParticleXL {
+            0% {
+                transform: translateX(-400px) translateY(0px) rotate(0deg) scale(0.2);
+                opacity: 0;
+            }
+            3% { opacity: 1; }
+            97% { opacity: 0.15; }
+            100% {
+                transform: translateX(calc(100vw + 400px)) translateY(-200px) rotate(180deg) scale(5);
+                opacity: 0;
+            }
+        }
+        @keyframes fogParticleXXL {
+            0% {
+                transform: translateX(-500px) translateY(-80px) rotate(0deg) scale(0.1);
+                opacity: 0;
+            }
+            2% { opacity: 1.2; }
+            98% { opacity: 0.1; }
+            100% {
+                transform: translateX(calc(100vw + 500px)) translateY(-300px) rotate(240deg) scale(6);
+                opacity: 0;
+            }
+        }
+        /* Multiple heavy fog overlays */
         .fog-overlay {
             position: fixed;
             top: 0;
@@ -155,52 +221,52 @@
             width: 100%;
             height: 100%;
             background: 
-                linear-gradient(45deg, rgba(0,0,0,0.3), rgba(80,80,80,0.1), rgba(0,0,0,0.4)),
-                linear-gradient(120deg, rgba(60,60,60,0.2), rgba(0,0,0,0.6));
+                linear-gradient(45deg, rgba(0,0,0,0.4), rgba(100,100,100,0.15), rgba(0,0,0,0.5)),
+                linear-gradient(120deg, rgba(80,80,80,0.25), rgba(0,0,0,0.7)),
+                linear-gradient(210deg, rgba(120,120,120,0.2), rgba(50,50,50,0.3), rgba(0,0,0,0.6));
             z-index: -1;
-            animation: fogOverlayShift 20s ease-in-out infinite;
+            animation: fogOverlayShift 15s ease-in-out infinite;
         }
-
         @keyframes fogOverlayShift {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 0.9; }
+            0%, 100% { opacity: 0.8; }
+            33% { opacity: 0.95; }
+            66% { opacity: 0.75; }
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem 1rem;
             z-index: 1;
             position: relative;
+            backdrop-filter: blur(1px);
         }
-
         header {
             text-align: center;
             margin-bottom: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
         }
-
         h1 {
             font-size: 1.6rem;
             font-weight: 600;
             letter-spacing: -0.5px;
             margin-bottom: 0.5rem;
             color: #f0f0f0;
-            text-shadow: 0 0 10px rgba(255,255,255,0.1);
+            text-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
-
         .subtitle {
             font-size: 0.8rem;
             opacity: 0.7;
             font-weight: 400;
         }
-
         .clock {
             font-size: 0.75rem;
             opacity: 0.6;
             margin-top: 0.5rem;
             font-weight: 300;
         }
-
         /* 6-column grid layout */
         .links-grid {
             display: grid;
@@ -210,11 +276,10 @@
             margin: 0 auto;
             padding: 0 2rem;
         }
-
         .link-card {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 12px;
             padding: 1.5rem 1rem;
             text-decoration: none;
@@ -227,17 +292,15 @@
             align-items: center;
             gap: 0.8rem;
             min-height: 120px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
             width: 100%;
         }
-
         .link-card:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             transform: translateY(-3px);
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.6);
         }
-
         .link-card::before {
             content: '';
             position: absolute;
@@ -248,23 +311,19 @@
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
             transition: left 0.5s ease;
         }
-
         .link-card:hover::before {
             left: 100%;
         }
-
         .link-icon {
             font-size: 1.8rem;
             flex-shrink: 0;
         }
-
         .link-title {
             font-size: 0.8rem;
             font-weight: 500;
             text-align: center;
             line-height: 1.2;
         }
-
         .link-desc {
             font-size: 0.7rem;
             opacity: 0.6;
@@ -272,7 +331,6 @@
             text-align: center;
             line-height: 1.1;
         }
-
         /* Search functionality */
         .search-container {
             max-width: 600px;
@@ -280,7 +338,6 @@
             position: relative;
             z-index: 1;
         }
-
         .search-box {
             position: relative;
             background: transparent;
@@ -291,16 +348,14 @@
             box-shadow: none;
             transition: all 0.3s ease;
         }
-
         .search-box.active {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 25px;
             padding: 1rem 1.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
         }
-
         .search-input {
             width: 100%;
             border: none;
@@ -313,23 +368,20 @@
             text-align: center;
             transition: all 0.3s ease;
         }
-
         .search-input.active {
             text-align: left;
         }
-
         .search-input::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
-
         .search-suggestions {
             position: absolute;
             top: 100%;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-top: none;
             border-radius: 0 0 15px 15px;
             max-height: 200px;
@@ -339,12 +391,10 @@
             visibility: hidden;
             transition: all 0.3s ease;
         }
-
         .search-suggestions.active {
             opacity: 1;
             visibility: visible;
         }
-
         .suggestion-item {
             padding: 0.75rem 1rem;
             color: #ffffff;
@@ -354,17 +404,14 @@
             transition: all 0.2s ease;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-
         .suggestion-item:hover,
         .suggestion-item.highlighted {
             background: rgba(255, 255, 255, 0.08);
             color: #00ff00;
         }
-
         .suggestion-item:last-child {
             border-bottom: none;
         }
-
         .instructions {
             position: fixed;
             bottom: 1rem;
@@ -374,7 +421,6 @@
             opacity: 0.5;
             font-weight: 300;
         }
-
         /* Responsive adjustments */
         @media (max-width: 1200px) {
             .links-grid {
@@ -383,7 +429,6 @@
                 padding: 0 1.5rem;
             }
         }
-
         @media (max-width: 1024px) {
             .links-grid {
                 grid-template-columns: repeat(4, 1fr);
@@ -391,7 +436,6 @@
                 padding: 0 1rem;
             }
         }
-
         @media (max-width: 768px) {
             .links-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -403,20 +447,16 @@
                 padding: 1rem 0.8rem;
                 min-height: 100px;
             }
-
             .link-icon {
                 font-size: 1.5rem;
             }
-
             .link-title {
                 font-size: 0.7rem;
             }
-
             .link-desc {
                 font-size: 0.6rem;
             }
         }
-
         @media (max-width: 480px) {
             .container {
                 padding: 1.5rem 0.8rem;
@@ -434,9 +474,11 @@
         <div class="fog-layer"></div>
         <div class="fog-layer"></div>
         <div class="fog-layer"></div>
+        <div class="fog-layer"></div>
+        <div class="fog-layer"></div>
+        <div class="fog-layer"></div>
     </div>
     <div class="fog-overlay"></div>
-
     <!-- Search Box at the top -->
     <div class="search-container">
         <div class="search-box">
@@ -444,117 +486,98 @@
             <div class="search-suggestions" id="searchSuggestions"></div>
         </div>
     </div>
-
     <div class="container">
         <header>
             <h1>chooch.net</h1>
             <div class="subtitle">digital hub</div>
             <div class="clock" id="clock"></div>
         </header>
-
         <div class="links-grid">
             <a href="https://tutanota.com" class="link-card">
                 <span class="link-icon">📧</span>
                 <div class="link-title">Tutanota</div>
                 <div class="link-desc">secure mail</div>
             </a>
-
-            <a href="https://your-rss.com" class="link-card">
-                <span class="link-icon">📡</span>
-                <div class="link-title">RSS</div>
-                <div class="link-desc">feeds</div>
-            </a>
-
-            <a href="https://your-jellyfin.com" class="link-card">
-                <span class="link-icon">🎬</span>
-                <div class="link-title">Jellyfin</div>
-                <div class="link-desc">media</div>
-            </a>
-
-            <a href="https://youtube.com" class="link-card">
-                <span class="link-icon">📺</span>
-                <div class="link-title">Youtube</div>
-                <div class="link-desc">videos</div>
-            </a>
-
-            <a href="https://your-seedbox.com" class="link-card">
-                <span class="link-icon">🌱</span>
-                <div class="link-title">Seedbox</div>
-                <div class="link-desc">torrents</div>
-            </a>
-
-            <a href="bin.chooch.net" class="link-card">
-                <span class="link-icon">🗂️</span>
-                <div class="link-title">Bin</div>
-                <div class="link-desc">storage</div>
-            </a>
-
             <a href="https://webmail.disroot.org/" class="link-card">
                 <span class="link-icon">📧</span>
                 <div class="link-title">Disroot</div>
                 <div class="link-desc">secure mail</div>
             </a>
-
-            <a href="https://drive.chooch.net" class="link-card">
-                <span class="link-icon">☁️</span>
-                <div class="link-title">Drive</div>
-                <div class="link-desc">cloud</div>
+            <a href="https://your-rss.com" class="link-card">
+                <span class="link-icon">📡</span>
+                <div class="link-title">RSS</div>
+                <div class="link-desc">feeds</div>
             </a>
-
-            <a href="https://your-jukebox.com" class="link-card">
-                <span class="link-icon">🎵</span>
-                <div class="link-title">Jukebox</div>
-                <div class="link-desc">tunes</div>
+            <a href="https://your-jellyfin.com" class="link-card">
+                <span class="link-icon">🎬</span>
+                <div class="link-title">Jellyfin</div>
+                <div class="link-desc">media</div>
             </a>
-
-            <a href="https://iplocation.net" class="link-card">
-                <span class="link-icon">🌍</span>
-                <div class="link-title">IP Location</div>
-                <div class="link-desc">geo</div>
+            <a href="https://youtube.com" class="link-card">
+                <span class="link-icon">📺</span>
+                <div class="link-title">Youtube</div>
+                <div class="link-desc">videos</div>
             </a>
-
-            <a href="https://your-soulseek.com" class="link-card">
-                <span class="link-icon">🔍</span>
-                <div class="link-title">Soulseek</div>
-                <div class="link-desc">p2p</div>
+            <a href="https://your-seedbox.com" class="link-card">
+                <span class="link-icon">🌱</span>
+                <div class="link-title">Seedbox</div>
+                <div class="link-desc">torrents</div>
             </a>
-
-            <a href="https://photos.google.com" class="link-card">
-                <span class="link-icon">📸</span>
-                <div class="link-title">Photos</div>
-                <div class="link-desc">gallery</div>
+            <a href="https://bin.chooch.net" class="link-card">
+                <span class="link-icon">🗂️</span>
+                <div class="link-title">Bin</div>
+                <div class="link-desc">storage</div>
             </a>
-            
             <a href="https://zemail.me/" class="link-card">
                 <span class="link-icon">📨</span>
                 <div class="link-title">Temp Mail</div>
                 <div class="link-desc">disposable</div>
             </a>
-
+            <a href="https://drive.chooch.net" class="link-card">
+                <span class="link-icon">☁️</span>
+                <div class="link-title">Drive</div>
+                <div class="link-desc">cloud</div>
+            </a>
+            <a href="https://your-jukebox.com" class="link-card">
+                <span class="link-icon">🎵</span>
+                <div class="link-title">Jukebox</div>
+                <div class="link-desc">tunes</div>
+            </a>
+            <a href="https://iplocation.net" class="link-card">
+                <span class="link-icon">🌍</span>
+                <div class="link-title">IP Location</div>
+                <div class="link-desc">geo</div>
+            </a>
+            <a href="https://your-soulseek.com" class="link-card">
+                <span class="link-icon">🔍</span>
+                <div class="link-title">Soulseek</div>
+                <div class="link-desc">p2p</div>
+            </a>
+            <a href="https://photos.google.com" class="link-card">
+                <span class="link-icon">📸</span>
+                <div class="link-title">Photos</div>
+                <div class="link-desc">gallery</div>
+            </a>
             <a href="https://your-notebook.com" class="link-card">
                 <span class="link-icon">📝</span>
                 <div class="link-title">Notebook</div>
                 <div class="link-desc">notes</div>
             </a>
-
             <a href="https://music.youtube.com" class="link-card">
                 <span class="link-icon">🎶</span>
                 <div class="link-title">YT Music</div>
                 <div class="link-desc">streaming</div>
             </a>
-
             <a href="https://speedtest.net" class="link-card">
                 <span class="link-icon">⚡</span>
                 <div class="link-title">Speedtest</div>
                 <div class="link-desc">network</div>
             </a>
-
             <a href="https://your-debrid.com" class="link-card">
                 <span class="link-icon">💨</span>
                 <div class="link-title">Debrid</div>
                 <div class="link-desc">download</div>
             </a>
-
             <a href="https://your-admin.com" class="link-card">
                 <span class="link-icon">⚙️</span>
                 <div class="link-title">Admin</div>
@@ -562,9 +585,7 @@
             </a>
         </div>
     </div>
-
     <div class="instructions">type to search</div>
-
     <script>
         // Clock
         function updateClock() {
@@ -581,47 +602,55 @@
             });
             document.getElementById('clock').textContent = `${timeString} · ${dateString}`;
         }
-
         updateClock();
         setInterval(updateClock, 1000);
-
-        // Create intense fog machine effect
+        // Create ULTRA-intense fog machine effect
         function createFogParticle() {
             const fogContainer = document.getElementById('fogContainer');
             
-            // Create different sizes of fog particles
-            const sizes = ['small', 'medium', 'large'];
+            // Create different sizes of fog particles including HUGE ones
+            const sizes = ['small', 'medium', 'large', 'xl', 'xxl'];
             const sizeClass = sizes[Math.floor(Math.random() * sizes.length)];
             
             const particle = document.createElement('div');
             particle.className = `fog-particle ${sizeClass}`;
             
-            // Different sizes based on class
+            // Much larger size ranges
             let size;
             switch(sizeClass) {
                 case 'small':
-                    size = Math.random() * 80 + 40;
+                    size = Math.random() * 100 + 80;
                     break;
                 case 'medium':
-                    size = Math.random() * 120 + 80;
+                    size = Math.random() * 150 + 120;
                     break;
                 case 'large':
-                    size = Math.random() * 200 + 120;
+                    size = Math.random() * 250 + 200;
+                    break;
+                case 'xl':
+                    size = Math.random() * 350 + 300;
+                    break;
+                case 'xxl':
+                    size = Math.random() * 500 + 400;
                     break;
             }
             
             particle.style.width = size + 'px';
             particle.style.height = size + 'px';
-            particle.style.left = '-200px';
-            particle.style.top = Math.random() * window.innerHeight + 'px';
-            particle.style.animationDelay = Math.random() * 2 + 's';
+            particle.style.left = '-500px';
+            particle.style.top = Math.random() * (window.innerHeight + 200) - 100 + 'px';
+            particle.style.animationDelay = Math.random() * 3 + 's';
             
-            // Random duration based on size
-            const duration = sizeClass === 'large' ? 
-                Math.random() * 5 + 13 : 
+            // Variable duration based on size
+            const duration = sizeClass === 'xxl' ? 
+                Math.random() * 6 + 15 : 
+                sizeClass === 'xl' ? 
+                Math.random() * 5 + 12 : 
+                sizeClass === 'large' ? 
+                Math.random() * 4 + 10 : 
                 sizeClass === 'medium' ? 
-                Math.random() * 3 + 10 : 
-                Math.random() * 2 + 8;
+                Math.random() * 3 + 8 : 
+                Math.random() * 2 + 6;
             
             particle.style.animationDuration = duration + 's';
             
@@ -632,17 +661,23 @@
                 if (particle.parentNode) {
                     particle.remove();
                 }
-            }, duration * 1000 + 1000);
+            }, duration * 1000 + 2000);
         }
-
-        // Create fog particles frequently for intense effect
-        setInterval(createFogParticle, 200);
+        // Create fog particles EXTREMELY frequently for ultra-dense effect
+        setInterval(createFogParticle, 25);
         
-        // Initial burst of fog
-        for(let i = 0; i < 15; i++) {
-            setTimeout(createFogParticle, i * 50);
+        // Massive initial burst of fog
+        for(let i = 0; i < 100; i++) {
+            setTimeout(createFogParticle, i * 10);
         }
-
+        
+        // Add periodic burst effects
+        setInterval(() => {
+            for(let i = 0; i < 30; i++) {
+                setTimeout(createFogParticle, i * 5);
+            }
+        }, 3000);
+        
         // Search functionality with auto-suggestions
         const searchInput = document.getElementById('searchInput');
         const searchSuggestions = document.getElementById('searchSuggestions');
@@ -662,7 +697,6 @@
             'what time is it in paris',
             'what time is it in tokyo',
         ];
-
         function activateSearch() {
             if (!isSearchActive) {
                 isSearchActive = true;
@@ -670,7 +704,6 @@
                 searchInput.classList.add('active');
             }
         }
-
         function deactivateSearch() {
             if (isSearchActive && searchInput.value.trim() === '') {
                 isSearchActive = false;
@@ -679,23 +712,19 @@
                 hideSuggestions();
             }
         }
-
         function showSuggestions(query) {
             if (query.length === 0) {
                 hideSuggestions();
                 return;
             }
-
             // Filter suggestions based on query
             suggestions = commonSuggestions.filter(suggestion => 
                 suggestion.toLowerCase().includes(query.toLowerCase())
             );
-
             if (suggestions.length === 0) {
                 hideSuggestions();
                 return;
             }
-
             searchSuggestions.innerHTML = '';
             suggestions.forEach((suggestion, index) => {
                 const suggestionElement = document.createElement('div');
@@ -707,17 +736,14 @@
                 });
                 searchSuggestions.appendChild(suggestionElement);
             });
-
             searchSuggestions.classList.add('active');
             currentSuggestionIndex = -1;
         }
-
         function hideSuggestions() {
             searchSuggestions.classList.remove('active');
             suggestions = [];
             currentSuggestionIndex = -1;
         }
-
         function highlightSuggestion(index) {
             const suggestionItems = searchSuggestions.querySelectorAll('.suggestion-item');
             suggestionItems.forEach(item => item.classList.remove('highlighted'));
@@ -726,18 +752,15 @@
                 suggestionItems[index].classList.add('highlighted');
             }
         }
-
         function performSearch(query) {
             // Ensure we use your original Startpage query
             const searchUrl = `https://www.startpage.com/sp/search?query=${encodeURIComponent(query)}&abp=1&t=night&lui=english&cat=web&abd=1&prfe=bfc85c1d885357c455065cb1ddcee0a65c66627199470e854d8cf578fa2f6ca0deea4cb4fa181162bce2f096d76df7fe86753b93f749e81e69e6c0904008c2923dd5902389bf3777806c92e759`;
             window.location.href = searchUrl;
         }
-
         // Search input event listeners
         searchInput.addEventListener('focus', () => {
             activateSearch();
         });
-
         searchInput.addEventListener('blur', () => {
             // Delay deactivation to allow for suggestion clicks
             setTimeout(() => {
@@ -746,7 +769,6 @@
                 }
             }, 200);
         });
-
         searchInput.addEventListener('input', (e) => {
             const value = e.target.value;
             if (value.length > 0) {
@@ -754,7 +776,6 @@
             }
             showSuggestions(value);
         });
-
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
@@ -782,14 +803,12 @@
                 searchInput.blur();
             }
         });
-
         // Hide suggestions when clicking outside
         document.addEventListener('click', (e) => {
             if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
                 hideSuggestions();
             }
         });
-
         // Don't auto-focus search input when page loads
         // searchInput.focus();
     </script>
