@@ -1,791 +1,1196 @@
-<!DOCTYPE html>
-<html data-darkreader-proxy-injected="true">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="color-scheme" content="dark light">
-  <meta name="robots" content="noindex">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Welcome to Room300 - FMS Senior Year</title>
-  <style>
-    :root {
-      --color-background: #8B00FF;
-      --color-background-overlay: rgba(139, 0, 255, 0.4);
-      --color-rain: #AA00FF;
-      --color-text-subtle: #E6CCFF;
-      --color-text: #FFFFFF;
-      --color-accent: #ff6b6b;
-      --color-accent-2: #4ecdc4;
-      --color-accent-3: #ffe66d;
-      --color-weed: #00FF00;
-      --font-family: -apple-system, Helvetica, sans-serif;
-      --font-size-1: 1rem;
-      --font-size-2: 3rem;
-      --font-size-base: clamp(16px, 1.2vw, 18px);
-      --font-weight-bold: 700;
-      --font-weight-normal: 400;
-      --line-height-base: 1.4;
-      --space-1: 0.5rem;
-      --space-2: 1rem;
-      --space-3: 4rem;
-      --transition-speed: 200ms;
-      --border-glow: 0 0 5px rgba(255, 255, 255, 0.5);
-    }
-
-    /* Psychedelic background effects */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        radial-gradient(circle at 25% 40%, rgba(255, 0, 128, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 75% 20%, rgba(0, 255, 128, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 45% 90%, rgba(255, 128, 0, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 85% 70%, rgba(128, 0, 255, 0.15) 0%, transparent 50%);
-      animation: psychedelic-shift 15s ease-in-out infinite;
-      z-index: -3;
-    }
-
-    @keyframes psychedelic-shift {
-      0%, 100% { 
-        background: 
-          radial-gradient(circle at 25% 40%, rgba(255, 0, 128, 0.15) 0%, transparent 50%),
-          radial-gradient(circle at 75% 20%, rgba(0, 255, 128, 0.15) 0%, transparent 50%),
-          radial-gradient(circle at 45% 90%, rgba(255, 128, 0, 0.15) 0%, transparent 50%),
-          radial-gradient(circle at 85% 70%, rgba(128, 0, 255, 0.15) 0%, transparent 50%);
-      }
-      50% { 
-        background: 
-          radial-gradient(circle at 75% 60%, rgba(255, 128, 0, 0.15) 0%, transparent 50%),
-          radial-gradient(circle at 25% 80%, rgba(128, 255, 0, 0.15) 0%, transparent 50%),
-          radial-gradient(circle at 85% 10%, rgba(0, 128, 255, 0.15) 0%, transparent 50%),
-          radial-gradient(circle at 15% 30%, rgba(255, 0, 255, 0.15) 0%, transparent 50%);
-      }
-    }
-
-    /* Floating weed emojis */
-    .weed-float {
-      position: fixed;
-      pointer-events: none;
-      font-size: 2rem;
-      animation: float-drift 8s linear infinite;
-      opacity: 0.3;
-      z-index: -2;
-    }
-
-    @keyframes float-drift {
-      0% {
-        transform: translateY(110vh) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.4;
-      }
-      50% {
-        opacity: 0.2;
-      }
-      90% {
-        opacity: 0.4;
-      }
-      100% {
-        transform: translateY(-10vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    /* Trippy glitch effect for title */
-    .glitch {
-      position: relative;
-      color: var(--color-text);
-      font-size: var(--font-size-2);
-      font-weight: var(--font-weight-bold);
-      text-shadow: 
-        0 0 10px currentColor,
-        0 0 20px var(--color-accent),
-        0 0 40px var(--color-accent-2);
-      animation: title-glow 3s ease-in-out infinite;
-    }
-
-    @keyframes title-glow {
-      0%, 100% { transform: scale(1) rotateZ(0deg); }
-      25% { transform: scale(1.02) rotateZ(0.5deg); }
-      50% { transform: scale(1.01) rotateZ(-0.5deg); }
-      75% { transform: scale(1.03) rotateZ(0.3deg); }
-    }
-
-    .glitch::before,
-    .glitch::after {
-      content: attr(data-text);
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0.8;
-    }
-
-    .glitch::before {
-      color: var(--color-weed);
-      animation: glitch-1 0.8s infinite;
-      clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-    }
-
-    .glitch::after {
-      color: var(--color-accent);
-      animation: glitch-2 0.9s infinite;
-      clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-    }
-
-    @keyframes glitch-1 {
-      0%, 100% { transform: translateX(0); }
-      10% { transform: translateX(-4px); }
-      20% { transform: translateX(4px); }
-      30% { transform: translateX(-2px); }
-      40% { transform: translateX(2px); }
-      50% { transform: translateX(-3px); }
-      60% { transform: translateX(3px); }
-      70% { transform: translateX(-1px); }
-      80% { transform: translateX(1px); }
-      90% { transform: translateX(-2px); }
-    }
-
-    @keyframes glitch-2 {
-      0%, 100% { transform: translateX(0); }
-      15% { transform: translateX(3px); }
-      25% { transform: translateX(-3px); }
-      35% { transform: translateX(2px); }
-      45% { transform: translateX(-2px); }
-      55% { transform: translateX(4px); }
-      65% { transform: translateX(-4px); }
-      75% { transform: translateX(1px); }
-      85% { transform: translateX(-1px); }
-      95% { transform: translateX(2px); }
-    }
-
-    /* Psychedelic vapor trail effect */
-    .vapor-effect {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%),
-        linear-gradient(-45deg, transparent 40%, rgba(0, 255, 0, 0.03) 60%, transparent 80%);
-      animation: vapor-dance 12s ease-in-out infinite;
-      z-index: -1;
-    }
-
-    @keyframes vapor-dance {
-      0%, 100% { 
-        transform: translateX(-20px) translateY(-20px) rotate(0deg);
-        opacity: 1;
-      }
-      25% { 
-        transform: translateX(20px) translateY(-10px) rotate(0.5deg);
-        opacity: 0.8;
-      }
-      50% { 
-        transform: translateX(10px) translateY(20px) rotate(-0.5deg);
-        opacity: 1.2;
-      }
-      75% { 
-        transform: translateX(-10px) translateY(15px) rotate(0.3deg);
-        opacity: 0.9;
-      }
-    }
-
-    /* Gaming console pattern with RGB shifting */
-    .rgb-shift {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 2px,
-          rgba(255, 0, 0, 0.01) 2px,
-          rgba(255, 0, 0, 0.01) 4px
-        ),
-        repeating-linear-gradient(
-          90deg,
-          transparent,
-          transparent 2px,
-          rgba(0, 255, 0, 0.01) 2px,
-          rgba(0, 255, 0, 0.01) 4px
-        );
-      animation: rgb-chromatic 4s linear infinite;
-      z-index: -1;
-    }
-
-    @keyframes rgb-chromatic {
-      0% { transform: translateX(0px); }
-      50% { transform: translateX(1px); }
-      100% { transform: translateX(0px); }
-    }
-
-    /* Nintendo-style button effects with extra flair */
-    .command {
-      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      border-radius: 12px;
-      backdrop-filter: blur(10px);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .command::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-      transition: left 0.5s;
-    }
-
-    .command:hover {
-      transform: translateY(-5px) scale(1.05);
-      box-shadow: 
-        0 10px 20px rgba(139, 0, 255, 0.3),
-        0 0 20px var(--color-accent),
-        inset 0 0 20px rgba(255, 255, 255, 0.1);
-    }
-
-    .command:hover::before {
-      left: 100%;
-    }
-
-    /* Emoji animations with enhanced effects */
-    .key {
-      transition: all 0.5s ease;
-      text-shadow: 0 0 10px currentColor;
-      position: relative;
-    }
-
-    .key::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-      transition: all 0.3s ease;
-      transform: translate(-50%, -50%);
-    }
-
-    .command:hover .key {
-      animation: emoji-dance 0.6s ease-in-out;
-      transform: rotate(360deg);
-    }
-
-    .command:hover .key::after {
-      width: 30px;
-      height: 30px;
-    }
-
-    @keyframes emoji-dance {
-      0%, 100% { transform: rotate(0deg) scale(1); }
-      25% { transform: rotate(-10deg) scale(1.1); }
-      50% { transform: rotate(0deg) scale(1.2); }
-      75% { transform: rotate(10deg) scale(1.1); }
-    }
-
-    /* Quantum search effect */
-    .search-quantum {
-      position: relative;
-    }
-
-    .search-quantum::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, var(--color-weed), var(--color-accent), var(--color-accent-2), var(--color-accent-3));
-      background-size: 400% 400%;
-      border-radius: 15px;
-      z-index: -1;
-      animation: quantum-border 3s ease infinite;
-    }
-
-    @keyframes quantum-border {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-
-    /* Enhanced rain with color shifting */
-    .rain-color-shift {
-      filter: hue-rotate(0deg);
-      animation: rain-hue 8s linear infinite;
-    }
-
-    @keyframes rain-hue {
-      0% { filter: hue-rotate(0deg) saturate(1.2); }
-      25% { filter: hue-rotate(90deg) saturate(1.5); }
-      50% { filter: hue-rotate(180deg) saturate(1.8); }
-      75% { filter: hue-rotate(270deg) saturate(1.5); }
-      100% { filter: hue-rotate(360deg) saturate(1.2); }
-    }
-
-    /* Particle explosion effect */
-    .particle-explosion {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 4px;
-      height: 4px;
-      background: var(--color-weed);
-      border-radius: 50%;
-      pointer-events: none;
-      opacity: 0;
-      z-index: 100;
-    }
-
-    /* Bass drop visual effect */
-    @keyframes bass-drop {
-      0% { transform: scale(1); box-shadow: none; }
-      25% { transform: scale(1.1); box-shadow: 0 0 30px var(--color-weed); }
-      50% { transform: scale(0.9); box-shadow: 0 0 50px var(--color-accent-2); }
-      75% { transform: scale(1.05); box-shadow: 0 0 40px var(--color-accent); }
-      100% { transform: scale(1); box-shadow: none; }
-    }
-
-    /* Music visualization bars */
-    .music-visualizer {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 3px;
-      height: 40px;
-      opacity: 0.6;
-    }
-
-    .music-bar {
-      width: 4px;
-      background: linear-gradient(to top, var(--color-weed), var(--color-accent-2));
-      animation: music-pulse 0.5s ease-in-out infinite alternate;
-      transform-origin: bottom;
-    }
-
-    .music-bar:nth-child(1) { animation-delay: 0s; }
-    .music-bar:nth-child(2) { animation-delay: 0.1s; }
-    .music-bar:nth-child(3) { animation-delay: 0.2s; }
-    .music-bar:nth-child(4) { animation-delay: 0.3s; }
-    .music-bar:nth-child(5) { animation-delay: 0.1s; }
-    .music-bar:nth-child(6) { animation-delay: 0.4s; }
-    .music-bar:nth-child(7) { animation-delay: 0.0s; }
-    .music-bar:nth-child(8) { animation-delay: 0.2s; }
-
-    @keyframes music-pulse {
-      0% { transform: scaleY(0.3); }
-      100% { transform: scaleY(1); }
-    }
-
-    /* Matrix-style text */
-    .matrix-text {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      line-height: 1.2;
-      color: var(--color-weed);
-      opacity: 0.1;
-      z-index: -2;
-      overflow: hidden;
-    }
-
-    .matrix-char {
-      position: absolute;
-      animation: matrix-fall 4s linear infinite;
-    }
-
-    @keyframes matrix-fall {
-      0% { 
-        transform: translateY(-20px);
-        opacity: 0;
-      }
-      5% { opacity: 1; }
-      95% { opacity: 1; }
-      100% { 
-        transform: translateY(100vh);
-        opacity: 0;
-      }
-    }
-
-    /* Trippy cursor trail */
-    .cursor-trail {
-      position: fixed;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      pointer-events: none;
-      mix-blend-mode: difference;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
-      transform: translate(-50%, -50%);
-      z-index: 1000;
-      animation: cursor-pulse 0.5s ease-out;
-    }
-
-    @keyframes cursor-pulse {
-      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
-      100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
-    }
-
-    /* Holographic subtitle */
-    .subtitle {
-      color: var(--color-text-subtle);
-      font-size: var(--font-size-1);
-      font-weight: var(--font-weight-normal);
-      margin-top: var(--space-1);
-      text-align: center;
-      display: block;
-      position: relative;
-      background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
-      background-size: 400% 400%;
-      animation: holographic-text 4s ease infinite;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    @keyframes holographic-text {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-
-    /* Retro scanlines with noise */
-    .scanlines::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        linear-gradient(
-          to bottom,
-          transparent 50%,
-          rgba(255, 255, 255, 0.01) 51%
-        ),
-        radial-gradient(ellipse at center, transparent 40%, rgba(0, 255, 0, 0.02) 41%);
-      background-size: 1px 6px, 100px 100px;
-      animation: scan-flicker 0.1s linear infinite;
-      pointer-events: none;
-      z-index: 999;
-    }
-
-    @keyframes scan-flicker {
-      0% { opacity: 1; }
-      95% { opacity: 1; }
-      96% { opacity: 0.98; }
-      97% { opacity: 1; }
-      98% { opacity: 0.99; }
-      99% { opacity: 1; }
-      100% { opacity: 1; }
-    }
-
-    /* Nuclear symbol rotation */
-    .nuclear-symbol {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      font-size: 4rem;
-      opacity: 0.05;
-      animation: nuclear-spin 20s linear infinite;
-      z-index: -2;
-    }
-
-    @keyframes nuclear-spin {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-
-    /* Add gaming console style power LED */
-    .power-led {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--color-weed);
-      box-shadow: 0 0 20px var(--color-weed);
-      animation: power-blink 2s ease-in-out infinite;
-    }
-
-    @keyframes power-blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    /* General styles */
-    html {
-      background-color: var(--color-background);
-      font-family: var(--font-family);
-      font-size: var(--font-size-base);
-      line-height: var(--line-height-base);
-    }
-
-    body {
-      margin: 0;
-      overflow-x: hidden;
-    }
-
-    main {
-      align-items: center;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 100vh;
-      padding: var(--space-3) var(--space-2);
-      position: relative;
-      width: 100vw;
-    }
-
-    h1 {
-      margin: 0 0 var(--space-1) 0;
-      text-align: center;
-      position: relative;
-    }
-  </style>
-  <script>
-    const CONFIG = {
-      commandPathDelimiter: '/',
-      commandSearchDelimiter: ' ',
-      defaultSearchTemplate: 'https://www.startpage.com/sp/search?query={}&abp=1&t=night&lui=english&cat=web&abd=1&prfe=bfc85c1d885357c455065cb1ddcee0a65c66627199470e854d8cf578fa2f6ca0deea4cb4fa181162bce2f096d76df7fe86753b93f749e81e69e6c0904008c2923dd5902389bf3777806c92e759',
-      openLinksInNewTab: false,
-      rainColumns: 200,
-      rainFade: 0.15,
-      rainFrameRate: 1000 / 20,
-      rainResilience: 0.85,
-      rainSpeed: 1.2,
-      suggestionLimit: 4,
-    };
+</a>
+                </div>
+                
+                <!-- AI Hub -->
+                <div class="hub-section hub-ai">
+                    <div class="section-header">
+                        <h2 class="section-title">AI Nexus</h2>
+                    </div>
+                    <a href="https://claude.ai" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🤖</div>
+                        <div class="card-title">Claude</div>
+                        <div class="card-desc">AI assistant</div>
+                    </a>
+                    <a href="https://chat.openai.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🧠</div>
+                        <div class="card-title">ChatGPT</div>
+                        <div class="card-desc">AI model</div>
+                    </a>
+                    <a href="https://www.perplexity.ai" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🔮</div>
+                        <div class="card-title">Perplexity</div>
+                        <div class="card-desc">AI search</div>
+                    </a>
+                    <a href="https://gemini.google.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">💎</div>
+                        <div class="card-title">Gemini</div>
+                        <div class="card-desc">Google AI</div>
+                    </a>
+                    <a href="https://www.anthropic.com/claude" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">⚡</div>
+                        <div class="card-title">Claude API</div>
+                        <div class="card-desc">developer</div>
+                    </a>
+                    <a href="https://huggingface.co" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🤗</div>
+                        <div class="card-title">HuggingFace</div>
+                        <div class="card-desc">ML models</div>
+                    </a>
+                </div>
+                
+                <!-- Security Hub -->
+                <div class="hub-section hub-security">
+                    <div class="section-header">
+                        <h2 class="section-title">Security Hub</h2>
+                    </div>
+                    <a href="https://protonmail.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🔐</div>
+                        <div class="card-title">ProtonMail</div>
+                        <div class="card-desc">encrypted mail</div>
+                    </a>
+                    <a href="https://protonvpn.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🛡️</div>
+                        <div class="card-title">ProtonVPN</div>
+                        <div class="card-desc">vpn access</div>
+                    </a>
+                    <a href="https://haveibeenpwned.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🔍</div>
+                        <div class="card-title">HaveIBeenPwned</div>
+                        <div class="card-desc">breach check</div>
+                    </a>
+                    <a href="https://tor.com" class="nexus-card">
+                        <div class="card-status status-warning"></div>
+                        <div class="card-icon">🧅</div>
+                        <div class="card-title">Tor Browser</div>
+                        <div class="card-desc">anonymous</div>
+                    </a>
+                    <a href="https://bitwarden.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🔑</div>
+                        <div class="card-title">Bitwarden</div>
+                        <div class="card-desc">passwords</div>
+                    </a>
+                    <a href="https://authy.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">📱</div>
+                        <div class="card-title">Authy</div>
+                        <div class="card-desc">2FA</div>
+                    </a>
+                </div>
+                
+                <!-- Dev Hub -->
+                <div class="hub-section hub-dev">
+                    <div class="section-header">
+                        <h2 class="section-title">Developer Tools</h2>
+                    </div>
+                    <a href="https://github.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">💻</div>
+                        <div class="card-title">GitHub</div>
+                        <div class="card-desc">repositories</div>
+                    </a>
+                    <a href="https://gitlab.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🦊</div>
+                        <div class="card-title">GitLab</div>
+                        <div class="card-desc">DevOps</div>
+                    </a>
+                    <a href="https://hub.docker.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🐳</div>
+                        <div class="card-title">Docker Hub</div>
+                        <div class="card-desc">containers</div>
+                    </a>
+                    <a href="https://stackoverflow.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">📚</div>
+                        <div class="card-title">Stack Overflow</div>
+                        <div class="card-desc">dev help</div>
+                    </a>
+                    <a href="https://postman.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🚀</div>
+                        <div class="card-title">Postman</div>
+                        <div class="card-desc">API testing</div>
+                    </a>
+                    <a href="https://vercel.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">▲</div>
+                        <div class="card-title">Vercel</div>
+                        <div class="card-desc">deployment</div>
+                    </a>
+                </div>
+                
+                <!-- Monitoring Hub -->
+                <div class="hub-section hub-monitoring">
+                    <div class="section-header">
+                        <h2 class="section-title">Monitoring</h2>
+                    </div>
+                    <a href="https://your-grafana.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">📊</div>
+                        <div class="card-title">Grafana</div>
+                        <div class="card-desc">metrics</div>
+                    </a>
+                    <a href="https://uptimerobot.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">⏰</div>
+                        <div class="card-title">UptimeRobot</div>
+                        <div class="card-desc">monitoring</div>
+                    </a>
+                    <a href="https://your-pihole.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🕳️</div>
+                        <div class="card-title">Pi-hole</div>
+                        <div class="card-desc">DNS filter</div>
+                    </a>
+                    <a href="https://your-prometheus.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🔥</div>
+                        <div class="card-title">Prometheus</div>
+                        <div class="card-desc">alerting</div>
+                    </a>
+                    <a href="https://netdata.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">📈</div>
+                        <div class="card-title">Netdata</div>
+                        <div class="card-desc">real-time</div>
+                    </a>
+                    <a href="https://your-status.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">💚</div>
+                        <div class="card-title">Status Page</div>
+                        <div class="card-desc">health</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
     
-    const COMMANDS = new Map([
-      ['📬', {
-        name: 'Tutanota',
-        url: 'https://mail.tutanota.com'
-      }],
-      ['🌿', {
-        name: 'Temp Mail', 
-        url: 'https://zemail.me/'
-      }],
-      ['📬  ', {
-        name: 'Disroot',
-        url: 'https://webmail.disroot.org/'
-      }],
-      ['🛜', {
-        name: 'RSS',
-        url: 'https://rss.room300.net'
-      }],
-      ['📂', {
-        name: 'Drive',
-        url: 'https://drive.room300.net'
-      }],
-      ['📔', {
-        name: 'Notebook',
-        url: 'https://notebook.room300.net'
-      }],
-      ['📺', {
-        name: 'Jellyfin',
-        url: 'https://tv.room300.net'
-      }],
-      ['🎵', {
-        name: 'Jukebox',
-        url: 'https://jukebox.room300.net'
-      }],
-      ['🎮', {
-        name: 'YT Music',
-        url: 'https://music.youtube.com'
-      }],
-      ['📺  ', {
-        name: 'Youtube',
-        url: 'https://youtube.com'
-      }],
-      ['📍', {
-        name: 'IP Location',
-        url: 'https://ipleak.net/'
-      }],
-      ['⚡', {
-        name: 'Speedtest',
-        url: 'https://real-debrid.com/speedtest'
-      }],
-      ['📡', {
-        name: 'Seedbox',
-        url: 'https://seedbox.room300.net'
-      }],
-      ['🔊', {
-        name: 'Soulseek',
-        url: 'https://soulseek.room300.net'
-      }],
-      ['🗄️', {
-        name: 'Debrid',
-        url: 'https://real-debrid.com/'
-      }],
-      ['🗑️', {
-        name: 'Bin',
-        url: 'https://bin.room300.net'
-      }],
-      ['📷', {
-        name: 'Photos',
-        url: 'https://photos.room300.net'
-      }],
-      ['💻', {
-        name: 'Admin',
-        url: 'https://admin.room300.net'
-      }],
-    ]);
-  </script>
-  <template id="commands-template">
+    <!-- Quick access toolbar -->
+    <div class="quick-access">
+        <div class="quick-btn" onclick="toggleSearch()" title="Search (Ctrl+Space)">🔍</div>
+        <div class="quick-btn" onclick="toggleTerminal()" title="Terminal">💻</div>
+        <div class="quick-btn" onclick="toggleStats()" title="System Stats">📊</div>
+        <div class="quick-btn" onclick="toggleTheme()" title="Toggle Theme">🌙</div>
+        <div class="quick-btn" onclick="toggleFullscreen()" title="Fullscreen">🖥️</div>
+    </div>
+    
+    <!-- Typing indicator -->
+    <div class="typing-indicator" id="typingIndicator">
+        NEXUS ready...
+    </div>
+    
+    <!-- Notification area -->
+    <div class="notification" id="notification">
+        <div class="notification-title">System Alert</div>
+        <div class="notification-message">All systems operational</div>
+    </div>
+    
+    <script>
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('fade-out');
+                showNotification('NEXUS Online', 'All systems operational', 'success');
+            }, 3000);
+        });
+        
+        // Custom cursor
+        const cursor = document.getElementById('customCursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        
+        // Hide cursor when not moving
+        let mouseTimer;
+        document.addEventListener('mousemove', () => {
+            cursor.style.display = 'block';
+            clearTimeout(mouseTimer);
+            mouseTimer = setTimeout(() => {
+                cursor.style.display = 'none';
+            }, 3000);
+        });
+        
+        // Matrix rain
+        function createMatrixRain() {
+            const container = document.getElementById('matrixRain');
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+-=[]{}|;:,.<>?';
+            
+            for (let i = 0; i < 50; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = Math.random() * 100 + '%';
+                column.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                column.style.animationDelay = Math.random() * 2 + 's';
+                
+                let text = '';
+                for (let j = 0; j < 20; j++) {
+                    text += chars[Math.floor(Math.random() * chars.length)];
+                }
+                column.textContent = text;
+                
+                container.appendChild(column);
+            }
+        }
+        
+        // Network nodes
+        function createNetworkNodes() {
+            const container = document.getElementById('networkNodes');
+            const nodes = [];
+            
+            // Create nodes
+            for (let i = 0; i < 8; i++) {
+                const node = document.createElement('div');
+                node.className = 'network-node';
+                node.style.left = Math.random() * 100 + '%';
+                node.style.top = Math.random() * 100 + '%';
+                node.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(node);
+                nodes.push(node);
+            }
+            
+            // Create connections
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    if (Math.random() < 0.3) {
+                        const line = document.createElement('div');
+                        line.className = 'connection-line';
+                        
+                        const rect1 = nodes[i].getBoundingClientRect();
+                        const rect2 = nodes[j].getBoundingClientRect();
+                        
+                        const dx = rect2.left - rect1.left;
+                        const dy = rect2.top - rect1.top;
+                        const distance = Math.sqrt(dx*dx + dy*dy);
+                        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                        
+                        line.style.width = distance + 'px';
+                        line.style.left = rect1.left + 'px';
+                        line.style.top = rect1.top + 'px';
+                        line.style.transform = `rotate(${angle}deg)`;
+                        line.style.animationDelay = Math.random() * 5 + 's';
+                        
+                        container.appendChild(line);
+                    }
+                }
+            }
+        }
+        
+        // Clock with enhanced formatting
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const dateString = now.toLocaleDateString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            document.getElementById('clock').textContent = `>> ${timeString} :: ${dateString} - STATUS: ONLINE`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+        
+        // System stats simulation
+        function updateStats() {
+            const cpu = document.querySelector('.stat-fill');
+            const ram = document.querySelectorAll('.stat-fill')[1];
+            const net = document.querySelectorAll('.stat-fill')[2];
+            
+            cpu.style.width = (Math.random() * 40 + 30) + '%';
+            ram.style.width = (Math.random() * 30 + 50) + '%';
+            net.style.width = (Math.random() * 50 + 10) + '%';
+        }
+        setInterval(updateStats, 5000);
+        
+        // Search functionality
+        const searchNexus = document.getElementById('searchNexus');
+        const searchInput = document.getElementById('searchInput');
+        const mainContent = document.getElementById('mainContent');
+        
+        function toggleSearch() {
+            if (searchNexus.classList.contains('active')) {
+                hideSearch();
+            } else {
+                showSearch();
+            }
+        }
+        
+        function showSearch() {
+            searchNexus.classList.add('active');
+            mainContent.style.filter = 'blur(5px)';
+            searchInput.focus();
+            showNotification('Search Mode', 'Type to search or enter commands', 'info');
+        }
+        
+        function hideSearch() {
+            searchNexus.classList.remove('active');
+            mainContent.style.filter = 'none';
+            searchInput.value = '';
+            showNotification('Search Closed', 'Returning to main interface', 'info');
+        }
+        
+        // Enhanced search with commands
+        const commands = {
+            'status': () => showNotification('System Status', 'All systems operational', 'success'),
+            'time': () => showNotification('Current Time', new Date().toLocaleString(), 'info'),
+            'weather': () => showNotification('Weather', '72°F - Clear - Los Angeles', 'info'),
+            'matrix': () => {
+                createMatrixRain();
+                showNotification('Matrix Mode', 'Reality subroutines activated', 'success');
+            },
+            'clear': () => {
+                document.getElementById('matrixRain').innerHTML = '';
+                showNotification('Cache Cleared', 'Visual effects reset', 'info');
+            },
+            'help': () => showNotification('Available Commands', 'status, time, weather, matrix, clear, help, exit', 'info'),
+            'exit': hideSearch
+        };
+        
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const query = searchInput.value.toLowerCase().trim();
+                
+                if (commands[query]) {
+                    commands[query]();
+                    searchInput.value = '';
+                    return;
+                }
+                <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chooch.net - NEXUS</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-      .commands {
-        columns: 1;
-        list-style: none;
-        margin: 0 auto;
-        max-width: 10rem;
-        padding: 0 0 0 var(--space-1);
-        width: 100vw;
-      }
-
-      .command {
-        display: flex;
-        gap: var(--space-2);
-        outline: 0;
-        padding: var(--space-1);
-        text-decoration: none;
-        border-radius: 12px;
-        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        backdrop-filter: blur(10px);
-        position: relative;
-        overflow: hidden;
-      }
-
-      .command::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        transition: left 0.5s;
-      }
-
-      .command:hover {
-        transform: translateY(-5px) scale(1.05);
-        box-shadow: 
-          0 10px 20px rgba(139, 0, 255, 0.3),
-          0 0 20px var(--color-accent),
-          inset 0 0 20px rgba(255, 255, 255, 0.1);
-      }
-
-      .command:hover::before {
-        left: 100%;
-      }
-
-      .key {
-        color: var(--color-text);
-        display: inline-block;
-        text-align: center;
-        width: 3ch;
-        text-shadow: 0 0 10px currentColor;
-        transition: all 0.5s ease;
-        position: relative;
-      }
-
-      .key::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-        transition: all 0.3s ease;
-        transform: translate(-50%, -50%);
-      }
-
-      .command:hover .key {
-        animation: emoji-dance 0.6s ease-in-out;
-        transform: rotate(360deg);
-      }
-
-      .command:hover .key::after {
-        width: 30px;
-        height: 30px;
-      }
-
-      @keyframes emoji-dance {
-        0%, 100% { transform: rotate(0deg) scale(1); }
-        25% { transform: rotate(-10deg) scale(1.1); }
-        50% { transform: rotate(0deg) scale(1.2); }
-        75% { transform: rotate(10deg) scale(1.1); }
-      }
-
-      .name {
-        color: var(--color-text-subtle);
-        transition: color var(--transition-speed);
-      }
-
-      .command:where(:focus, :hover) .name {
-        color: var(--color-text);
-      }
-
-      @media (min-width: 500px) {
-        .commands {
-          columns: 2;
-          max-width: 20rem;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-      }
-
-      @media (min-width: 700px) {
-        .commands {
-          columns: 3;
-          max-width: 30rem;
+        
+        :root {
+            --primary-green: #00ff41;
+            --primary-cyan: #00ffff;
+            --primary-purple: #ff00ff;
+            --primary-orange: #ff8800;
+            --bg-dark: #080808;
+            --bg-darker: #000000;
+            --terminal-green: #00ff41;
         }
-      }
-
-      @media (min-width: 900px) {
-        .commands {
-          columns: 4;
-          max-width: 40rem;
+        
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-dark);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            cursor: crosshair;
         }
-      }
-
-      @media (min-width: 1200px) {
-        .commands {
-          columns: 6;
-          max-width: 60rem;
+        
+        /* Custom cursor */
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-green);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            mix-blend-mode: screen;
         }
-      }
+        
+        .custom-cursor::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-green);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        /* System stats overlay */
+        .system-stats {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--primary-green);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.7rem;
+            color: var(--primary-green);
+            font-family: 'JetBrains Mono', monospace;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .stat-bar {
+            width: 50px;
+            height: 4px;
+            background: rgba(0, 255, 65, 0.2);
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-fill {
+            height: 100%;
+            background: var(--primary-green);
+            transition: width 1s ease;
+        }
+        
+        /* Matrix rain with more complexity */
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -5;
+            overflow: hidden;
+        }
+        
+        .matrix-column {
+            position: absolute;
+            top: -100%;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--primary-green);
+            writing-mode: vertical-lr;
+            animation: matrix-fall linear infinite;
+        }
+        
+        @keyframes matrix-fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        
+        /* Network visualization */
+        .network-nodes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -4;
+            background: radial-gradient(circle at 50% 50%, transparent 20%, var(--bg-dark) 100%);
+        }
+        
+        .network-node {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--primary-cyan);
+            animation: node-pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes node-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-cyan), transparent);
+            transform-origin: 0;
+            animation: connection-flow 5s linear infinite;
+        }
+        
+        @keyframes connection-flow {
+            0% { opacity: 0; }
+            50% { opacity: 0.3; }
+            100% { opacity: 0; }
+        }
+        
+        /* Enhanced glitch effects */
+        .glitch {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            animation: glitch-anim 2s infinite;
+            color: var(--primary-purple);
+            z-index: -1;
+        }
+        
+        .glitch::after {
+            animation: glitch-anim2 1s infinite;
+            color: var(--primary-cyan);
+            z-index: -2;
+        }
+        
+        @keyframes glitch-anim {
+            0% { clip: rect(64px, 9999px, 66px, 0); transform: skew(0.3deg); }
+            5% { clip: rect(30px, 9999px, 36px, 0); transform: skew(0.8deg); }
+            10% { clip: rect(70px, 9999px, 71px, 0); transform: skew(0.2deg); }
+            15% { clip: rect(10px, 9999px, 15px, 0); transform: skew(0.6deg); }
+            20% { clip: rect(50px, 9999px, 52px, 0); transform: skew(0.4deg); }
+            25% { clip: rect(0px, 9999px, 2px, 0); transform: skew(0.1deg); }
+            30% { clip: rect(40px, 9999px, 45px, 0); transform: skew(0.7deg); }
+            100% { clip: rect(100px, 9999px, 102px, 0); transform: skew(0deg); }
+        }
+        
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 67px, 0); transform: skew(0.2deg); }
+            5% { clip: rect(29px, 9999px, 33px, 0); transform: skew(0.7deg); }
+            10% { clip: rect(69px, 9999px, 72px, 0); transform: skew(0.1deg); }
+            100% { clip: rect(99px, 9999px, 103px, 0); transform: skew(0deg); }
+        }
+        
+        /* Holographic effects */
+        .hologram {
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.03), transparent);
+            background-size: 20px 20px;
+            animation: hologram-scan 4s linear infinite;
+        }
+        
+        @keyframes hologram-scan {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
+        }
+        
+        /* Neon glow effects */
+        .neon-glow {
+            text-shadow: 
+                0 0 5px var(--primary-green),
+                0 0 10px var(--primary-green),
+                0 0 15px var(--primary-green),
+                0 0 20px var(--primary-green);
+        }
+        
+        /* Enhanced terminal window */
+        .terminal-window {
+            background: var(--bg-darker);
+            border: 2px solid var(--primary-green);
+            border-radius: 10px;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 65, 0.3),
+                inset 0 0 30px rgba(0, 255, 65, 0.1);
+            backdrop-filter: blur(20px);
+        }
+        
+        .terminal-header {
+            background: linear-gradient(90deg, var(--primary-green), transparent);
+            height: 30px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            border-bottom: 1px solid rgba(0, 255, 65, 0.5);
+        }
+        
+        .terminal-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .terminal-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-green);
+            box-shadow: 0 0 5px var(--primary-green);
+            animation: blink 2s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        
+        .terminal-content {
+            padding: 20px;
+            background: var(--bg-darker);
+        }
+        
+        .terminal-prompt {
+            color: var(--primary-green);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .terminal-prompt::before {
+            content: 'root@nexus:~$ ';
+        }
+        
+        /* Dynamic grid system */
+        .nexus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .hub-section {
+            grid-column: span 6;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+        }
+        
+        @media (max-width: 1400px) {
+            .hub-section {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .hub-section {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (max-width: 800px) {
+            .hub-section {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .hub-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Enhanced cards */
+        .nexus-card {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-decoration: none;
+            color: #ffffff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            min-height: 140px;
+        }
+        
+        .nexus-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8f00ff, #ff0000);
+            background-size: 600% 600%;
+            animation: rgb-border 8s linear infinite;
+            border-radius: 15px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nexus-card:hover::before {
+            opacity: 0.5;
+        }
+        
+        @keyframes rgb-border {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .nexus-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: var(--primary-green);
+            box-shadow: 
+                0 10px 40px rgba(0, 255, 65, 0.4),
+                0 0 50px rgba(0, 255, 65, 0.2),
+                inset 0 0 30px rgba(0, 255, 65, 0.1);
+        }
+        
+        /* Category-specific hover effects */
+        .hub-security .nexus-card:hover {
+            border-color: #ff0040;
+            box-shadow: 0 10px 40px rgba(255, 0, 64, 0.4);
+        }
+        
+        .hub-dev .nexus-card:hover {
+            border-color: #4080ff;
+            box-shadow: 0 10px 40px rgba(64, 128, 255, 0.4);
+        }
+        
+        .hub-monitoring .nexus-card:hover {
+            border-color: #ff8000;
+            box-shadow: 0 10px 40px rgba(255, 128, 0, 0.4);
+        }
+        
+        .hub-ai .nexus-card:hover {
+            border-color: #8040ff;
+            box-shadow: 0 10px 40px rgba(128, 64, 255, 0.4);
+        }
+        
+        .card-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            font-size: 2rem;
+            background: rgba(0, 255, 65, 0.1);
+            border-radius: 50%;
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            filter: drop-shadow(0 0 10px rgba(0, 255, 65, 0.5));
+        }
+        
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            color: var(--primary-green);
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+        
+        .card-desc {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            text-align: center;
+            color: #ffffff;
+        }
+        
+        .card-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: status-pulse 2s infinite;
+        }
+        
+        .status-online {
+            background: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+        }
+        
+        .status-warning {
+            background: #ffff00;
+            box-shadow: 0 0 10px #ffff00;
+        }
+        
+        .status-offline {
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+        
+        @keyframes status-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        
+        /* Section headers */
+        .section-header {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            color: var(--primary-green);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::before,
+        .section-title::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 50px;
+            height: 1px;
+            background: var(--primary-green);
+        }
+        
+        .section-title::before {
+            left: -70px;
+        }
+        
+        .section-title::after {
+            right: -70px;
+        }
+        
+        /* Enhanced search overlay */
+        .search-nexus {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(15px);
+        }
+        
+        .search-nexus.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .search-interface {
+            width: 90%;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--primary-green);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 
+                0 0 50px rgba(0, 255, 65, 0.3),
+                inset 0 0 50px rgba(0, 255, 65, 0.1);
+        }
+        
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 255, 65, 0.1);
+            border-radius: 25px;
+            padding: 15px;
+            border: 1px solid rgba(0, 255, 65, 0.5);
+        }
+        
+        .search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--primary-green);
+            font-size: 1.2rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .search-input::placeholder {
+            color: rgba(0, 255, 65, 0.5);
+        }
+        
+        /* Quick access toolbar */
+        .quick-access {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 10px;
+            border-radius: 25px;
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            backdrop-filter: blur(15px);
+        }
+        
+        .quick-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--primary-green);
+        }
+        
+        .quick-btn:hover {
+            background: var(--primary-green);
+            color: black;
+            transform: scale(1.2);
+        }
+        
+        /* Typing indicator */
+        .typing-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            font-size: 0.8rem;
+            color: var(--primary-green);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .typing-indicator.show {
+            opacity: 1;
+        }
+        
+        /* Weather widget */
+        .weather-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--primary-green);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: var(--primary-green);
+        }
+        
+        /* Notification system */
+        .notification {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid var(--primary-green);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px;
+            transition: right 0.3s ease;
+            z-index: 3000;
+        }
+        
+        .notification.show {
+            right: 0;
+        }
+        
+        .notification-title {
+            color: var(--primary-green);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .notification-message {
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+        
+        /* Loading screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-darker);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            opacity: 1;
+            transition: opacity 1s ease;
+        }
+        
+        .loading-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-text {
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            animation: glow-pulse 2s infinite;
+        }
+        
+        @keyframes glow-pulse {
+            0%, 100% { text-shadow: 0 0 10px var(--primary-green); }
+            50% { text-shadow: 0 0 30px var(--primary-green); }
+        }
+        
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(0, 255, 65, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .loading-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--primary-green);
+            animation: loading-progress 3s ease-out forwards;
+            box-shadow: 0 0 20px var(--primary-green);
+        }
+        
+        @keyframes loading-progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
     </style>
-    <nav>
-      <menu class="commands"></menu>
-    </nav>
-  </template>
-  <template id="command-template">
-    <li>
-      <a class="command" rel="noopener noreferrer">
-        <span class="key"></span>
-        <span class="name"></span>
-      </a>
-    </li>
-  </template>
-  <script type="module">
-    class Commands extends HTMLElement {
-      constructor() {
+</head>
+<body>
+    <!-- Loading screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text glitch" data-text="INITIALIZING NEXUS...">INITIALIZING NEXUS...</div>
+        <div class="loading-bar">
+            <div class="loading-fill"></div>
+        </div>
+    </div>
+    
+    <!-- Custom cursor -->
+    <div class="custom-cursor" id="customCursor"></div>
+    
+    <!-- System stats -->
+    <div class="system-stats">
+        <div class="stat-line">
+            <span>CPU:</span>
+            <div class="stat-bar"><div class="stat-fill" style="width: 45%"></div></div>
+        </div>
+        <div class="stat-line">
+            <span>RAM:</span>
+            <div class="stat-bar"><div class="stat-fill" style="width: 67%"></div></div>
+        </div>
+        <div class="stat-line">
+            <span>NET:</span>
+            <div class="stat-bar"><div class="stat-fill" style="width: 23%"></div></div>
+        </div>
+    </div>
+    
+    <!-- Weather widget -->
+    <div class="weather-widget" id="weatherWidget">
+        <div>📍 Los Angeles</div>
+        <div>🌡️ 72°F - Clear</div>
+        <div>💨 5mph NW</div>
+    </div>
+    
+    <!-- Matrix rain effect -->
+    <div class="matrix-rain" id="matrixRain"></div>
+    
+    <!-- Network visualization -->
+    <div class="network-nodes" id="networkNodes"></div>
+    
+    <!-- Search overlay -->
+    <div class="search-nexus" id="searchNexus">
+        <div class="search-interface terminal-window">
+            <div class="terminal-header">
+                <div class="terminal-controls">
+                    <div class="terminal-btn"></div>
+                    <div class="terminal-btn"></div>
+                    <div class="terminal-btn"></div>
+                </div>
+            </div>
+            <div class="terminal-content">
+                <div class="terminal-prompt">nexus/search $</div>
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Enter command or query...">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main content -->
+    <div class="main-content" id="mainContent">
+        <div class="container">
+            <!-- Header -->
+            <header class="terminal-window" style="text-align: center; margin-bottom: 30px;">
+                <div class="terminal-header">
+                    <div class="terminal-controls">
+                        <div class="terminal-btn"></div>
+                        <div class="terminal-btn"></div>
+                        <div class="terminal-btn"></div>
+                    </div>
+                </div>
+                <div class="terminal-content">
+                    <div class="terminal-prompt">nexus/initialize</div>
+                    <h1 class="glitch neon-glow" data-text="CHOOCH.NET">CHOOCH.NET</h1>
+                    <div style="color: var(--primary-green); margin: 10px 0;">[ DIGITAL NEXUS - SYSTEM ONLINE ]</div>
+                    <div style="color: rgba(0,255,65,0.7); font-size: 0.9rem;" id="clock"></div>
+                </div>
+            </header>
+            
+            <!-- Hub sections -->
+            <div class="nexus-grid">
+                <!-- Primary Services -->
+                <div class="hub-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Primary Services</h2>
+                    </div>
+                    <a href="https://mail.tutanota.com/login" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">📧</div>
+                        <div class="card-title">Tutanota</div>
+                        <div class="card-desc">secure mail</div>
+                    </a>
+                    <a href="https://your-rss.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">📡</div>
+                        <div class="card-title">RSS</div>
+                        <div class="card-desc">feeds</div>
+                    </a>
+                    <a href="https://your-jellyfin.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🎬</div>
+                        <div class="card-title">Jellyfin</div>
+                        <div class="card-desc">media</div>
+                    </a>
+                    <a href="https://your-jukebox.com" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🎵</div>
+                        <div class="card-title">Jukebox</div>
+                        <div class="card-desc">tunes</div>
+                    </a>
+                    <a href="https://your-seedbox.com" class="nexus-card">
+                        <div class="card-status status-warning"></div>
+                        <div class="card-icon">🌱</div>
+                        <div class="card-title">Seedbox</div>
+                        <div class="card-desc">torrents</div>
+                    </a>
+                    <a href="https://bin.chooch.net" class="nexus-card">
+                        <div class="card-status status-online"></div>
+                        <div class="card-icon">🗂️</div>
+                        <div class="card-title">Bin</div>
+                        <div class="card-desc">storage</div>
