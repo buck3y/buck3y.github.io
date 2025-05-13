@@ -126,17 +126,40 @@
       margin: 0;
     }
 
+    /* Main content layout */
     main {
-      align-items: center;
+      align-items: flex-start;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 100vh;
       overflow: hidden;
       padding: var(--space-3) var(--space-2);
       position: relative;
       width: 100vw;
+    }
+
+    /* Container for two-column layout */
+    .categories-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: calc(var(--space-3) * 1.5);
+      width: 100%;
+      max-width: 90rem;
+      margin: 0 auto;
+    }
+
+    .categories-column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (max-width: 900px) {
+      .categories-container {
+        grid-template-columns: 1fr;
+        gap: var(--space-2);
+      }
     }
 
     h1 {
@@ -820,70 +843,78 @@
     <h1 class="glitch" data-text="Chooch.net">Chooch.net</h1>
     <span class="subtitle">  </span>
     
-    <canvas class="rain-canvas"></canvas>
+    <canvas class="rain-canvas" style="display: none;"></canvas>
     
-    <!-- Email & Communications Section -->
-    <div class="command-section">
-      <h2 class="category-title">📧 Email & Communications</h2>
-      <nav>
-        <menu class="commands" id="email-commands"></menu>
-      </nav>
-    </div>
+    <div class="categories-container">
+      <!-- Left Column -->
+      <div class="categories-column">
+        <!-- Email & Communications Section -->
+        <div class="command-section">
+          <h2 class="category-title">📧 Email & Communications</h2>
+          <nav>
+            <menu class="commands" id="email-commands"></menu>
+          </nav>
+        </div>
 
-    <!-- Entertainment Section -->
-    <div class="command-section">
-      <h2 class="category-title">🎬 Entertainment</h2>
-      <nav>
-        <menu class="commands" id="entertainment-commands"></menu>
-      </nav>
-    </div>
+        <!-- Files & Storage Section -->
+        <div class="command-section">
+          <h2 class="category-title">📁 Files & Storage</h2>
+          <nav>
+            <menu class="commands" id="files-commands"></menu>
+          </nav>
+        </div>
 
-    <!-- Files & Storage Section -->
-    <div class="command-section">
-      <h2 class="category-title">📁 Files & Storage</h2>
-      <nav>
-        <menu class="commands" id="files-commands"></menu>
-      </nav>
-    </div>
+        <!-- Security & Privacy Section -->
+        <div class="command-section">
+          <h2 class="category-title">🔐 Security & Privacy</h2>
+          <nav>
+            <menu class="commands" id="security-commands"></menu>
+          </nav>
+        </div>
 
-    <!-- Network & Tools Section -->
-    <div class="command-section">
-      <h2 class="category-title">🛠️ Network & Tools</h2>
-      <nav>
-        <menu class="commands" id="tools-commands"></menu>
-      </nav>
-    </div>
+        <!-- Developer Tools Section -->
+        <div class="command-section">
+          <h2 class="category-title">🛠️ Developer Tools</h2>
+          <nav>
+            <menu class="commands" id="devtools-commands"></menu>
+          </nav>
+        </div>
+      </div>
 
-    <!-- Torrenting Section -->
-    <div class="command-section">
-      <h2 class="category-title">🏴‍☠️ Torrenting</h2>
-      <nav>
-        <menu class="commands" id="torrenting-commands"></menu>
-      </nav>
-    </div>
+      <!-- Right Column -->
+      <div class="categories-column">
+        <!-- Entertainment Section -->
+        <div class="command-section">
+          <h2 class="category-title">🎬 Entertainment</h2>
+          <nav>
+            <menu class="commands" id="entertainment-commands"></menu>
+          </nav>
+        </div>
 
-    <!-- Security & Privacy Section -->
-    <div class="command-section">
-      <h2 class="category-title">🔐 Security & Privacy</h2>
-      <nav>
-        <menu class="commands" id="security-commands"></menu>
-      </nav>
-    </div>
+        <!-- Network & Tools Section -->
+        <div class="command-section">
+          <h2 class="category-title">🛠️ Network & Tools</h2>
+          <nav>
+            <menu class="commands" id="tools-commands"></menu>
+          </nav>
+        </div>
 
-    <!-- Developer Tools Section -->
-    <div class="command-section">
-      <h2 class="category-title">🛠️ Developer Tools</h2>
-      <nav>
-        <menu class="commands" id="devtools-commands"></menu>
-      </nav>
-    </div>
+        <!-- Torrenting Section -->
+        <div class="command-section">
+          <h2 class="category-title">🏴‍☠️ Torrenting</h2>
+          <nav>
+            <menu class="commands" id="torrenting-commands"></menu>
+          </nav>
+        </div>
 
-    <!-- Research & Learning Section -->
-    <div class="command-section">
-      <h2 class="category-title">📚 Research & Learning</h2>
-      <nav>
-        <menu class="commands" id="research-commands"></menu>
-      </nav>
+        <!-- Research & Learning Section -->
+        <div class="command-section">
+          <h2 class="category-title">📚 Research & Learning</h2>
+          <nav>
+            <menu class="commands" id="research-commands"></menu>
+          </nav>
+        </div>
+      </div>
     </div>
     
     <dialog class="dialog" id="search-dialog">
