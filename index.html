@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STORM COMMAND - Unleash the Thunder</title>
+    <title>chooch.net</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,218 +12,246 @@
             box-sizing: border-box;
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-
         body {
-            min-height: 100vh;
-            font-family: 'Orbitron', monospace;
+            font-family: 'JetBrains Mono', monospace;
+            background: #080808;
             color: #ffffff;
+            min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
-            background: #000;
         }
 
-        /* Epic Storm Background */
-        .storm-background {
+        /* Heavy smoke background layers */
+        .smoke-bg {
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            z-index: -4;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: 
-                radial-gradient(circle at 20% 50%, rgba(15, 20, 25, 0.9) 0%, transparent 70%),
-                radial-gradient(circle at 80% 20%, rgba(26, 35, 50, 0.8) 0%, transparent 70%),
-                radial-gradient(circle at 40% 80%, rgba(44, 62, 80, 0.7) 0%, transparent 70%),
-                linear-gradient(45deg, #000000 0%, #0f1419 20%, #1a2332 40%, #2c3e50 60%, #34495e 80%, #2c3e50 100%);
-            background-size: 300% 300%, 250% 250%, 400% 400%, 200% 200%;
-            animation: stormChaos 15s ease-in-out infinite;
+                radial-gradient(circle at 10% 20%, rgba(60, 60, 60, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 90% 30%, rgba(40, 40, 40, 0.5) 0%, transparent 45%),
+                radial-gradient(circle at 30% 70%, rgba(70, 70, 70, 0.3) 0%, transparent 35%),
+                radial-gradient(circle at 70% 80%, rgba(50, 50, 50, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 50% 10%, rgba(45, 45, 45, 0.3) 0%, transparent 30%);
+            z-index: -4;
+            animation: smokeShift 30s ease-in-out infinite;
         }
 
-        @keyframes stormChaos {
-            0% { background-position: 0% 0%, 100% 100%, 50% 50%, 0% 0%; transform: rotate(0deg) scale(1); }
-            25% { background-position: 100% 0%, 0% 50%, 0% 100%, 50% 0%; transform: rotate(1deg) scale(1.05); }
-            50% { background-position: 100% 100%, 50% 0%, 100% 0%, 100% 50%; transform: rotate(0deg) scale(1); }
-            75% { background-position: 0% 100%, 100% 0%, 50% 50%, 0% 100%; transform: rotate(-1deg) scale(1.05); }
-            100% { background-position: 0% 0%, 0% 100%, 0% 0%, 0% 0%; transform: rotate(0deg) scale(1); }
+        @keyframes smokeShift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(-20px, -15px) scale(1.05); }
+            50% { transform: translate(15px, -10px) scale(0.98); }
+            75% { transform: translate(-10px, 20px) scale(1.02); }
         }
 
-        /* EPIC SMOKE EFFECTS */
+        .smoke-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, rgba(0,0,0,0.6), rgba(30,30,30,0.3), rgba(0,0,0,0.5)),
+                linear-gradient(120deg, rgba(20,20,20,0.4), rgba(0,0,0,0.7));
+            z-index: -3;
+            animation: smokeOverlay 25s ease-in-out infinite;
+        }
+
+        @keyframes smokeOverlay {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.9; }
+        }
+
+        /* Realistic smoke particles */
         .smoke-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -3;
+            z-index: -2;
             overflow: hidden;
         }
 
-        .smoke {
+        .smoke-particle {
             position: absolute;
-            background: radial-gradient(circle, rgba(100,100,100,0.4) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(90,90,90,0.6) 0%, rgba(60,60,60,0.4) 30%, transparent 70%);
             border-radius: 50%;
-            filter: blur(3px);
+            filter: blur(1.5px);
             opacity: 0;
-            animation: smokeRise 12s infinite ease-out;
         }
 
-        @keyframes smokeRise {
-            0% { transform: translateY(100vh) translateX(0) scale(0.5); opacity: 0; }
+        .smoke-large {
+            animation: smokeLarge 20s infinite linear;
+        }
+
+        .smoke-medium {
+            animation: smokeMedium 15s infinite linear;
+        }
+
+        .smoke-small {
+            animation: smokeSmall 12s infinite linear;
+        }
+
+        @keyframes smokeLarge {
+            0% {
+                transform: translateY(110vh) translateX(0px) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            5% { opacity: 0.4; }
             15% { opacity: 0.6; }
             85% { opacity: 0.3; }
-            100% { transform: translateY(-20vh) translateX(50px) scale(2); opacity: 0; }
+            100% {
+                transform: translateY(-10vh) translateX(100px) rotate(180deg) scale(2.5);
+                opacity: 0;
+            }
         }
 
-        /* Insane Lightning */
-        .lightning-container {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            overflow: hidden;
+        @keyframes smokeMedium {
+            0% {
+                transform: translateY(110vh) translateX(0px) rotate(0deg) scale(0.6);
+                opacity: 0;
+            }
+            8% { opacity: 0.5; }
+            20% { opacity: 0.7; }
+            80% { opacity: 0.4; }
+            100% {
+                transform: translateY(-5vh) translateX(-80px) rotate(-90deg) scale(2);
+                opacity: 0;
+            }
         }
 
-        .lightning-strike {
-            position: absolute;
-            width: 3px;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,1), rgba(173,216,230,0.9), rgba(135,206,235,0.8), transparent);
-            opacity: 0;
-            filter: drop-shadow(0 0 20px rgba(135,206,235,0.8));
-            animation: megaLightning 6s infinite;
-        }
-
-        .lightning-strike:nth-child(1) { left: 15%; animation-delay: 0s; transform: rotate(-2deg); }
-        .lightning-strike:nth-child(2) { left: 45%; animation-delay: 2s; transform: rotate(3deg); }
-        .lightning-strike:nth-child(3) { left: 75%; animation-delay: 4s; transform: rotate(-1deg); }
-        .lightning-strike:nth-child(4) { left: 30%; animation-delay: 1s; transform: rotate(2deg); }
-        .lightning-strike:nth-child(5) { left: 60%; animation-delay: 3s; transform: rotate(-3deg); }
-
-        @keyframes megaLightning {
-            0%, 92% { opacity: 0; transform: scaleY(1); }
-            93% { opacity: 1; box-shadow: 0 0 30px rgba(255,255,255,1), 0 0 60px rgba(135,206,235,0.8), 0 0 90px rgba(173,216,230,0.6); transform: scaleY(1.1); }
-            94% { opacity: 0; }
-            95% { opacity: 1; box-shadow: 0 0 50px rgba(255,255,255,1), 0 0 100px rgba(135,206,235,0.9), 0 0 150px rgba(173,216,230,0.7); transform: scaleY(1.2); }
-            96% { opacity: 0; }
-            97% { opacity: 1; transform: scaleY(1.05); }
-            100% { opacity: 0; }
-        }
-
-        /* Plasma Effects */
-        .plasma-waves {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50%;
-            z-index: -2;
-            background: 
-                radial-gradient(ellipse at center bottom, rgba(30,144,255,0.2) 0%, transparent 60%),
-                radial-gradient(ellipse at center bottom, rgba(0,191,255,0.1) 0%, transparent 70%);
-            animation: plasmaFlow 10s ease-in-out infinite;
-        }
-
-        @keyframes plasmaFlow {
-            0%, 100% { transform: translateY(0px) scaleX(1); }
-            50% { transform: translateY(-30px) scaleX(1.1); }
+        @keyframes smokeSmall {
+            0% {
+                transform: translateY(110vh) translateX(0px) rotate(0deg) scale(0.4);
+                opacity: 0;
+            }
+            10% { opacity: 0.6; }
+            25% { opacity: 0.8; }
+            75% { opacity: 0.5; }
+            100% {
+                transform: translateY(-2vh) translateX(60px) rotate(270deg) scale(1.5);
+                opacity: 0;
+            }
         }
 
         .container {
-            position: relative;
-            max-width: 1400px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 4rem 2rem;
-            z-index: 1;
+            padding: 2rem 1rem;
         }
 
-        /* Epic Header */
         header {
             text-align: center;
-            margin-bottom: 5rem;
-            position: relative;
+            margin-bottom: 2rem;
         }
 
         h1 {
-            font-size: 4rem;
-            font-weight: 900;
-            letter-spacing: -2px;
-            text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(135,206,235,0.6), 0 0 60px rgba(173,216,230,0.4), 0 0 80px rgba(30,144,255,0.3);
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ffffff, #87ceeb, #4682b4, #1e90ff);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: epicGlow 4s ease-in-out infinite alternate;
-            position: relative;
-        }
-
-        h1::before {
-            content: "STORM COMMAND";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(135,206,235,0.2));
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: blur(4px);
-            animation: textBlur 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes epicGlow {
-            from { filter: brightness(1) saturate(1); transform: scale(1); }
-            to { filter: brightness(1.3) saturate(1.2); transform: scale(1.02); }
-        }
-
-        @keyframes textBlur {
-            from { filter: blur(4px); }
-            to { filter: blur(8px); }
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+            color: #f0f0f0;
         }
 
         .subtitle {
-            font-size: 1.5rem;
-            opacity: 0.9;
+            font-size: 0.8rem;
+            opacity: 0.7;
             font-weight: 400;
-            color: #e0f4ff;
-            text-shadow: 0 0 20px rgba(135,206,235,0.5);
-            animation: subtitlePulse 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes subtitlePulse {
-            from { opacity: 0.9; }
-            to { opacity: 1; }
         }
 
         .clock {
-            font-size: 1.2rem;
-            opacity: 0.8;
-            margin-top: 1.5rem;
-            font-family: 'Orbitron', monospace;
-            color: #4682b4;
-            text-shadow: 0 0 10px rgba(70,130,180,0.6);
+            font-size: 0.75rem;
+            opacity: 0.6;
+            margin-top: 0.5rem;
+            font-weight: 300;
         }
 
-        /* Insane Search */
+        /* Landscape oriented, smaller link grid */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .link-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 0.6rem 0.8rem;
+            text-decoration: none;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .link-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-1px);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .link-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .link-card:hover::before {
+            left: 100%;
+        }
+
+        .link-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .link-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .link-title {
+            font-size: 0.75rem;
+            font-weight: 500;
+            line-height: 1.2;
+            margin-bottom: 0.1rem;
+        }
+
+        .link-desc {
+            font-size: 0.65rem;
+            opacity: 0.5;
+            font-weight: 300;
+            line-height: 1.1;
+        }
+
+        /* Search functionality */
         .search-container {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 90%;
-            max-width: 800px;
+            max-width: 500px;
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
         }
 
         .search-container.active {
             opacity: 1;
             pointer-events: all;
-            transform: translate(-50%, -50%) scale(1);
         }
 
         .search-overlay {
@@ -232,7 +261,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(15px);
             z-index: 999;
             opacity: 0;
             visibility: hidden;
@@ -245,379 +274,326 @@
         }
 
         .search-box {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(30px);
-            border: 2px solid rgba(135, 206, 235, 0.3);
-            border-radius: 80px;
-            padding: 2rem 3rem;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 0 50px rgba(135, 206, 235, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .search-box::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, rgba(135,206,235,0.5), rgba(173,216,230,0.5), rgba(240,248,255,0.5), rgba(135,206,235,0.5));
-            background-size: 400% 400%;
-            border-radius: 80px;
-            z-index: -1;
-            animation: borderGlow 3s ease infinite;
-        }
-
-        @keyframes borderGlow {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 1rem 1.5rem;
         }
 
         .search-input {
             width: 100%;
             border: none;
             outline: none;
-            font-size: 1.8rem;
+            font-size: 1rem;
             background: transparent;
             color: #ffffff;
+            font-family: 'JetBrains Mono', monospace;
             font-weight: 400;
-            font-family: 'Orbitron', monospace;
-            text-shadow: 0 0 20px rgba(255,255,255,0.5);
         }
 
         .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-            text-shadow: 0 0 10px rgba(135,206,235,0.3);
+            color: rgba(255, 255, 255, 0.5);
         }
 
-        /* Enhanced Cards */
-        .links-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 2rem;
-            margin-top: 4rem;
-        }
-
-        .link-card {
-            position: relative;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(135, 206, 235, 0.2);
-            border-radius: 25px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-            color: #ffffff;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-
-        .link-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(135,206,235,0.2), rgba(173,216,230,0.3), rgba(135,206,235,0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .link-card::after {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, rgba(135,206,235,0), rgba(135,206,235,0.3), rgba(173,216,230,0.3), rgba(135,206,235,0));
-            background-size: 400% 400%;
-            border-radius: 25px;
-            z-index: -1;
-            opacity: 0;
-            animation: cardBorder 3s ease infinite;
-        }
-
-        @keyframes cardBorder {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .link-card:hover::before {
-            left: 100%;
-        }
-
-        .link-card:hover::after {
-            opacity: 1;
-        }
-
-        .link-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-15px) scale(1.05);
-            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.4), 0 0 60px rgba(135, 206, 235, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.2);
-            border-color: rgba(135, 206, 235, 0.4);
-        }
-
-        .link-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-            filter: drop-shadow(0 0 15px rgba(255,255,255,0.4));
-            animation: iconFloat 4s ease-in-out infinite;
-        }
-
-        @keyframes iconFloat {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .link-title {
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 0 10px rgba(135,206,235,0.3);
-        }
-
-        .link-description {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            font-weight: 300;
-            color: #b0d4f1;
-        }
-
-        /* Instructions */
         .instructions {
             position: fixed;
-            bottom: 2rem;
+            bottom: 1rem;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(15px);
-            padding: 1.2rem 2.5rem;
-            border-radius: 60px;
-            font-size: 0.95rem;
-            opacity: 0.9;
-            border: 1px solid rgba(135, 206, 235, 0.2);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            font-size: 0.7rem;
+            opacity: 0.5;
+            font-weight: 300;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            .links-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; }
-            .link-card { padding: 1.5rem; }
-            .search-box { padding: 1.5rem 2rem; }
-            .search-input { font-size: 1.4rem; }
+            .links-grid {
+                grid-template-columns: 1fr;
+                gap: 0.6rem;
+            }
+            
+            .link-card {
+                padding: 0.5rem 0.7rem;
+                gap: 0.6rem;
+            }
+
+            .link-icon {
+                font-size: 1rem;
+            }
+
+            .link-title {
+                font-size: 0.7rem;
+            }
+
+            .link-desc {
+                font-size: 0.6rem;
+            }
         }
 
         @media (max-width: 480px) {
-            .links-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+            .container {
+                padding: 1.5rem 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Epic Backgrounds -->
-    <div class="storm-background"></div>
+    <div class="smoke-bg"></div>
+    <div class="smoke-overlay"></div>
     <div class="smoke-container" id="smokeContainer"></div>
-    <div class="lightning-container">
-        <div class="lightning-strike"></div>
-        <div class="lightning-strike"></div>
-        <div class="lightning-strike"></div>
-        <div class="lightning-strike"></div>
-        <div class="lightning-strike"></div>
-    </div>
-    <div class="plasma-waves"></div>
 
     <div class="container">
         <header>
-            <h1>STORM COMMAND</h1>
-            <div class="subtitle">⚡ Your Digital Command Center ⚡</div>
+            <h1>chooch.net</h1>
+            <div class="subtitle">digital hub</div>
             <div class="clock" id="clock"></div>
         </header>
 
         <div class="links-grid">
             <!-- Row 1 -->
             <a href="https://tutanota.com" class="link-card">
-                <span class="link-icon">🔐</span>
-                <div class="link-title">Tutanota</div>
-                <div class="link-description">Secure Email</div>
-            </a>
-
-            <a href="https://your-rss-feed.com" class="link-card">
-                <span class="link-icon">📡</span>
-                <div class="link-title">RSS</div>
-                <div class="link-description">News Feed</div>
+                <span class="link-icon">📧</span>
+                <div class="link-content">
+                    <div class="link-title">tutanota</div>
+                    <div class="link-desc">secure mail</div>
+                </div>
             </a>
 
             <a href="https://your-jellyfin.com" class="link-card">
                 <span class="link-icon">🎬</span>
-                <div class="link-title">Jellyfin</div>
-                <div class="link-description">Media Storm</div>
-            </a>
-
-            <a href="https://youtube.com" class="link-card">
-                <span class="link-icon">📺</span>
-                <div class="link-title">YouTube</div>
-                <div class="link-description">Thunder Vision</div>
+                <div class="link-content">
+                    <div class="link-title">jellyfin</div>
+                    <div class="link-desc">media</div>
+                </div>
             </a>
 
             <a href="https://your-seedbox.com" class="link-card">
                 <span class="link-icon">🌱</span>
-                <div class="link-title">Seedbox</div>
-                <div class="link-description">Data Seeds</div>
-            </a>
-
-            <a href="https://your-bin.com" class="link-card">
-                <span class="link-icon">🗂️</span>
-                <div class="link-title">Bin</div>
-                <div class="link-description">File Vault</div>
+                <div class="link-content">
+                    <div class="link-title">seedbox</div>
+                    <div class="link-desc">torrents</div>
+                </div>
             </a>
 
             <!-- Row 2 -->
             <a href="https://temp-mail.org" class="link-card">
                 <span class="link-icon">📨</span>
-                <div class="link-title">Temp Mail</div>
-                <div class="link-description">Ghost Mail</div>
-            </a>
-
-            <a href="https://drive.google.com" class="link-card">
-                <span class="link-icon">☁️</span>
-                <div class="link-title">Drive</div>
-                <div class="link-description">Cloud Storm</div>
+                <div class="link-content">
+                    <div class="link-title">temp mail</div>
+                    <div class="link-desc">disposable</div>
+                </div>
             </a>
 
             <a href="https://your-jukebox.com" class="link-card">
                 <span class="link-icon">🎵</span>
-                <div class="link-title">Jukebox</div>
-                <div class="link-description">Music Thunder</div>
-            </a>
-
-            <a href="https://iplocation.net" class="link-card">
-                <span class="link-icon">🌍</span>
-                <div class="link-title">IP Location</div>
-                <div class="link-description">Storm Tracker</div>
+                <div class="link-content">
+                    <div class="link-title">jukebox</div>
+                    <div class="link-desc">tunes</div>
+                </div>
             </a>
 
             <a href="https://your-soulseek.com" class="link-card">
-                <span class="link-icon">👁️</span>
-                <div class="link-title">Soulseek</div>
-                <div class="link-description">Soul Search</div>
-            </a>
-
-            <a href="https://photos.google.com" class="link-card">
-                <span class="link-icon">📸</span>
-                <div class="link-title">Photos</div>
-                <div class="link-description">Lightning Shots</div>
+                <span class="link-icon">🔍</span>
+                <div class="link-content">
+                    <div class="link-title">soulseek</div>
+                    <div class="link-desc">p2p</div>
+                </div>
             </a>
 
             <!-- Row 3 -->
             <a href="https://discord.com" class="link-card">
                 <span class="link-icon">💬</span>
-                <div class="link-title">Discord</div>
-                <div class="link-description">Command Comm</div>
-            </a>
-
-            <a href="https://your-notebook.com" class="link-card">
-                <span class="link-icon">📝</span>
-                <div class="link-title">Notebook</div>
-                <div class="link-description">Storm Log</div>
+                <div class="link-content">
+                    <div class="link-title">discord</div>
+                    <div class="link-desc">chat</div>
+                </div>
             </a>
 
             <a href="https://music.youtube.com" class="link-card">
                 <span class="link-icon">🎶</span>
-                <div class="link-title">YT Music</div>
-                <div class="link-description">Thunder Beats</div>
-            </a>
-
-            <a href="https://speedtest.net" class="link-card">
-                <span class="link-icon">⚡</span>
-                <div class="link-title">Speedtest</div>
-                <div class="link-description">Lightning Speed</div>
+                <div class="link-content">
+                    <div class="link-title">yt music</div>
+                    <div class="link-desc">streaming</div>
+                </div>
             </a>
 
             <a href="https://your-debrid.com" class="link-card">
                 <span class="link-icon">💨</span>
-                <div class="link-title">Debrid</div>
-                <div class="link-description">Storm Downloader</div>
+                <div class="link-content">
+                    <div class="link-title">debrid</div>
+                    <div class="link-desc">download</div>
+                </div>
+            </a>
+
+            <!-- Row 4 -->
+            <a href="https://your-rss.com" class="link-card">
+                <span class="link-icon">📡</span>
+                <div class="link-content">
+                    <div class="link-title">rss</div>
+                    <div class="link-desc">feeds</div>
+                </div>
+            </a>
+
+            <a href="https://youtube.com" class="link-card">
+                <span class="link-icon">📺</span>
+                <div class="link-content">
+                    <div class="link-title">youtube</div>
+                    <div class="link-desc">videos</div>
+                </div>
+            </a>
+
+            <a href="https://your-bin.com" class="link-card">
+                <span class="link-icon">🗂️</span>
+                <div class="link-content">
+                    <div class="link-title">bin</div>
+                    <div class="link-desc">storage</div>
+                </div>
+            </a>
+
+            <!-- Row 5 -->
+            <a href="https://drive.google.com" class="link-card">
+                <span class="link-icon">☁️</span>
+                <div class="link-content">
+                    <div class="link-title">drive</div>
+                    <div class="link-desc">cloud</div>
+                </div>
+            </a>
+
+            <a href="https://iplocation.net" class="link-card">
+                <span class="link-icon">🌍</span>
+                <div class="link-content">
+                    <div class="link-title">ip location</div>
+                    <div class="link-desc">geo</div>
+                </div>
+            </a>
+
+            <a href="https://photos.google.com" class="link-card">
+                <span class="link-icon">📸</span>
+                <div class="link-content">
+                    <div class="link-title">photos</div>
+                    <div class="link-desc">gallery</div>
+                </div>
+            </a>
+
+            <!-- Row 6 -->
+            <a href="https://your-notebook.com" class="link-card">
+                <span class="link-icon">📝</span>
+                <div class="link-content">
+                    <div class="link-title">notebook</div>
+                    <div class="link-desc">notes</div>
+                </div>
+            </a>
+
+            <a href="https://speedtest.net" class="link-card">
+                <span class="link-icon">⚡</span>
+                <div class="link-content">
+                    <div class="link-title">speedtest</div>
+                    <div class="link-desc">network</div>
+                </div>
             </a>
 
             <a href="https://your-admin.com" class="link-card">
                 <span class="link-icon">⚙️</span>
-                <div class="link-title">Admin</div>
-                <div class="link-description">Command Center</div>
+                <div class="link-content">
+                    <div class="link-title">admin</div>
+                    <div class="link-desc">control</div>
+                </div>
             </a>
         </div>
     </div>
 
-    <!-- Search Overlay -->
+    <!-- Search -->
     <div class="search-overlay" id="searchOverlay"></div>
-    
-    <!-- Search Container -->
     <div class="search-container" id="searchContainer">
         <div class="search-box">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search the storm...">
+            <input type="text" class="search-input" id="searchInput" placeholder="search...">
         </div>
     </div>
 
-    <div class="instructions">
-        ⚡ Start typing to command the storm ⚡
-    </div>
+    <div class="instructions">start typing to search</div>
 
     <script>
-        // Epic Clock
+        // Clock
         function updateClock() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('en-US', { 
                 hour12: false,
                 hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
+                minute: '2-digit'
             });
             const dateString = now.toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'long',
+                weekday: 'short',
+                month: 'short',
                 day: 'numeric'
             });
-            document.getElementById('clock').textContent = `${timeString} • ${dateString}`;
+            document.getElementById('clock').textContent = `${timeString} · ${dateString}`;
         }
 
         updateClock();
         setInterval(updateClock, 1000);
 
-        // Epic Smoke Creation
+        // Create lots of realistic smoke
         function createSmoke() {
             const smokeContainer = document.getElementById('smokeContainer');
-            const smoke = document.createElement('div');
-            smoke.className = 'smoke';
             
-            // Random size and position
-            const size = Math.random() * 80 + 20;
-            smoke.style.width = size + 'px';
-            smoke.style.height = size + 'px';
-            smoke.style.left = Math.random() * window.innerWidth + 'px';
-            smoke.style.animationDelay = Math.random() * 5 + 's';
-            smoke.style.animationDuration = (Math.random() * 8 + 10) + 's';
+            // Create different sizes of smoke
+            const sizes = ['small', 'medium', 'large'];
+            const sizeClass = sizes[Math.floor(Math.random() * sizes.length)];
             
-            smokeContainer.appendChild(smoke);
+            const particle = document.createElement('div');
+            particle.className = `smoke-particle smoke-${sizeClass}`;
             
-            // Remove smoke after animation
+            // Different sizes based on class
+            let size;
+            switch(sizeClass) {
+                case 'small':
+                    size = Math.random() * 30 + 15;
+                    break;
+                case 'medium':
+                    size = Math.random() * 50 + 30;
+                    break;
+                case 'large':
+                    size = Math.random() * 80 + 50;
+                    break;
+            }
+            
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * (window.innerWidth + 200) - 100 + 'px';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            
+            // Random duration based on size
+            const duration = sizeClass === 'large' ? 
+                Math.random() * 5 + 18 : 
+                sizeClass === 'medium' ? 
+                Math.random() * 3 + 13 : 
+                Math.random() * 2 + 10;
+            
+            particle.style.animationDuration = duration + 's';
+            
+            smokeContainer.appendChild(particle);
+            
+            // Remove after animation
             setTimeout(() => {
-                smokeContainer.removeChild(smoke);
-            }, 18000);
+                if (particle.parentNode) {
+                    particle.remove();
+                }
+            }, duration * 1000 + 2000);
         }
 
-        // Create smoke periodically
-        setInterval(createSmoke, 800);
+        // Create smoke more frequently for heavy effect
+        setInterval(createSmoke, 300);
+        
+        // Initial burst of smoke
+        for(let i = 0; i < 10; i++) {
+            setTimeout(createSmoke, i * 100);
+        }
 
         // Search functionality
         const searchOverlay = document.getElementById('searchOverlay');
         const searchContainer = document.getElementById('searchContainer');
         const searchInput = document.getElementById('searchInput');
-
         let searchVisible = false;
-        let typingTimeout;
 
         document.addEventListener('keydown', (e) => {
             if (searchVisible || e.ctrlKey || e.metaKey || e.altKey) return;
@@ -627,7 +603,7 @@
                 setTimeout(() => {
                     searchInput.value = e.key;
                     searchInput.focus();
-                }, 100);
+                }, 50);
             }
         });
 
@@ -662,51 +638,6 @@
         });
 
         searchOverlay.addEventListener('click', hideSearch);
-
-        searchInput.addEventListener('input', () => {
-            clearTimeout(typingTimeout);
-            typingTimeout = setTimeout(() => {
-                if (!searchInput.value && searchVisible) {
-                    hideSearch();
-                }
-            }, 3000);
-        });
-
-        // Random lightning strikes
-        function triggerLightning() {
-            const lightningStrikes = document.querySelectorAll('.lightning-strike');
-            const randomStrike = lightningStrikes[Math.floor(Math.random() * lightningStrikes.length)];
-            
-            randomStrike.style.opacity = '1';
-            randomStrike.style.boxShadow = '0 0 100px rgba(255,255,255,0.9)';
-            
-            setTimeout(() => {
-                randomStrike.style.opacity = '0';
-                randomStrike.style.boxShadow = 'none';
-            }, 200);
-        }
-
-        // Random lightning
-        setInterval(() => {
-            if (Math.random() < 0.3) {
-                triggerLightning();
-            }
-        }, 2000);
-
-        // Page flash on lightning
-        function flashScreen() {
-            document.body.style.filter = 'brightness(1.5)';
-            setTimeout(() => {
-                document.body.style.filter = 'brightness(1)';
-            }, 100);
-        }
-
-        // Flash screen occasionally with lightning
-        setInterval(() => {
-            if (Math.random() < 0.1) {
-                flashScreen();
-            }
-        }, 3000);
     </script>
 </body>
 </html>
