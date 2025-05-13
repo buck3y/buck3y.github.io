@@ -19,7 +19,7 @@
             overflow: hidden;
             position: relative;
         }
-        /* Ultra-dense fog machine effects */
+        /* Reasonable fog effects */
         .fog-container {
             position: fixed;
             top: 0;
@@ -34,66 +34,30 @@
             width: 100%;
             height: 100%;
             background: radial-gradient(ellipse at center, 
-                rgba(220, 220, 220, 0.3) 0%, 
-                rgba(180, 180, 180, 0.25) 10%, 
-                rgba(150, 150, 150, 0.2) 20%, 
-                rgba(120, 120, 120, 0.15) 30%, 
-                rgba(100, 100, 100, 0.12) 40%, 
-                rgba(70, 70, 70, 0.08) 60%, 
-                rgba(30, 30, 30, 0.04) 80%, 
+                rgba(220, 220, 220, 0.12) 0%, 
+                rgba(150, 150, 150, 0.09) 20%, 
+                rgba(100, 100, 100, 0.06) 40%, 
+                rgba(70, 70, 70, 0.04) 60%, 
+                rgba(30, 30, 30, 0.02) 80%, 
                 transparent 100%);
-            animation: fogMove1 20s linear infinite;
+            animation: fogMove1 30s linear infinite;
         }
         .fog-layer:nth-child(2) {
-            animation: fogMove2 18s linear infinite reverse;
+            animation: fogMove2 25s linear infinite reverse;
             background: radial-gradient(ellipse at center, 
-                rgba(200, 200, 200, 0.28) 0%, 
-                rgba(160, 160, 160, 0.22) 15%, 
-                rgba(120, 120, 120, 0.18) 30%, 
-                rgba(80, 80, 80, 0.12) 50%, 
-                rgba(50, 50, 50, 0.08) 75%, 
+                rgba(200, 200, 200, 0.1) 0%, 
+                rgba(120, 120, 120, 0.08) 25%, 
+                rgba(80, 80, 80, 0.05) 50%, 
+                rgba(50, 50, 50, 0.03) 75%, 
                 transparent 100%);
         }
         .fog-layer:nth-child(3) {
-            animation: fogMove3 22s linear infinite;
+            animation: fogMove3 35s linear infinite;
             background: radial-gradient(ellipse at center, 
-                rgba(180, 180, 180, 0.32) 0%, 
-                rgba(140, 140, 140, 0.26) 12%, 
-                rgba(110, 110, 110, 0.2) 25%, 
-                rgba(70, 70, 70, 0.15) 40%, 
-                rgba(40, 40, 40, 0.1) 60%, 
-                transparent 100%);
-        }
-        .fog-layer:nth-child(4) {
-            animation: fogMove4 25s linear infinite reverse;
-            background: radial-gradient(ellipse at center, 
-                rgba(240, 240, 240, 0.25) 0%, 
-                rgba(190, 190, 190, 0.2) 20%, 
-                rgba(140, 140, 140, 0.16) 35%, 
-                rgba(90, 90, 90, 0.12) 55%, 
-                rgba(60, 60, 60, 0.08) 75%, 
-                transparent 100%);
-        }
-        .fog-layer:nth-child(5) {
-            animation: fogMove5 15s linear infinite;
-            background: radial-gradient(ellipse at center, 
-                rgba(210, 210, 210, 0.35) 0%, 
-                rgba(170, 170, 170, 0.28) 8%, 
-                rgba(130, 130, 130, 0.22) 18%, 
-                rgba(100, 100, 100, 0.18) 30%, 
-                rgba(60, 60, 60, 0.12) 45%, 
-                rgba(30, 30, 30, 0.06) 70%, 
-                transparent 100%);
-        }
-        .fog-layer:nth-child(6) {
-            animation: fogMove6 28s linear infinite reverse;
-            background: radial-gradient(ellipse at center, 
-                rgba(160, 160, 160, 0.4) 0%, 
-                rgba(130, 130, 130, 0.32) 5%, 
-                rgba(100, 100, 100, 0.25) 12%, 
-                rgba(80, 80, 80, 0.2) 25%, 
-                rgba(50, 50, 50, 0.15) 40%, 
-                rgba(20, 20, 20, 0.08) 65%, 
+                rgba(180, 180, 180, 0.11) 0%, 
+                rgba(110, 110, 110, 0.08) 20%, 
+                rgba(70, 70, 70, 0.05) 40%, 
+                rgba(40, 40, 40, 0.03) 60%, 
                 transparent 100%);
         }
         @keyframes fogMove1 {
@@ -474,9 +438,6 @@
         <div class="fog-layer"></div>
         <div class="fog-layer"></div>
         <div class="fog-layer"></div>
-        <div class="fog-layer"></div>
-        <div class="fog-layer"></div>
-        <div class="fog-layer"></div>
     </div>
     <div class="fog-overlay"></div>
     <!-- Search Box at the top -->
@@ -608,49 +569,39 @@
         function createFogParticle() {
             const fogContainer = document.getElementById('fogContainer');
             
-            // Create different sizes of fog particles including HUGE ones
-            const sizes = ['small', 'medium', 'large', 'xl', 'xxl'];
+            // Create different sizes of fog particles
+            const sizes = ['small', 'medium', 'large'];
             const sizeClass = sizes[Math.floor(Math.random() * sizes.length)];
             
             const particle = document.createElement('div');
             particle.className = `fog-particle ${sizeClass}`;
             
-            // Much larger size ranges
+            // Different sizes based on class
             let size;
             switch(sizeClass) {
                 case 'small':
-                    size = Math.random() * 100 + 80;
+                    size = Math.random() * 80 + 40;
                     break;
                 case 'medium':
-                    size = Math.random() * 150 + 120;
+                    size = Math.random() * 120 + 80;
                     break;
                 case 'large':
-                    size = Math.random() * 250 + 200;
-                    break;
-                case 'xl':
-                    size = Math.random() * 350 + 300;
-                    break;
-                case 'xxl':
-                    size = Math.random() * 500 + 400;
+                    size = Math.random() * 200 + 120;
                     break;
             }
             
             particle.style.width = size + 'px';
             particle.style.height = size + 'px';
-            particle.style.left = '-500px';
-            particle.style.top = Math.random() * (window.innerHeight + 200) - 100 + 'px';
-            particle.style.animationDelay = Math.random() * 3 + 's';
+            particle.style.left = '-200px';
+            particle.style.top = Math.random() * window.innerHeight + 'px';
+            particle.style.animationDelay = Math.random() * 2 + 's';
             
-            // Variable duration based on size
-            const duration = sizeClass === 'xxl' ? 
-                Math.random() * 6 + 15 : 
-                sizeClass === 'xl' ? 
-                Math.random() * 5 + 12 : 
-                sizeClass === 'large' ? 
-                Math.random() * 4 + 10 : 
+            // Random duration based on size
+            const duration = sizeClass === 'large' ? 
+                Math.random() * 5 + 13 : 
                 sizeClass === 'medium' ? 
-                Math.random() * 3 + 8 : 
-                Math.random() * 2 + 6;
+                Math.random() * 3 + 10 : 
+                Math.random() * 2 + 8;
             
             particle.style.animationDuration = duration + 's';
             
@@ -661,22 +612,15 @@
                 if (particle.parentNode) {
                     particle.remove();
                 }
-            }, duration * 1000 + 2000);
+            }, duration * 1000 + 1000);
         }
-        // Create fog particles EXTREMELY frequently for ultra-dense effect
-        setInterval(createFogParticle, 25);
+        // Create fog particles at reasonable rate
+        setInterval(createFogParticle, 200);
         
-        // Massive initial burst of fog
-        for(let i = 0; i < 100; i++) {
-            setTimeout(createFogParticle, i * 10);
+        // Initial burst of fog
+        for(let i = 0; i < 15; i++) {
+            setTimeout(createFogParticle, i * 50);
         }
-        
-        // Add periodic burst effects
-        setInterval(() => {
-            for(let i = 0; i < 30; i++) {
-                setTimeout(createFogParticle, i * 5);
-            }
-        }, 3000);
         
         // Search functionality with auto-suggestions
         const searchInput = document.getElementById('searchInput');
