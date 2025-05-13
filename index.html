@@ -374,11 +374,6 @@
                     <div class="link-title">Tutanota</div>
                     <div class="link-desc">secure mail</div>
                 </a>
-                <a href="https://webmail.disroot.org/" class="link-card">
-                    <span class="link-icon">📧</span>
-                    <div class="link-title">Disroot</div>
-                    <div class="link-desc">secure mail</div>
-                </a>
                 <a href="https://your-rss.com" class="link-card">
                     <span class="link-icon">📡</span>
                     <div class="link-title">RSS</div>
@@ -437,6 +432,11 @@
                     <span class="link-icon">📸</span>
                     <div class="link-title">Photos</div>
                     <div class="link-desc">gallery</div>
+                </a>
+                <a href="https://webmail.disroot.org/" class="link-card">
+                    <span class="link-icon">📧</span>
+                    <div class="link-title">Disroot</div>
+                    <div class="link-desc">secure mail</div>
                 </a>
                 <a href="https://your-notebook.com" class="link-card">
                     <span class="link-icon">📝</span>
@@ -499,21 +499,38 @@
         let currentSuggestionIndex = -1;
         let suggestions = [];
 
-        // Common search suggestions (you can customize these)
+        // Startpage-focused search suggestions
         const allSuggestions = [
-            'what time is it in japan',
-            'what time is it in london',
-            'what time is it in portland oregon',
-            'what time is it in australia',
-            'what time is it in new york',
-            'what time is it in california',
-            'what time is it in paris',
-            'what time is it in tokyo',
-            'weather today',
-            'how to install linux',
-            'check my network speed',
-            'translate hello to spanish',
-            'convert 100 usd to eur'
+            'gmail',
+            'github',
+            'reddit',
+            'weather',
+            'maps',
+            'translate',
+            'calculator',
+            'timer',
+            'calendar',
+            'news',
+            'amazon',
+            'netflix',
+            'spotify',
+            'twitter',
+            'instagram',
+            'facebook',
+            'linkedin',
+            'stackoverflow',
+            'youtube',
+            'google drive',
+            'dropbox',
+            'outlook',
+            'slack',
+            'discord',
+            'wikipedia',
+            'imdb',
+            'twitch',
+            'pinterest',
+            'zoom',
+            'teams'
         ];
 
         // Show search overlay when typing
@@ -623,7 +640,14 @@
             suggestions.forEach((suggestion, index) => {
                 const suggestionElement = document.createElement('div');
                 suggestionElement.className = 'suggestion-item';
-                suggestionElement.textContent = suggestion;
+                
+                // Add icon for site shortcuts
+                if (siteShortcuts[suggestion.toLowerCase()]) {
+                    suggestionElement.innerHTML = `<span style="margin-right: 8px; opacity: 0.7;">🌐</span>${suggestion}`;
+                } else {
+                    suggestionElement.textContent = suggestion;
+                }
+                
                 suggestionElement.addEventListener('click', () => {
                     selectSuggestion(suggestion);
                 });
@@ -655,13 +679,68 @@
             performSearch(suggestion);
         }
 
+        // Site shortcuts mapping
+        const siteShortcuts = {
+            'gmail': 'https://gmail.com',
+            'github': 'https://github.com',
+            'reddit': 'https://reddit.com',
+            'weather': 'https://weather.com',
+            'maps': 'https://maps.google.com',
+            'translate': 'https://translate.google.com',
+            'calculator': 'https://www.google.com/search?q=calculator',
+            'timer': 'https://www.google.com/search?q=timer',
+            'calendar': 'https://calendar.google.com',
+            'news': 'https://news.google.com',
+            'amazon': 'https://amazon.com',
+            'netflix': 'https://netflix.com',
+            'spotify': 'https://spotify.com',
+            'twitter': 'https://twitter.com',
+            'instagram': 'https://instagram.com',
+            'facebook': 'https://facebook.com',
+            'linkedin': 'https://linkedin.com',
+            'stackoverflow': 'https://stackoverflow.com',
+            'youtube': 'https://youtube.com',
+            'google drive': 'https://drive.google.com',
+            'dropbox': 'https://dropbox.com',
+            'outlook': 'https://outlook.com',
+            'slack': 'https://slack.com',
+            'discord': 'https://discord.com',
+            'wikipedia': 'https://wikipedia.org',
+            'imdb': 'https://imdb.com',
+            'twitch': 'https://twitch.tv',
+            'pinterest': 'https://pinterest.com',
+            'zoom': 'https://zoom.us',
+            'teams': 'https://teams.microsoft.com'
+        };
+
+        // Enhanced search performance function
         function performSearch(query) {
-            if (query.trim()) {
-                // You can customize this to use different search engines
-                const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-                window.open(searchUrl, '_blank');
+            if (!query.trim()) return;
+            
+            const lowerQuery = query.toLowerCase().trim();
+            
+            // Check if it's a direct site match
+            if (siteShortcuts[lowerQuery]) {
+                window.open(siteShortcuts[lowerQuery], '_blank');
                 hideSearchOverlay();
+                return;
             }
+            
+            // Check if it's a partial match
+            const exactMatch = Object.keys(siteShortcuts).find(site => 
+                site.toLowerCase() === lowerQuery
+            );
+            
+            if (exactMatch) {
+                window.open(siteShortcuts[exactMatch], '_blank');
+                hideSearchOverlay();
+                return;
+            }
+            
+            // Otherwise perform a web search
+            const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+            window.open(searchUrl, '_blank');
+            hideSearchOverlay();
         }
 
         // Prevent accidental page navigation when typing
