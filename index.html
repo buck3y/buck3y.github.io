@@ -737,8 +737,8 @@
                 return;
             }
             
-            // Otherwise perform a web search
-            const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+            // Otherwise perform a web search using Startpage
+            const searchUrl = `https://www.startpage.com/sp/search?query=${encodeURIComponent(query)}&abp=1&t=night&lui=english&cat=web&abd=1&prfe=bfc85c1d885357c455065cb1ddcee0a65c66627199470e854d8cf578fa2f6ca0deea4cb4fa181162bce2f096d76df7fe86753b93f749e81e69e6c0904008c2923dd5902389bf3777806c92e759`;
             window.open(searchUrl, '_blank');
             hideSearchOverlay();
         }
