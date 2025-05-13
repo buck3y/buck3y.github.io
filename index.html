@@ -3,298 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>chooch.net - NEXUS</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>NEXUS • System Terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --color-primary: #00ff41;
+            --color-secondary: #00ffff;
+            --color-accent: #ff0080;
+            --color-warning: #ffaa00;
+            --color-error: #ff4444;
+            --color-background: #0f0f0f;
+            --color-background-dark: #000000;
+            --color-background-card: rgba(30, 30, 40, 0.8);
+            --color-background-widget: rgba(20, 20, 30, 0.9);
+            --color-text: #ffffff;
+            --color-text-dim: #888888;
+            --color-text-bright: #00ff41;
+            --color-border: rgba(0, 255, 65, 0.3);
+            --color-border-hover: var(--color-primary);
+            --color-purple: #8844ff;
+            --color-purple-dark: #4422aa;
+            --font-family: 'Fira Code', monospace;
+            --font-size-base: 14px;
+            --font-size-large: 18px;
+            --font-size-title: 24px;
+            --space-small: 8px;
+            --space-medium: 16px;
+            --space-large: 24px;
+            --border-radius: 8px;
+            --transition-speed: 0.2s;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
-        :root {
-            --primary-green: #00ff41;
-            --primary-cyan: #00ffff;
-            --bg-dark: #0a0a0a;
-            --bg-darker: #000000;
-        }
-        
+
         body {
-            font-family: 'JetBrains Mono', monospace;
-            background: var(--bg-dark);
-            color: #ffffff;
+            font-family: var(--font-family);
+            font-size: var(--font-size-base);
+            background: linear-gradient(45deg, var(--color-background), var(--color-purple-dark));
+            color: var(--color-text);
             min-height: 100vh;
             overflow-x: hidden;
         }
-        
-        /* Simplified animations for GitHub Pages */
-        .float {
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .glow {
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        
-        @keyframes glow {
-            from { text-shadow: 0 0 20px var(--primary-green); }
-            to { text-shadow: 0 0 30px var(--primary-green), 0 0 40px var(--primary-green); }
-        }
-        
-        /* Simplified fog effect */
-        .fog {
+
+        /* ASCII Art Background */
+        .ascii-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(ellipse at top, rgba(100, 100, 100, 0.1), transparent),
-                radial-gradient(ellipse at bottom, rgba(50, 50, 50, 0.05), transparent);
             z-index: -1;
-            animation: fogMove 20s linear infinite;
+            opacity: 0.05;
+            font-family: monospace;
+            font-size: 10px;
+            white-space: pre;
+            overflow: hidden;
+            color: var(--color-primary);
         }
-        
-        @keyframes fogMove {
-            0% { transform: translateX(-20px); }
-            50% { transform: translateX(20px); }
-            100% { transform: translateX(-20px); }
-        }
-        
-        /* Simple matrix effect */
-        .matrix::before {
-            content: '01010101010101010101010101010101';
+
+        /* System bars */
+        .system-bar {
+            background: var(--color-background-dark);
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--space-small) var(--space-medium);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             position: fixed;
             top: 0;
             left: 0;
-            color: rgba(0, 255, 65, 0.1);
-            font-size: 14px;
-            white-space: pre;
-            animation: matrix-fall 20s linear infinite;
-            z-index: -2;
-            pointer-events: none;
+            right: 0;
+            z-index: 100;
         }
-        
-        @keyframes matrix-fall {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100vh); }
-        }
-        
-        /* Terminal header */
-        .terminal-header {
-            background: var(--bg-darker);
-            border: 2px solid var(--primary-green);
-            border-radius: 10px;
-            padding: 1rem;
-            text-align: center;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
-        }
-        
-        .terminal-title {
-            color: var(--primary-green);
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .terminal-subtitle {
-            color: var(--primary-cyan);
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-        
-        .terminal-time {
-            color: var(--primary-green);
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-        }
-        
-        /* Grid layout - GitHub Pages compatible */
-        .hub-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-        
-        @media (min-width: 1200px) {
-            .hub-grid {
-                grid-template-columns: repeat(6, 1fr);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .hub-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 1rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .hub-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.8rem;
-            }
-        }
-        
-        /* Hub sections */
-        .hub-section {
-            grid-column: span 6;
-            margin-bottom: 2rem;
-        }
-        
-        .section-title {
-            color: var(--primary-green);
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-            text-align: center;
-            position: relative;
-        }
-        
-        .section-title::before,
-        .section-title::after {
-            content: '==';
-            position: absolute;
-            top: 0;
-            color: var(--primary-cyan);
-        }
-        
-        .section-title::before {
-            left: -3rem;
-        }
-        
-        .section-title::after {
-            right: -3rem;
-        }
-        
-        .section-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.2rem;
-        }
-        
-        @media (min-width: 1200px) {
-            .section-grid {
-                grid-template-columns: repeat(6, 1fr);
-            }
-        }
-        
-        /* Hub cards */
-        .hub-card {
-            background: rgba(0, 20, 0, 0.8);
-            border: 1px solid rgba(0, 255, 65, 0.3);
-            border-radius: 10px;
-            padding: 1.5rem;
-            text-decoration: none;
-            color: #ffffff;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-            min-height: 140px;
+
+        .system-info {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            backdrop-filter: blur(5px);
+            gap: var(--space-large);
+            font-size: 12px;
         }
-        
-        .hub-card:hover {
-            border-color: var(--primary-green);
-            background: rgba(0, 255, 65, 0.1);
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0, 255, 65, 0.3);
-        }
-        
-        .hub-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
-            transition: left 0.5s;
-        }
-        
-        .hub-card:hover::before {
-            left: 100%;
-        }
-        
-        .card-icon {
-            font-size: 2.5rem;
+
+        .info-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            width: 60px;
-            height: 60px;
-            margin-bottom: 0.5rem;
+            gap: var(--space-small);
         }
-        
-        .card-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--primary-green);
-            margin-bottom: 0.3rem;
-        }
-        
-        .card-desc {
-            font-size: 0.7rem;
-            opacity: 0.7;
-            color: #ffffff;
-        }
-        
-        .card-status {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+
+        .status-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--primary-green);
-            box-shadow: 0 0 10px var(--primary-green);
             animation: pulse 2s infinite;
         }
-        
+
+        .status-dot.green { background: var(--color-primary); }
+        .status-dot.yellow { background: var(--color-warning); }
+        .status-dot.red { background: var(--color-error); }
+
         @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
-        
-        /* Color coding for different hubs */
-        .hub-ai .hub-card:hover {
-            border-color: #8040ff;
-            box-shadow: 0 5px 20px rgba(128, 64, 255, 0.3);
+
+        /* Main container */
+        .main-container {
+            margin-top: 40px;
+            padding: var(--space-medium);
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: var(--space-medium);
+            min-height: calc(100vh - 40px);
         }
-        
-        .hub-security .hub-card:hover {
-            border-color: #ff0040;
-            box-shadow: 0 5px 20px rgba(255, 0, 64, 0.3);
+
+        /* Terminal header */
+        .terminal-header {
+            background: var(--color-background-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: var(--space-medium);
+            text-align: center;
+            margin-bottom: var(--space-medium);
+            backdrop-filter: blur(10px);
         }
-        
-        .hub-dev .hub-card:hover {
-            border-color: #4080ff;
-            box-shadow: 0 5px 20px rgba(64, 128, 255, 0.3);
+
+        .terminal-title {
+            color: var(--color-primary);
+            font-size: var(--font-size-title);
+            font-weight: 700;
+            margin-bottom: var(--space-small);
+            text-shadow: 0 0 20px var(--color-primary);
         }
-        
-        .hub-monitoring .hub-card:hover {
-            border-color: #ff8000;
-            box-shadow: 0 5px 20px rgba(255, 128, 0, 0.3);
+
+        .terminal-subtitle {
+            color: var(--color-secondary);
+            font-size: var(--font-size-base);
+            opacity: 0.8;
         }
-        
+
+        /* Left panel - main content */
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-medium);
+        }
+
+        /* Command sections */
+        .command-section {
+            background: var(--color-background-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: var(--space-medium);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: var(--space-medium);
+            padding-bottom: var(--space-small);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .section-title {
+            color: var(--color-primary);
+            font-size: var(--font-size-large);
+            font-weight: 600;
+        }
+
+        .section-count {
+            color: var(--color-text-dim);
+            font-size: 12px;
+        }
+
+        /* Command grid */
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: var(--space-small);
+        }
+
+        .command-item {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: var(--space-medium);
+            text-decoration: none;
+            color: var(--color-text);
+            transition: all var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .command-item:hover {
+            border-color: var(--color-primary);
+            background: rgba(0, 255, 65, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 65, 0.2);
+        }
+
+        .command-icon {
+            font-size: 24px;
+            margin-bottom: var(--space-small);
+            display: block;
+        }
+
+        .command-name {
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }
+
+        .command-desc {
+            font-size: 12px;
+            color: var(--color-text-dim);
+        }
+
+        /* Right panel - widgets */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-medium);
+        }
+
+        .widget {
+            background: var(--color-background-widget);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: var(--space-medium);
+            backdrop-filter: blur(10px);
+        }
+
+        .widget-title {
+            color: var(--color-primary);
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            margin-bottom: var(--space-medium);
+            display: flex;
+            align-items: center;
+            gap: var(--space-small);
+        }
+
+        /* System info widget */
+        .system-info-widget {
+            font-size: 12px;
+        }
+
+        .info-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--space-small);
+            padding: 4px 0;
+            border-bottom: 1px dotted var(--color-border);
+        }
+
+        .info-label {
+            color: var(--color-text-dim);
+        }
+
+        .info-value {
+            color: var(--color-text-bright);
+            font-weight: 600;
+        }
+
+        /* Graph widget */
+        .graph-widget {
+            height: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graph-container {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: var(--border-radius);
+            position: relative;
+        }
+
+        .graph-bars {
+            display: flex;
+            align-items: end;
+            height: 100%;
+            padding: var(--space-small);
+            gap: 2px;
+        }
+
+        .graph-bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--color-accent), var(--color-primary));
+            border-radius: 2px;
+            transition: height 0.5s ease;
+        }
+
+        /* Terminal output */
+        .terminal-output {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: var(--space-medium);
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            overflow-y: auto;
+            max-height: 200px;
+        }
+
+        .terminal-line {
+            margin-bottom: 4px;
+        }
+
+        .terminal-prompt {
+            color: var(--color-primary);
+        }
+
+        .terminal-command {
+            color: var(--color-secondary);
+        }
+
+        .terminal-output-text {
+            color: var(--color-text);
+        }
+
+        /* Quick access widget */
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-small);
+        }
+
+        .quick-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: var(--space-small);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .quick-btn:hover {
+            border-color: var(--color-primary);
+            background: rgba(0, 255, 65, 0.1);
+        }
+
         /* Search overlay */
         .search-overlay {
             position: fixed;
@@ -303,673 +360,654 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: all var(--transition-speed);
         }
-        
+
         .search-overlay.active {
             opacity: 1;
             visibility: visible;
         }
-        
+
         .search-container {
-            background: var(--bg-darker);
-            border: 2px solid var(--primary-green);
-            border-radius: 15px;
-            padding: 2rem;
+            background: var(--color-background-dark);
+            border: 2px solid var(--color-primary);
+            border-radius: var(--border-radius);
+            padding: var(--space-large);
             width: 90%;
             max-width: 600px;
-            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+            box-shadow: 0 0 30px var(--color-primary);
         }
-        
-        .search-box {
-            display: flex;
-            background: rgba(0, 255, 65, 0.1);
-            border-radius: 25px;
-            padding: 15px;
-            border: 1px solid rgba(0, 255, 65, 0.5);
-        }
-        
+
         .search-input {
-            flex: 1;
-            background: transparent;
-            border: none;
+            width: 100%;
+            padding: var(--space-medium);
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            color: var(--color-text);
+            font-family: var(--font-family);
+            font-size: var(--font-size-base);
             outline: none;
-            color: var(--primary-green);
-            font-size: 1.1rem;
-            font-family: 'JetBrains Mono', monospace;
         }
-        
-        .search-input::placeholder {
-            color: rgba(0, 255, 65, 0.5);
+
+        .search-input:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
         }
-        
-        /* Instructions */
-        .instructions {
-            position: fixed;
-            bottom: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--primary-green);
-            font-size: 0.8rem;
-            opacity: 0.7;
-            text-align: center;
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .right-panel {
+                order: -1;
+            }
         }
-        
-        /* Quick access */
-        .quick-access {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-            z-index: 100;
+
+        @media (max-width: 768px) {
+            .command-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .system-info {
+                gap: var(--space-small);
+            }
         }
-        
-        .quick-btn {
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid var(--primary-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--primary-green);
-            font-size: 1.2rem;
-            user-select: none;
+
+        /* Animations */
+        @keyframes matrix-flow {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
         }
-        
-        .quick-btn:hover {
-            background: var(--primary-green);
-            color: black;
-            transform: scale(1.1);
-        }
-        
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 80px;
-            background: var(--bg-darker);
-            border: 1px solid var(--primary-green);
-            border-radius: 8px;
-            padding: 15px;
-            color: var(--primary-green);
-            font-size: 0.8rem;
-            max-width: 250px;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            z-index: 200;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        /* Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-        
-        /* Fix viewport issues */
-        html {
-            height: 100%;
-        }
-        
-        /* Ensure content is visible */
-        .matrix {
-            position: relative;
-            z-index: 1;
+
+        .matrix-char {
+            color: var(--color-primary);
+            opacity: 0.3;
+            animation: matrix-flow linear infinite;
         }
     </style>
 </head>
-<body class="matrix">
-    <!-- Background effects -->
-    <div class="fog"></div>
+<body>
+    <!-- ASCII Background -->
+    <div class="ascii-bg" id="asciiBg"></div>
     
-    <!-- Search overlay -->
+    <!-- System Bar -->
+    <div class="system-bar">
+        <div class="system-info">
+            <div class="info-item">
+                <div class="status-dot green"></div>
+                <span>System: Online</span>
+            </div>
+            <div class="info-item">
+                <div class="status-dot green"></div>
+                <span>Network: Connected</span>
+            </div>
+            <div class="info-item">
+                <div class="status-dot yellow"></div>
+                <span id="loadInfo">Load: 1.2</span>
+            </div>
+        </div>
+        <div class="system-time" id="systemTime"></div>
+    </div>
+    
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <!-- Terminal Header -->
+            <div class="terminal-header">
+                <div class="terminal-title">NEXUS TERMINAL</div>
+                <div class="terminal-subtitle">[ SYSTEM ACCESS GRANTED ]</div>
+            </div>
+            
+            <!-- Communication Section -->
+            <div class="command-section">
+                <div class="section-header">
+                    <div class="section-title">&gt; Communications</div>
+                    <div class="section-count">[3 services]</div>
+                </div>
+                <div class="command-grid">
+                    <a href="https://mail.tutanota.com" class="command-item" target="_blank">
+                        <span class="command-icon">📬</span>
+                        <div class="command-name">tutanota</div>
+                        <div class="command-desc">secure email</div>
+                    </a>
+                    <a href="https://zemail.me/" class="command-item" target="_blank">
+                        <span class="command-icon">📧</span>
+                        <div class="command-name">temp-mail</div>
+                        <div class="command-desc">disposable inbox</div>
+                    </a>
+                    <a href="https://webmail.disroot.org/" class="command-item" target="_blank">
+                        <span class="command-icon">📮</span>
+                        <div class="command-name">disroot</div>
+                        <div class="command-desc">privacy mail</div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- File Systems Section -->
+            <div class="command-section">
+                <div class="section-header">
+                    <div class="section-title">&gt; File Systems</div>
+                    <div class="section-count">[4 services]</div>
+                </div>
+                <div class="command-grid">
+                    <a href="#" class="command-item">
+                        <span class="command-icon">📂</span>
+                        <div class="command-name">drive</div>
+                        <div class="command-desc">cloud storage</div>
+                    </a>
+                    <a href="#" class="command-item">
+                        <span class="command-icon">🗑️</span>
+                        <div class="command-name">bin</div>
+                        <div class="command-desc">file storage</div>
+                    </a>
+                    <a href="#" class="command-item">
+                        <span class="command-icon">📔</span>
+                        <div class="command-name">notebook</div>
+                        <div class="command-desc">notes & docs</div>
+                    </a>
+                    <a href="#" class="command-item">
+                        <span class="command-icon">📷</span>
+                        <div class="command-name">photos</div>
+                        <div class="command-desc">gallery</div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Media Systems Section -->
+            <div class="command-section">
+                <div class="section-header">
+                    <div class="section-title">&gt; Media Systems</div>
+                    <div class="section-count">[4 services]</div>
+                </div>
+                <div class="command-grid">
+                    <a href="#" class="command-item">
+                        <span class="command-icon">📺</span>
+                        <div class="command-name">jellyfin</div>
+                        <div class="command-desc">media server</div>
+                    </a>
+                    <a href="#" class="command-item">
+                        <span class="command-icon">🎵</span>
+                        <div class="command-name">jukebox</div>
+                        <div class="command-desc">music player</div>
+                    </a>
+                    <a href="https://music.youtube.com" class="command-item" target="_blank">
+                        <span class="command-icon">🎼</span>
+                        <div class="command-name">yt-music</div>
+                        <div class="command-desc">streaming</div>
+                    </a>
+                    <a href="https://youtube.com" class="command-item" target="_blank">
+                        <span class="command-icon">📻</span>
+                        <div class="command-name">youtube</div>
+                        <div class="command-desc">videos</div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Network Tools Section -->
+            <div class="command-section">
+                <div class="section-header">
+                    <div class="section-title">&gt; Network Tools</div>
+                    <div class="section-count">[6 services]</div>
+                </div>
+                <div class="command-grid">
+                    <a href="#" class="command-item">
+                        <span class="command-icon">📡</span>
+                        <div class="command-name">seedbox</div>
+                        <div class="command-desc">torrent client</div>
+                    </a>
+                    <a href="#" class="command-item">
+                        <span class="command-icon">🎧</span>
+                        <div class="command-name">soulseek</div>
+                        <div class="command-desc">music sharing</div>
+                    </a>
+                    <a href="https://real-debrid.com/" class="command-item" target="_blank">
+                        <span class="command-icon">🗄️</span>
+                        <div class="command-name">debrid</div>
+                        <div class="command-desc">premium dl</div>
+                    </a>
+                    <a href="https://real-debrid.com/speedtest" class="command-item" target="_blank">
+                        <span class="command-icon">🪛</span>
+                        <div class="command-name">speedtest</div>
+                        <div class="command-desc">network test</div>
+                    </a>
+                    <a href="https://ipleak.net/" class="command-item" target="_blank">
+                        <span class="command-icon">📍</span>
+                        <div class="command-name">ip-location</div>
+                        <div class="command-desc">network info</div>
+                    </a>
+                    <a href="#" class="command-item">
+                        <span class="command-icon">🛜</span>
+                        <div class="command-name">rss</div>
+                        <div class="command-desc">news feeds</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Panel - Widgets -->
+        <div class="right-panel">
+            <!-- System Info Widget -->
+            <div class="widget">
+                <div class="widget-title">
+                    <span>📊</span>
+                    System Info
+                </div>
+                <div class="system-info-widget">
+                    <div class="info-line">
+                        <span class="info-label">Uptime</span>
+                        <span class="info-value" id="uptime">2d 4h 23m</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="info-label">CPU Usage</span>
+                        <span class="info-value" id="cpuUsage">47%</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="info-label">Memory</span>
+                        <span class="info-value" id="memUsage">8.2/16 GB</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="info-label">Disk</span>
+                        <span class="info-value" id="diskUsage">243/512 GB</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="info-label">Network</span>
+                        <span class="info-value" id="networkSpeed">↓ 234 Mbps</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Graph Widget -->
+            <div class="widget">
+                <div class="widget-title">
+                    <span>📈</span>
+                    Performance
+                </div>
+                <div class="graph-widget">
+                    <div class="graph-container">
+                        <div class="graph-bars" id="performanceGraph"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Terminal Output Widget -->
+            <div class="widget">
+                <div class="widget-title">
+                    <span>💻</span>
+                    Terminal
+                </div>
+                <div class="terminal-output" id="terminalOutput">
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">root@nexus:~$</span>
+                        <span class="terminal-command">systemctl status</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-output-text">● system.slice - System Slice</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-output-text">   Loaded: loaded</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-output-text">   Active: active since boot</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">root@nexus:~$</span>
+                        <span class="terminal-command">cat /proc/version</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-output-text">Linux version 5.19.0-nexus</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">root@nexus:~$</span>
+                        <span class="terminal-command" id="typingCommand"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Access Widget -->
+            <div class="widget">
+                <div class="widget-title">
+                    <span>⚡</span>
+                    Quick Access
+                </div>
+                <div class="quick-access">
+                    <div class="quick-btn" onclick="toggleSearch()">
+                        <div>🔍</div>
+                        <div style="font-size: 10px;">Search</div>
+                    </div>
+                    <div class="quick-btn" onclick="restartSystem()">
+                        <div>🔄</div>
+                        <div style="font-size: 10px;">Restart</div>
+                    </div>
+                    <div class="quick-btn" onclick="adminPanel()">
+                        <div>⚙️</div>
+                        <div style="font-size: 10px;">Admin</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Search Overlay -->
     <div class="search-overlay" id="searchOverlay">
         <div class="search-container">
-            <div style="text-align: center; margin-bottom: 1rem;">
-                <div style="color: var(--primary-green); font-size: 1.2rem;">[ NEXUS SEARCH ]</div>
+            <div class="widget-title" style="margin-bottom: 16px; justify-content: center;">
+                <span>🔍</span>
+                NEXUS SEARCH
             </div>
-            <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="Type to search or enter command..."/>
-            </div>
-            <div style="margin-top: 1rem; text-align: center; font-size: 0.8rem; color: #888;">
-                Press Escape to close
-            </div>
-        </div>
-    </div>
-    
-    <!-- Quick access -->
-    <div class="quick-access">
-        <div class="quick-btn" id="searchBtn" title="Search">🔍</div>
-    </div>
-    
-    <!-- Notification -->
-    <div class="notification" id="notification">
-        System ready
-    </div>
-    
-    <!-- Main content -->
-    <div class="container">
-        <!-- Header -->
-        <header class="terminal-header">
-            <div class="terminal-title glow">CHOOCH.NET</div>
-            <div class="terminal-subtitle">[ DIGITAL NEXUS - SYSTEM ONLINE ]</div>
-            <div class="terminal-time" id="clock"></div>
-        </header>
-        
-        <!-- Hub sections -->
-        <div class="hub-grid">
-            <!-- Primary Services -->
-            <div class="hub-section">
-                <h2 class="section-title">Primary Services</h2>
-                <div class="section-grid">
-                    <a href="https://mail.tutanota.com/login" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">📧</div>
-                        <div class="card-title">Tutanota</div>
-                        <div class="card-desc">secure mail</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">📡</div>
-                        <div class="card-title">RSS</div>
-                        <div class="card-desc">feeds</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🎬</div>
-                        <div class="card-title">Jellyfin</div>
-                        <div class="card-desc">media</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🎵</div>
-                        <div class="card-title">Jukebox</div>
-                        <div class="card-desc">tunes</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🌱</div>
-                        <div class="card-title">Seedbox</div>
-                        <div class="card-desc">torrents</div>
-                    </a>
-                    <a href="https://bin.chooch.net" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🗂️</div>
-                        <div class="card-title">Bin</div>
-                        <div class="card-desc">storage</div>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Communications -->
-            <div class="hub-section">
-                <h2 class="section-title">Communications</h2>
-                <div class="section-grid">
-                    <a href="https://webmail.disroot.org/" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">📧</div>
-                        <div class="card-title">Disroot</div>
-                        <div class="card-desc">secure mail</div>
-                    </a>
-                    <a href="https://drive.chooch.net" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">☁️</div>
-                        <div class="card-title">Drive</div>
-                        <div class="card-desc">cloud</div>
-                    </a>
-                    <a href="https://youtube.com" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">
-                            <svg width="35" height="35" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                            </svg>
-                        </div>
-                        <div class="card-title">YouTube</div>
-                        <div class="card-desc">videos</div>
-                    </a>
-                    <a href="https://ipleak.net/" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🌍</div>
-                        <div class="card-title">IP Location</div>
-                        <div class="card-desc">geo</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🔍</div>
-                        <div class="card-title">Soulseek</div>
-                        <div class="card-desc">p2p</div>
-                    </a>
-                    <a href="https://photos.google.com" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">📸</div>
-                        <div class="card-title">Photos</div>
-                        <div class="card-desc">gallery</div>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Utilities -->
-            <div class="hub-section">
-                <h2 class="section-title">Utilities</h2>
-                <div class="section-grid">
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">📝</div>
-                        <div class="card-title">Notebook</div>
-                        <div class="card-desc">notes</div>
-                    </a>
-                    <a href="https://real-debrid.com/speedtest" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">⚡</div>
-                        <div class="card-title">Speedtest</div>
-                        <div class="card-desc">network</div>
-                    </a>
-                    <a href="https://real-debrid.com/" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">💨</div>
-                        <div class="card-title">Debrid</div>
-                        <div class="card-desc">download</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">⚙️</div>
-                        <div class="card-title">Admin</div>
-                        <div class="card-desc">control</div>
-                    </a>
-                    <a href="#" class="hub-card">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🔍</div>
-                        <div class="card-title">Soulseek</div>
-                        <div class="card-desc">p2p</div>
-                    </a>
-                    <a href="https://weather.com" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🌤️</div>
-                        <div class="card-title">Weather</div>
-                        <div class="card-desc">forecast</div>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- AI Hub -->
-            <div class="hub-section hub-ai">
-                <h2 class="section-title">AI Nexus</h2>
-                <div class="section-grid">
-                    <a href="https://claude.ai" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🤖</div>
-                        <div class="card-title">Claude</div>
-                        <div class="card-desc">AI assistant</div>
-                    </a>
-                    <a href="https://chat.openai.com" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🧠</div>
-                        <div class="card-title">ChatGPT</div>
-                        <div class="card-desc">AI model</div>
-                    </a>
-                    <a href="https://www.perplexity.ai" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🔮</div>
-                        <div class="card-title">Perplexity</div>
-                        <div class="card-desc">AI search</div>
-                    </a>
-                    <a href="https://gemini.google.com" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">💎</div>
-                        <div class="card-title">Gemini</div>
-                        <div class="card-desc">Google AI</div>
-                    </a>
-                    <a href="https://www.anthropic.com/claude" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">⚡</div>
-                        <div class="card-title">Claude API</div>
-                        <div class="card-desc">developer</div>
-                    </a>
-                    <a href="https://huggingface.co" class="hub-card" target="_blank">
-                        <div class="card-status"></div>
-                        <div class="card-icon">🤗</div>
-                        <div class="card-title">HuggingFace</div>
-                        <div class="card-desc">ML models</div>
-                    </a>
-                </div>
+            <input type="text" class="search-input" id="searchInput" placeholder="Type command or search...">
+            <div style="margin-top: 16px; text-align: center; font-size: 12px; color: #888;">
+                Press ESC to close • Enter to search
             </div>
         </div>
-    </div>
-    
-    <div class="instructions">
-        Type to search • ESC to close • Click 💨 for smoke • NEXUS ready 🌿
     </div>
     
     <script>
-        // Wait for DOM to be fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Clock
-            function updateClock() {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('en-US', { 
-                    hour12: false,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
-                const dateString = now.toLocaleDateString('en-US', {
-                    weekday: 'short',
-                    month: 'short',
-                    day: 'numeric'
-                });
+        // System state
+        const system = {
+            bootTime: Date.now(),
+            cpuValues: [],
+            memValues: [],
+            networkValues: []
+        };
+        
+        // Commands for typing effect
+        const commands = [
+            'htop',
+            'ps aux | grep nexus',
+            'df -h',
+            'netstat -tuln',
+            'curl -s https://ipinfo.io',
+            'lsof -i :80',
+            'who'
+        ];
+        let currentCommand = 0;
+        let typeIndex = 0;
+        
+        // Initialize ASCII background
+        function initASCIIBackground() {
+            const asciiBg = document.getElementById('asciiBg');
+            const skull = `
+                  ██████╗ █████╗ ███████╗██╗   ██╗██╗   ██╗███████╗
+                 ██╔════╝██╔══██╗██╔════╝██║   ██║██║   ██║██╔════╝
+                 ██║     ███████║███████╗██║   ██║██║   ██║███████╗
+                 ██║     ██╔══██║╚════██║██║   ██║██║   ██║╚════██║
+                 ╚██████╗██║  ██║███████║╚██████╔╝╚██████╔╝███████║
+                  ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝  ╚═════╝ ╚══════╝
+            `;
+            asciiBg.textContent = skull;
+        }
+        
+        // Update system time
+        function updateSystemTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('systemTime').textContent = timeString;
+        }
+        
+        // Update system info
+        function updateSystemInfo() {
+            // Simulate system load
+            const load = (Math.random() * 3).toFixed(1);
+            document.getElementById('loadInfo').textContent = `Load: ${load}`;
+            
+            // Update detailed info (if elements exist)
+            if (document.getElementById('cpuUsage')) {
+                const cpu = Math.floor(Math.random() * 100);
+                const mem = Math.floor(Math.random() * 16);
+                const disk = 243 + Math.floor(Math.random() * 50);
+                const network = Math.floor(Math.random() * 500);
                 
-                // Special 4:20 message
-                const time420 = timeString === '04:20:00' || timeString === '16:20:00';
-                const statusText = time420 ? '420 TIME! 🌿💨' : 'STATUS: ONLINE';
+                document.getElementById('cpuUsage').textContent = `${cpu}%`;
+                document.getElementById('memUsage').textContent = `${mem}/16 GB`;
+                document.getElementById('diskUsage').textContent = `${disk}/512 GB`;
+                document.getElementById('networkSpeed').textContent = `↓ ${network} Mbps`;
                 
-                const clockElement = document.getElementById('clock');
-                if (clockElement) {
-                    clockElement.textContent = `${timeString} :: ${dateString} - ${statusText}`;
-                }
-                
-                if (time420) {
-                    createSmokeEffect();
-                    showNotification('It\'s 420 time! 🌿💨');
+                // Update graph data
+                system.cpuValues.push(cpu);
+                if (system.cpuValues.length > 30) system.cpuValues.shift();
+                updatePerformanceGraph();
+            }
+        }
+        
+        // Update performance graph
+        function updatePerformanceGraph() {
+            const graphBars = document.getElementById('performanceGraph');
+            if (!graphBars) return;
+            
+            graphBars.innerHTML = '';
+            system.cpuValues.forEach(value => {
+                const bar = document.createElement('div');
+                bar.className = 'graph-bar';
+                bar.style.height = `${value}%`;
+                graphBars.appendChild(bar);
+            });
+        }
+        
+        // Typing effect for terminal
+        function typeCommand() {
+            const commandElement = document.getElementById('typingCommand');
+            if (!commandElement) return;
+            
+            const currentCmd = commands[currentCommand];
+            if (typeIndex < currentCmd.length) {
+                commandElement.textContent = currentCmd.substring(0, typeIndex + 1);
+                typeIndex++;
+                setTimeout(typeCommand, 100);
+            } else {
+                setTimeout(() => {
+                    typeIndex = 0;
+                    currentCommand = (currentCommand + 1) % commands.length;
+                    commandElement.textContent = '';
+                    setTimeout(typeCommand, 1000);
+                }, 2000);
+            }
+        }
+        
+        // Search functionality
+        function toggleSearch() {
+            const overlay = document.getElementById('searchOverlay');
+            const input = document.getElementById('searchInput');
+            
+            if (overlay.classList.contains('active')) {
+                overlay.classList.remove('active');
+                input.value = '';
+            } else {
+                overlay.classList.add('active');
+                input.focus();
+            }
+        }
+        
+        // Quick access functions
+        function restartSystem() {
+            const overlay = document.createElement('div');
+            overlay.className = 'search-overlay active';
+            overlay.innerHTML = `
+                <div class="search-container" style="text-align: center;">
+                    <div style="color: var(--color-warning); font-size: 24px; margin-bottom: 16px;">⚠️</div>
+                    <div style="color: var(--color-text); margin-bottom: 16px;">System Restart Initiated</div>
+                    <div style="color: var(--color-text-dim); font-size: 12px;">This is just a simulation...</div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            setTimeout(() => overlay.remove(), 3000);
+        }
+        
+        function adminPanel() {
+            window.open('#admin', '_blank');
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Open search with any letter
+            if (!document.getElementById('searchOverlay').classList.contains('active')) {
+                if (/^[a-zA-Z]$/.test(e.key)) {
+                    toggleSearch();
+                    document.getElementById('searchInput').value = e.key;
                 }
             }
-            updateClock();
-            setInterval(updateClock, 1000);
             
-            // Create vapor particles (simplified for GitHub Pages)
-            function createVaporParticles() {
-                // Simplified version that won't cause issues
-                console.log('Vapor particles ready');
+            // Close search with ESC
+            if (e.key === 'Escape') {
+                if (document.getElementById('searchOverlay').classList.contains('active')) {
+                    toggleSearch();
+                }
             }
             
-            // Create smoke effect on demand
-            function createSmokeEffect() {
-                const body = document.body;
+            // Search with Enter
+            if (e.key === 'Enter' && document.getElementById('searchOverlay').classList.contains('active')) {
+                const query = document.getElementById('searchInput').value.trim();
+                if (query) {
+                    const searchUrl = `https://www.startpage.com/sp/search?query=${encodeURIComponent(query)}`;
+                    window.open(searchUrl, '_blank');
+                    toggleSearch();
+                }
+            }
+        });
+        
+        // Update uptime display
+        function updateUptime() {
+            const uptimeElement = document.getElementById('uptime');
+            if (!uptimeElement) return;
+            
+            const now = Date.now();
+            const uptimeMs = now - system.bootTime;
+            const days = Math.floor(uptimeMs / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((uptimeMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((uptimeMs % (1000 * 60 * 60)) / (1000 * 60));
+            
+            uptimeElement.textContent = `${days}d ${hours}h ${minutes}m`;
+        }
+        
+        // Matrix rain effect
+        function createMatrixRain() {
+            const chars = '0123456789ABCDEF';
+            for (let i = 0; i < 5; i++) {
+                const span = document.createElement('span');
+                span.className = 'matrix-char';
+                span.textContent = chars[Math.floor(Math.random() * chars.length)];
+                span.style.position = 'fixed';
+                span.style.left = Math.random() * 100 + '%';
+                span.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                span.style.fontSize = Math.random() * 20 + 10 + 'px';
+                document.body.appendChild(span);
+                
+                setTimeout(() => span.remove(), 5000);
+            }
+        }
+        
+        // 420 easter egg
+        function check420() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            
+            if ((hours === 4 || hours === 16) && minutes === 20) {
+                // Create smoke effect
                 const smoke = document.createElement('div');
-                smoke.style.position = 'fixed';
-                smoke.style.top = '50%';
-                smoke.style.left = '50%';
-                smoke.style.width = '100px';
-                smoke.style.height = '100px';
-                smoke.style.background = 'radial-gradient(circle, rgba(200, 255, 200, 0.6) 0%, transparent 70%)';
-                smoke.style.borderRadius = '50%';
-                smoke.style.filter = 'blur(30px)';
-                smoke.style.pointerEvents = 'none';
-                smoke.style.animation = 'smokeRise 3s ease-out forwards';
-                smoke.style.transform = 'translate(-50%, -50%)';
-                smoke.style.zIndex = '1000';
+                smoke.innerHTML = '💨 4:20 - It\'s time! 🌿';
+                smoke.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(0, 255, 65, 0.1);
+                    padding: 20px;
+                    border: 1px solid var(--color-primary);
+                    border-radius: 8px;
+                    color: var(--color-primary);
+                    font-size: 18px;
+                    z-index: 2000;
+                    animation: smokeEffect 3s ease forwards;
+                `;
                 
-                // Add CSS for smoke animation if not already added
-                if (!document.getElementById('smokeCSS')) {
+                // Add CSS for smoke animation
+                if (!document.getElementById('smokeStyle')) {
                     const style = document.createElement('style');
-                    style.id = 'smokeCSS';
+                    style.id = 'smokeStyle';
                     style.textContent = `
-                        @keyframes smokeRise {
-                            0% {
-                                transform: translate(-50%, -50%) scale(0.1);
-                                opacity: 0.8;
-                            }
-                            50% {
-                                transform: translate(-50%, -60%) scale(1);
-                                opacity: 0.4;
-                            }
-                            100% {
-                                transform: translate(-50%, -200%) scale(2);
-                                opacity: 0;
-                            }
+                        @keyframes smokeEffect {
+                            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+                            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+                            100% { opacity: 0; transform: translate(-50%, -50%) scale(1) translateY(-50px); }
                         }
                     `;
                     document.head.appendChild(style);
                 }
                 
-                body.appendChild(smoke);
-                
-                // Remove after animation
-                setTimeout(() => smoke.remove(), 3000);
-                
-                // Add multiple smaller smoke puffs
-                for (let i = 0; i < 5; i++) {
-                    setTimeout(() => {
-                        const puff = document.createElement('div');
-                        puff.style.position = 'fixed';
-                        puff.style.top = '50%';
-                        puff.style.left = (50 + Math.random() * 20 - 10) + '%';
-                        puff.style.width = '50px';
-                        puff.style.height = '50px';
-                        puff.style.background = 'radial-gradient(circle, rgba(150, 200, 150, 0.3) 0%, transparent 70%)';
-                        puff.style.borderRadius = '50%';
-                        puff.style.filter = 'blur(15px)';
-                        puff.style.pointerEvents = 'none';
-                        puff.style.animation = 'smokeRise 2s ease-out forwards';
-                        puff.style.transform = 'translate(-50%, -50%)';
-                        puff.style.zIndex = '1000';
-                        
-                        body.appendChild(puff);
-                        setTimeout(() => puff.remove(), 2000);
-                    }, i * 300);
-                }
-                
-                showNotification('💨 *puff puff pass* 💨');
-            }
-            
-            // Make createSmokeEffect available globally
-            window.createSmokeEffect = createSmokeEffect;
-            
-            // Search functionality
-            const searchOverlay = document.getElementById('searchOverlay');
-            const searchInput = document.getElementById('searchInput');
-            const searchBtn = document.getElementById('searchBtn');
-            
-            function toggleSearch() {
-                if (searchOverlay.classList.contains('active')) {
-                    hideSearch();
-                } else {
-                    showSearch();
-                }
-            }
-            
-            function showSearch() {
-                searchOverlay.classList.add('active');
-                setTimeout(() => searchInput.focus(), 300);
-                showNotification('Search activated 🔍');
-            }
-            
-            function hideSearch() {
-                searchOverlay.classList.remove('active');
-                searchInput.value = '';
-                showNotification('Search closed');
-            }
-            
-            // Event listeners
-            if (searchBtn) {
-                searchBtn.addEventListener('click', toggleSearch);
-            }
-            
-            // Keyboard shortcuts
-            document.addEventListener('keydown', (e) => {
-                // Type to search
-                if (!searchOverlay.classList.contains('active') && 
-                    !e.ctrlKey && !e.altKey && !e.metaKey &&
-                    e.key.length === 1 && 
-                    !e.target.tagName || e.target.tagName.toLowerCase() !== 'input') {
-                    showSearch();
-                    setTimeout(() => {
-                        searchInput.value = e.key;
-                    }, 50);
-                }
-                
-                // Escape to close
-                if (e.key === 'Escape' && searchOverlay.classList.contains('active')) {
-                    hideSearch();
-                }
-                
-                // Easter egg: Press 'S' for smoke
-                if (e.key.toLowerCase() === 's' && !searchOverlay.classList.contains('active')) {
-                    createSmokeEffect();
-                }
-            });
-            
-            // Enhanced search with 420-themed shortcuts
-            const shortcuts = {
-                'g': 'https://github.com',
-                'gmail': 'https://gmail.com',
-                'y': 'https://youtube.com',
-                'yt': 'https://youtube.com',
-                'reddit': 'https://reddit.com',
-                'r': 'https://reddit.com',
-                'claude': 'https://claude.ai',
-                'gpt': 'https://chat.openai.com',
-                'perplexity': 'https://www.perplexity.ai',
-                'gemini': 'https://gemini.google.com',
-                'netflix': 'https://netflix.com',
-                'n': 'https://netflix.com',
-                'discord': 'https://discord.com',
-                'd': 'https://discord.com',
-                // 420-themed shortcuts
-                '420': function() { 
-                    createSmokeEffect(); 
-                    showNotification('Smoke \'em if you got \'em! 🌿'); 
-                },
-                'smoke': function() { 
-                    createSmokeEffect(); 
-                    showNotification('*puff* 💨'); 
-                },
-                'weed': 'https://www.leafly.com',
-                'blaze': function() { 
-                    createSmokeEffect();
-                    showNotification('Blaze it! 🔥💨');
-                }
-            };
-            
-            if (searchInput) {
-                searchInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        const query = searchInput.value.toLowerCase().trim();
-                        
-                        if (typeof shortcuts[query] === 'function') {
-                            shortcuts[query]();
-                            hideSearch();
-                        } else if (shortcuts[query]) {
-                            window.open(shortcuts[query], '_blank');
-                            hideSearch();
-                            showNotification(`Opening ${query} 💨`);
-                        } else {
-                            // Default search
-                            window.open(`https://www.startpage.com/sp/search?query=${encodeURIComponent(searchInput.value)}`, '_blank');
-                            hideSearch();
-                            showNotification('Searching... 🔍');
-                        }
-                    }
-                });
-            }
-            
-            // Click outside to close
-            if (searchOverlay) {
-                searchOverlay.addEventListener('click', (e) => {
-                    if (e.target === searchOverlay) {
-                        hideSearch();
-                    }
-                });
-            }
-            
-            // Notification system
-            function showNotification(message) {
-                const notification = document.getElementById('notification');
-                if (notification) {
-                    notification.textContent = message;
-                    notification.classList.add('show');
-                    
-                    setTimeout(() => {
-                        notification.classList.remove('show');
-                    }, 3000);
-                }
-            }
-            
-            // Initialize effects
-            createVaporParticles();
-            showNotification('NEXUS online 🌿');
-            
-            // Add enhanced hover effects with smoke
-            document.querySelectorAll('.hub-card').forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    card.style.animation = 'float 2s ease-in-out infinite';
-                    
-                    // Random smoke on hover (10% chance)
-                    if (Math.random() < 0.1) {
-                        createMiniSmoke(card);
-                    }
-                });
-                
-                card.addEventListener('mouseleave', () => {
-                    card.style.animation = '';
-                });
-            });
-            
-            // Create mini smoke effect on card
-            function createMiniSmoke(element) {
-                const rect = element.getBoundingClientRect();
-                const smoke = document.createElement('div');
-                smoke.style.position = 'absolute';
-                smoke.style.top = rect.top + 'px';
-                smoke.style.left = rect.left + rect.width/2 + 'px';
-                smoke.style.width = '30px';
-                smoke.style.height = '30px';
-                smoke.style.background = 'radial-gradient(circle, rgba(100, 200, 100, 0.4) 0%, transparent 70%)';
-                smoke.style.borderRadius = '50%';
-                smoke.style.filter = 'blur(10px)';
-                smoke.style.pointerEvents = 'none';
-                smoke.style.animation = 'smokeRise 1s ease-out forwards';
-                smoke.style.transform = 'translate(-50%, -50%)';
-                smoke.style.zIndex = '1001';
-                
                 document.body.appendChild(smoke);
-                setTimeout(() => smoke.remove(), 1000);
+                setTimeout(() => smoke.remove(), 3000);
             }
+        }
+        
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            initASCIIBackground();
+            typeCommand();
             
-            // Console easter eggs
-            console.log('%c 🌿 NEXUS INITIALIZED 💨 ', 'background: #00ff00; color: #000000; font-size: 14px; font-weight: bold;');
-            console.log('%c System online - Smoke \'em if you got \'em! 🌿 ', 'color: #00ff00; font-size: 12px;');
-            console.log('%c Type "420" or "smoke" in search for special effects 💨 ', 'color: #00ffff; font-size: 12px;');
-            console.log('%c Press "S" for instant smoke 🚬 ', 'color: #ffff00; font-size: 12px;');
+            // Set up intervals
+            setInterval(updateSystemTime, 1000);
+            setInterval(updateSystemInfo, 2000);
+            setInterval(updateUptime, 60000);
+            setInterval(createMatrixRain, 1000);
+            setInterval(check420, 60000);
             
-            // Random ambient smoke every 30 seconds
-            setInterval(() => {
-                if (Math.random() < 0.3) {
-                    setTimeout(() => createSmokeEffect(), Math.random() * 5000);
+            // Initial updates
+            updateSystemTime();
+            updateSystemInfo();
+            updateUptime();
+            
+            // Click outside search to close
+            document.getElementById('searchOverlay').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) {
+                    toggleSearch();
                 }
-            }, 30000);
-            
-            // Special 420 time check every minute
-            setInterval(() => {
-                const now = new Date();
-                const time = now.toLocaleTimeString('en-US', { 
-                    hour12: false,
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                
-                if (time === '04:20' || time === '16:20') {
-                    for (let i = 0; i < 5; i++) {
-                        setTimeout(() => createSmokeEffect(), i * 1000);
-                    }
-                    showNotification('🌿 4:20 BLAZE IT! 💨🔥');
-                }
-            }, 60000);
+            });
         });
+        
+        // Add some dynamic terminal commands
+        setInterval(() => {
+            const terminalOutput = document.getElementById('terminalOutput');
+            if (terminalOutput) {
+                const commands = ['ps aux', 'netstat -i', 'free -h', 'uptime', 'who'];
+                const randomCmd = commands[Math.floor(Math.random() * commands.length)];
+                
+                const newLine = document.createElement('div');
+                newLine.className = 'terminal-line';
+                newLine.innerHTML = `
+                    <span class="terminal-prompt">root@nexus:~$</span>
+                    <span class="terminal-command">${randomCmd}</span>
+                `;
+                
+                // Add before the typing command line
+                const typingLine = terminalOutput.lastElementChild;
+                terminalOutput.insertBefore(newLine, typingLine);
+                
+                // Keep only last 15 lines
+                const lines = terminalOutput.children;
+                if (lines.length > 15) {
+                    terminalOutput.removeChild(lines[0]);
+                }
+                
+                // Scroll to bottom
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }
+        }, 5000);
     </script>
 </body>
 </html>
