@@ -571,3 +571,78 @@ body {
   60% { transform: translateX(2px); }
   80% { transform: translateX(-2px); }
 }
+
+
+/* Search Suggestions Styles - Add to your main.css */
+
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.search-suggestions.show {
+  display: block;
+}
+
+.search-suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.search-suggestion-item:hover,
+.search-suggestion-item.highlighted {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+}
+
+.suggestion-icon {
+  font-size: var(--font-size-lg);
+  flex-shrink: 0;
+}
+
+.suggestion-text {
+  flex: 1;
+}
+
+.suggestion-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.suggestion-category {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  margin-top: var(--space-xs);
+}
+
+/* Search input container relative positioning */
+.search-container {
+  position: relative;
+}
+
+/* Improved search input focus state */
+.search-input:focus + .search-suggestions {
+  display: block;
+}
