@@ -1,28 +1,80 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Chooch.net - Your Personal Hub for Essential Services & Tools">
-  <meta name="theme-color" content="#0a0a0a">
-  <title>Chooch.net</title>
+<html data-darkreader-proxy-injected="true"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
-  <!-- Preload critical resources -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preload" as="style" href="css/main.css">
+  <meta name="color-scheme" content="dark light">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to the Chooch Train!</title>
   
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/enhanced-styles.css">
   
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <style>
+    /* Original Vaporwave Header Styles */
+    .glitch {
+      position: relative;
+      color: var(--color-text);
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0.8;
+    }
+
+    .glitch::before {
+      color: var(--color-accent);
+      animation: glitch-1 0.5s infinite;
+      clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    }
+
+    .glitch::after {
+      color: var(--color-accent-2);
+      animation: glitch-2 0.5s infinite;
+      clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    }
+
+    @keyframes glitch-1 {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-2px); }
+      40% { transform: translateX(2px); }
+      60% { transform: translateX(-2px); }
+      80% { transform: translateX(2px); }
+    }
+
+    @keyframes glitch-2 {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(2px); }
+      40% { transform: translateX(-2px); }
+      60% { transform: translateX(2px); }
+      80% { transform: translateX(-2px); }
+    }
+
+    /* Keep original vaporwave colors */
+    :root {
+      --color-text: #00ff41;
+      --color-accent: #ff6b6b;
+      --color-accent-2: #4ecdc4;
+      --font-size-2xl: 3rem;
+      --font-weight-bold: 700;
+    }
+  </style>
 </head>
 <body>
+  <!-- Header with Original Vaporwave Effect -->
   <header class="header">
     <div class="header-content">
-      <a href="/" class="logo">Chooch.net</a>
+      <a href="/" class="logo">
+        <h1 class="glitch" data-text="Chooch.net">Chooch.net</h1>
+      </a>
       <div class="header-controls">
         <div class="search-container">
           <input 
@@ -41,6 +93,7 @@
   </header>
 
   <main class="main">
+    <!-- Status Bar -->
     <div class="status-bar">
       <div class="status-item">
         <div class="status-indicator"></div>
@@ -60,6 +113,7 @@
       </div>
     </div>
 
+    <!-- Quick Actions -->
     <div class="quick-actions">
       <h2>Quick Actions</h2>
       <div class="actions-grid">
@@ -82,7 +136,9 @@
       </div>
     </div>
 
+    <!-- Categories Grid -->
     <div class="categories-grid" id="categories-grid">
+      <!-- Email & Communications -->
       <div class="category fade-in">
         <div class="category-header">
           <span class="category-icon">📧</span>
@@ -113,6 +169,7 @@
         </div>
       </div>
 
+      <!-- Entertainment -->
       <div class="category fade-in">
         <div class="category-header">
           <span class="category-icon">🎬</span>
@@ -143,6 +200,7 @@
         </div>
       </div>
 
+      <!-- Files & Storage -->
       <div class="category fade-in">
         <div class="category-header">
           <span class="category-icon">📁</span>
@@ -163,6 +221,7 @@
         </div>
       </div>
 
+      <!-- Torrenting -->
       <div class="category fade-in">
         <div class="category-header">
           <span class="category-icon">🏴‍☠️</span>
@@ -193,6 +252,7 @@
         </div>
       </div>
 
+      <!-- Security & Privacy -->
       <div class="category fade-in">
         <div class="category-header">
           <span class="category-icon">🔐</span>
@@ -223,6 +283,7 @@
         </div>
       </div>
 
+      <!-- Developer Tools -->
       <div class="category fade-in">
         <div class="category-header">
           <span class="category-icon">🛠️</span>
@@ -253,6 +314,7 @@
         </div>
       </div>
 
+      <!-- Research & Learning -->
       <div class="category fade-in">
         <div class="category-header">
           <span class="category-icon">📚</span>
@@ -283,6 +345,7 @@
         </div>
       </div>
 
+      <!-- Network & Tools -->
       <div class="category fade-in">
         <div class="category-header">
           <span class="category-icon">🛠️</span>
@@ -318,7 +381,7 @@
   <script src="js/main.js"></script>
   <script src="js/animations.js"></script>
   <script src="js/theme-manager.js"></script>
+  <script src="js/smoke-reveal.js"></script>
   <script src="js/enhanced-features.js"></script>
-  <script src="js/vapor-cloud.js"></script>
 </body>
 </html>
