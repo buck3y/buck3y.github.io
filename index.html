@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html data-darkreader-proxy-injected="true"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
-  <meta name="color-scheme" content="dark light">
-  <meta name="robots" content="noindex">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Chooch.net - Your Personal Hub for Essential Services & Tools">
   <title>Welcome to the Chooch Train!</title>
   
   <!-- Stylesheets -->
@@ -13,12 +13,13 @@
   <link rel="stylesheet" href="css/enhanced-styles.css">
   
   <style>
-    /* Original Vaporwave Header Styles */
+    /* Vaporwave Glitch Header Effect */
     .glitch {
       position: relative;
-      color: var(--color-text);
-      font-size: var(--font-size-2xl);
-      font-weight: var(--font-weight-bold);
+      color: #00ff41;
+      font-size: 3rem;
+      font-weight: 700;
+      text-decoration: none;
     }
 
     .glitch::before,
@@ -31,13 +32,13 @@
     }
 
     .glitch::before {
-      color: var(--color-accent);
+      color: #ff6b6b;
       animation: glitch-1 0.5s infinite;
       clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
     }
 
     .glitch::after {
-      color: var(--color-accent-2);
+      color: #4ecdc4;
       animation: glitch-2 0.5s infinite;
       clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
     }
@@ -58,23 +59,19 @@
       80% { transform: translateX(-2px); }
     }
 
-    /* Keep original vaporwave colors */
-    :root {
-      --color-text: #00ff41;
-      --color-accent: #ff6b6b;
-      --color-accent-2: #4ecdc4;
-      --font-size-2xl: 3rem;
-      --font-weight-bold: 700;
+    /* Fix header layout */
+    .header .logo {
+      background: transparent;
+      -webkit-text-fill-color: unset;
+      font-size: inherit;
     }
   </style>
 </head>
 <body>
-  <!-- Header with Original Vaporwave Effect -->
+  <!-- Header with Vaporwave Glitch Effect -->
   <header class="header">
     <div class="header-content">
-      <a href="/" class="logo">
-        <h1 class="glitch" data-text="Chooch.net">Chooch.net</h1>
-      </a>
+      <a href="/" class="logo glitch" data-text="Chooch.net">Chooch.net</a>
       <div class="header-controls">
         <div class="search-container">
           <input 
