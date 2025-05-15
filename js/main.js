@@ -204,3 +204,229 @@ document.addEventListener('DOMContentLoaded', () => {
   new KeyboardShortcuts();
   new PerformanceMonitor();
 });
+
+
+
+// Enhanced Search Functionality - Add to your existing main.js or enhanced-features.js
+
+class EnhancedSearch {
+  constructor() {
+    this.searchInput = document.getElementById('search-input');
+    this.services = this.getAllServices();
+    this.suggestionsList = null;
+    this.currentSuggestionIndex = -1;
+    this.init();
+  }
+
+  init() {
+    this.createSuggestionsContainer();
+    this.bindEvents();
+  }
+
+  createSuggestionsContainer() {
+    // Create suggestions container if it doesn't exist
+    const suggestionsContainer = document.getElementById('search-suggestions') || document.createElement('div');
+    suggestionsContainer.id = 'search-suggestions';
+    suggestionsContainer.className = 'search-suggestions';
+    
+    // Position it after the search input
+    if (!document.getElementById('search-suggestions')) {
+      this.searchInput.parentNode.appendChild(suggestionsContainer);
+    }
+  }
+
+  bindEvents() {
+    // Show suggestions on focus
+    this.searchInput.addEventListener('focus', () => {
+      if (this.searchInput.value) {
+        this.showSuggestions(this.searchInput.value);
+      }
+    });
+
+    // Hide suggestions on click outside
+    document.addEventListener('click', (e) => {
+      if (!this.searchInput.contains(e.target) && !document.getElementById('search-suggestions').contains(e.target)) {
+        this.hideSuggestions();
+      }
+    });
+
+    // Handle input
+    this.searchInput.addEventListener('input', (e) => {
+      this.showSuggestions(e.target.value);
+    });
+
+    // Handle keyboard navigation
+    this.searchInput.addEventListener('keydown', (e) => {
+      const suggestionsContainer = document.getElementById('search-suggestions');
+      const suggestions = suggestionsContainer.children;
+
+      if (suggestions.length === 0) return;
+
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          this.currentSuggestionIndex = Math.min(this.currentSuggestionIndex + 1, suggestions.length - 1);
+          this.highlightSuggestion();
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          this.currentSuggestionIndex = Math.max(this.currentSuggestionIndex - 1, -1);
+          this.highlightSuggestion();
+          break;
+        case 'Enter':
+          e.preventDefault();
+          if (this.currentSuggestionIndex >= 0) {
+            suggestions[this.currentSuggestionIndex].click();
+          } else if (this.searchInput.value) {
+            this.searchAndNavigate(this.searchInput.value);
+          }
+          break;
+        case 'Escape':
+          this.hideSuggestions();
+          this.searchInput.blur();
+          break;
+      }
+    });
+  }
+
+  getAllServices() {
+    const services = [];
+    document.querySelectorAll('.service').forEach(service => {
+      const name = service.querySelector('.service-name').textContent;
+      const url = service.href;
+      const category = service.closest('.category').querySelector('.category-title').textContent;
+      services.push({ name, url, category });
+    });
+    return services;
+  }
+
+  showSuggestions(query) {
+    if (!query || query.length < 2) {
+      this.hideSuggestions();
+      return;
+    }
+
+    const matches = this.services.filter(service =>
+      service.name.toLowerCase().includes(query.toLowerCase()) ||
+      service.category.toLowerCase().includes(query.toLowerCase())
+    ).slice(0, 5);
+
+    const suggestionsContainer = document.getElementById('search-suggestions');
+    suggestionsContainer.innerHTML = '';
+
+    if (matches.length === 0) {
+      // Show "search with Google" option
+      const searchItem = document.createElement('div');
+      searchItem.className = 'search-suggestion-item';
+      searchItem.innerHTML = `
+        <div class="suggestion-icon">🔍</div>
+        <div class="suggestion-text">Search for "${query}" with Google</div>
+      `;
+      searchItem.addEventListener('click', () => {
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+        this.hideSuggestions();
+      });
+      suggestionsContainer.appendChild(searchItem);
+    }
+
+    matches.forEach((match, index) => {
+      const item = document.createElement('div');
+      item.className = 'search-suggestion-item';
+      item.innerHTML = `
+        <div class="suggestion-icon">${this.getServiceIcon(match.name)}</div>
+        <div class="suggestion-text">
+          <div class="suggestion-name">${match.name}</div>
+          <div class="suggestion-category">${match.category}</div>
+        </div>
+      `;
+      
+      item.addEventListener('click', () => {
+        window.open(match.url, '_blank');
+        this.hideSuggestions();
+      });
+      
+      suggestionsContainer.appendChild(item);
+    });
+
+    suggestionsContainer.classList.add('show');
+    this.currentSuggestionIndex = -1;
+  }
+
+  hideSuggestions() {
+    const suggestionsContainer = document.getElementById('search-suggestions');
+    suggestionsContainer.classList.remove('show');
+    this.currentSuggestionIndex = -1;
+  }
+
+  highlightSuggestion() {
+    const suggestionsContainer = document.getElementById('search-suggestions');
+    const suggestions = suggestionsContainer.children;
+    
+    // Remove previous highlights
+    Array.from(suggestions).forEach(item => item.classList.remove('highlighted'));
+    
+    // Highlight current suggestion
+    if (this.currentSuggestionIndex >= 0) {
+      suggestions[this.currentSuggestionIndex].classList.add('highlighted');
+    }
+  }
+
+  getServiceIcon(serviceName) {
+    // Return appropriate emoji based on service name
+    const iconMap = {
+      'YouTube': '▶️',
+      'Gmail': '✉️',
+      'GitHub': '🐙',
+      'Bitwarden': '🔐',
+      'Jellyfin': '📺',
+      'Tutanota': '✉️',
+      'Disroot': '📬',
+      'Catbox': '🐱',
+      'Real-Debrid': '⚡',
+      'Seedbox': '📦',
+      'Soulseek': '🎵',
+      'ProtonMail': '🔒',
+      'VS Code': '💻',
+      'Notion': '📝',
+      'LibGen': '📚',
+      'Udemy': '🎯',
+      'IP Location': '🌐',
+      'RSS': '📡'
+    };
+    
+    for (const [key, icon] of Object.entries(iconMap)) {
+      if (serviceName.toLowerCase().includes(key.toLowerCase())) {
+        return icon;
+      }
+    }
+    return '🔗'; // Default icon
+  }
+
+  searchAndNavigate(query) {
+    // Try to find a direct match first
+    const directMatch = this.services.find(service => 
+      service.name.toLowerCase() === query.toLowerCase()
+    );
+    
+    if (directMatch) {
+      window.open(directMatch.url, '_blank');
+    } else {
+      // Fall back to Google search
+      window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+    }
+    this.hideSuggestions();
+  }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  new EnhancedSearch();
+});
+
+// Slash key to focus search
+document.addEventListener('keydown', (e) => {
+  if (e.key === '/' && e.target.tagName !== 'INPUT') {
+    e.preventDefault();
+    document.getElementById('search-input').focus();
+  }
+});
