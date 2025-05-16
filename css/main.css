@@ -646,3 +646,82 @@ body {
 .search-input:focus + .search-suggestions {
   display: block;
 }
+
+/* Add these styles to your main.css file */
+
+/* Header centering and vaporwave glitch effect */
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center everything */
+  gap: var(--space-lg);
+}
+
+/* Make the logo centered */
+.logo {
+  /* Reset any inherited gradient styles */
+  background: transparent !important;
+  background-clip: unset !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  
+  /* Glitch effect styling */
+  position: relative;
+  color: #00ff41; /* var(--color-text) equivalent */
+  font-size: 3rem; /* var(--font-size-2) equivalent */
+  font-weight: 700; /* var(--font-weight-bold) equivalent */
+  text-decoration: none;
+}
+
+/* Vaporwave colors for glitch */
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.8;
+}
+
+.glitch::before {
+  color: #ff6b6b; /* var(--color-accent) equivalent */
+  animation: glitch-1 0.5s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch::after {
+  color: #4ecdc4; /* var(--color-accent-2) equivalent */
+  animation: glitch-2 0.5s infinite;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch-1 {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-2px); }
+  40% { transform: translateX(2px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+
+@keyframes glitch-2 {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(2px); }
+  40% { transform: translateX(-2px); }
+  60% { transform: translateX(2px); }
+  80% { transform: translateX(-2px); }
+}
+
+/* Mobile responsive - stack elements vertically on small screens */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  
+  .logo {
+    font-size: 2.5rem; /* Slightly smaller on mobile */
+  }
+}
