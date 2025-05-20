@@ -1,19 +1,38 @@
-<!DOCTYPE html>
+    // Update clock
+    function updateClock() {
+      const now = new Date();
+      
+      // Update digital clock
+      const hours = state.is24Hour ? now.getHours() : now.getHours() % 12 || 12;
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      const ampm = state.is24Hour ? '' : now.getHours() >= 12 ? ' PM' : ' AM';
+      
+      const clockText = `${hours}:${minutes}:${seconds}${ampm}`;
+      elements.digitalClock.textContent = clockText;
+      elements.digitalClock.setAttribute('data-text', clockText);
+      
+      // Update date display
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      elements.dateDisplay.textContent = now.toLocaleDateString(undefined, options);
+      
+      // Update header time
+      const headerHours<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="dark">
   <meta name="robots" content="noindex">
-  <title>Room300 - Command Center</title>
+  <title>chooch.net - Command Center</title>
   <style>
     :root {
-      /* Core theme colors - using a more refined palette */
-      --color-bg-primary: #0f0f1a;
-      --color-bg-secondary: #16162c;
-      --color-accent-primary: #7c3aed;
-      --color-accent-secondary: #10b981;
-      --color-accent-tertiary: #f472b6;
+      /* Vaporwave color palette */
+      --color-bg-primary: #0b0421;
+      --color-bg-secondary: #1f0f40;
+      --color-accent-primary: #ff00ff;
+      --color-accent-secondary: #00ffff;
+      --color-accent-tertiary: #ff6b6b;
       --color-text-primary: #f3f4f6;
       --color-text-secondary: #9ca3af;
       
@@ -64,35 +83,75 @@
 
     /* Header Styles */
     .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      width: 100%;
       padding: var(--space-4);
       position: relative;
       z-index: 10;
     }
 
+    .header-content { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 0 var(--space-3); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: var(--space-5); 
+    } 
+
     .logo {
-      font-size: 1.5rem;
+      position: relative;
+      color: #00ff41;
+      font-size: 3rem;
       font-weight: var(--font-weight-bold);
-      color: var(--color-accent-primary);
       text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      transition: color var(--transition-fast);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      /* Reset any inherited gradient styles */
+      background: transparent !important;
+      background-clip: unset !important;
+      -webkit-background-clip: unset !important;
+      -webkit-text-fill-color: unset !important;
     }
 
-    .logo:hover {
-      color: var(--color-accent-secondary);
-    }
+    /* Vaporwave glitch effect */
+    .glitch::before, 
+    .glitch::after { 
+      content: attr(data-text); 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      opacity: 0.8; 
+    } 
 
-    .logo span {
-      background: linear-gradient(45deg, var(--color-accent-primary), var(--color-accent-secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-fill-color: transparent;
+    .glitch::before { 
+      color: var(--color-accent-primary);
+      animation: glitch-1 2s infinite; 
+      clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); 
+      transform: translate(-2px, 0);
+    } 
+
+    .glitch::after { 
+      color: var(--color-accent-secondary); 
+      animation: glitch-2 2s infinite; 
+      clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%); 
+      transform: translate(2px, 0);
+    } 
+
+    @keyframes glitch-1 { 
+      0%, 100% { transform: translateX(0); } 
+      20% { transform: translateX(-2px); } 
+      40% { transform: translateX(2px); } 
+      60% { transform: translateX(-1px); } 
+      80% { transform: translateX(1px); } 
+    } 
+
+    @keyframes glitch-2 { 
+      0%, 100% { transform: translateX(0); } 
+      20% { transform: translateX(2px); } 
+      40% { transform: translateX(-2px); } 
+      60% { transform: translateX(1px); } 
+      80% { transform: translateX(-1px); } 
     }
 
     /* Main Content */
@@ -141,7 +200,7 @@
     }
 
     .command-card {
-      background-color: var(--color-bg-secondary);
+      background-color: rgba(31, 15, 64, 0.6);
       border-radius: 12px;
       padding: var(--space-4);
       text-align: center;
@@ -154,7 +213,7 @@
 
     .command-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 15px var(--color-accent-primary);
       border-color: var(--color-accent-primary);
     }
 
@@ -166,8 +225,8 @@
       width: 100%;
       height: 100%;
       background: linear-gradient(45deg, 
-                 rgba(124, 58, 237, 0.2), 
-                 rgba(16, 185, 129, 0.1));
+                 rgba(255, 0, 255, 0.2), 
+                 rgba(0, 255, 255, 0.1));
       opacity: 0;
       transition: opacity var(--transition-medium);
       z-index: 0;
@@ -201,26 +260,31 @@
     }
 
     .category-btn {
-      background-color: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: rgba(31, 15, 64, 0.4);
+      border: 1px solid rgba(255, 0, 255, 0.3);
       color: var(--color-text-secondary);
       padding: var(--space-2) var(--space-3);
       border-radius: 20px;
       cursor: pointer;
       transition: all var(--transition-fast);
       font-weight: var(--font-weight-medium);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.9rem;
     }
 
     .category-btn:hover {
-      background-color: rgba(124, 58, 237, 0.1);
+      background-color: rgba(255, 0, 255, 0.2);
       color: var(--color-accent-primary);
-      border-color: rgba(124, 58, 237, 0.3);
+      border-color: var(--color-accent-primary);
+      box-shadow: 0 0 10px rgba(255, 0, 255, 0.4);
     }
 
     .category-btn.active {
       background-color: var(--color-accent-primary);
       color: white;
       border-color: var(--color-accent-primary);
+      box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
     }
 
     /* Time and Weather */
@@ -256,7 +320,8 @@
       height: 100%;
       z-index: 1;
       overflow: hidden;
-      opacity: 0.5;
+      opacity: 0.7;
+      background: linear-gradient(to bottom, var(--color-bg-primary), #000);
     }
 
     canvas {
@@ -552,8 +617,17 @@
       font-size: 0.9rem;
     }
 
-    /* Responsive adjustments */
+    /* Mobile responsive styles */
     @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: var(--space-3);
+      }
+      
+      .logo {
+        font-size: 2.5rem;
+      }
+      
       .commands-grid {
         grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
         gap: var(--space-3);
@@ -574,6 +648,10 @@
       .settings-panel {
         width: 300px;
       }
+      
+      .digital-clock {
+        font-size: 2.5rem;
+      }
     }
 
     @media (max-width: 480px) {
@@ -582,7 +660,7 @@
       }
       
       .logo {
-        font-size: 1.2rem;
+        font-size: 2rem;
       }
       
       .time-weather {
@@ -596,7 +674,7 @@
       
       .category-btn {
         padding: var(--space-1) var(--space-2);
-        font-size: 0.9rem;
+        font-size: 0.8rem;
       }
       
       .commands-grid {
@@ -607,6 +685,10 @@
       .settings-panel {
         width: 100%;
         right: -100%;
+      }
+      
+      .digital-clock {
+        font-size: 2rem;
       }
     }
 
@@ -683,20 +765,35 @@
       flex-direction: column;
       align-items: center;
       margin-bottom: var(--space-5);
+      position: relative;
     }
 
     .digital-clock {
       font-size: 3.5rem;
       font-weight: 300;
       font-family: var(--font-mono);
-      color: var(--color-accent-primary);
+      color: var(--color-accent-secondary);
       margin-bottom: var(--space-1);
       letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+      position: relative;
+    }
+
+    .digital-clock::before {
+      content: attr(data-text);
+      position: absolute;
+      left: -2px;
+      top: 0;
+      color: var(--color-accent-primary);
+      opacity: 0.7;
+      z-index: -1;
     }
 
     .date-display {
       color: var(--color-text-secondary);
       font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     /* Search suggestions */
@@ -739,14 +836,16 @@
 
   <!-- Header -->
   <header class="header">
-    <a href="#" class="logo">
-      <span>ROOM300</span>
-    </a>
-    <div class="time-weather">
-      <div class="time" id="current-time">12:30 PM</div>
-      <div class="weather" id="weather-display">
-        <span>72°F</span>
-        <span>☀️</span>
+    <div class="header-content">
+      <a href="#" class="logo glitch" data-text="CHOOCH.NET">
+        CHOOCH.NET
+      </a>
+      <div class="time-weather">
+        <div class="time" id="current-time">12:30 PM</div>
+        <div class="weather" id="weather-display">
+          <span>72°F</span>
+          <span>☀️</span>
+        </div>
       </div>
     </div>
   </header>
@@ -820,8 +919,8 @@
     <div class="settings-section">
       <h3 class="settings-section-title">Theme</h3>
       <div class="theme-colors">
-        <div class="color-option active" style="background: linear-gradient(45deg, #7c3aed, #10b981);" data-theme="default"></div>
-        <div class="color-option" style="background: linear-gradient(45deg, #3b82f6, #ec4899);" data-theme="blue-pink"></div>
+        <div class="color-option active" style="background: linear-gradient(45deg, #ff00ff, #00ffff);" data-theme="default"></div>
+        <div class="color-option" style="background: linear-gradient(45deg, #ff71ce, #01cdfe);" data-theme="blue-pink"></div>
         <div class="color-option" style="background: linear-gradient(45deg, #f59e0b, #ef4444);" data-theme="amber-red"></div>
         <div class="color-option" style="background: linear-gradient(45deg, #10b981, #3b82f6);" data-theme="green-blue"></div>
         <div class="color-option" style="background: linear-gradient(45deg, #8b5cf6, #6366f1);" data-theme="purple-indigo"></div>
@@ -994,25 +1093,25 @@
   <!-- JavaScript -->
   <script>
     // Command data with categories
-    const COMMANDS = [
+          const COMMANDS = [
       { key: '📬', name: 'Tutanota', url: 'https://mail.tutanota.com', category: 'mail' },
       { key: '📬', name: 'Temp Mail', url: 'https://zemail.me', category: 'mail' },
       { key: '📬', name: 'Disroot', url: 'https://webmail.disroot.org', category: 'mail' },
-      { key: '🛜', name: 'RSS', url: 'https://rss.room300.net', category: 'media' },
-      { key: '📂', name: 'Drive', url: 'https://drive.room300.net', category: 'storage' },
-      { key: '📔', name: 'Notebook', url: 'https://notebook.room300.net', category: 'tools' },
-      { key: '📺', name: 'Jellyfin', url: 'https://tv.room300.net', category: 'media' },
-      { key: '🎵', name: 'Jukebox', url: 'https://jukebox.room300.net', category: 'media' },
+      { key: '🛜', name: 'RSS', url: 'https://rss.chooch.net', category: 'media' },
+      { key: '📂', name: 'Drive', url: 'https://drive.chooch.net', category: 'storage' },
+      { key: '📔', name: 'Notebook', url: 'https://notebook.chooch.net', category: 'tools' },
+      { key: '📺', name: 'Jellyfin', url: 'https://tv.chooch.net', category: 'media' },
+      { key: '🎵', name: 'Jukebox', url: 'https://jukebox.chooch.net', category: 'media' },
       { key: '🎵', name: 'YT Music', url: 'https://music.youtube.com', category: 'media' },
       { key: '📺', name: 'YouTube', url: 'https://youtube.com', category: 'media' },
       { key: '📍', name: 'IP Location', url: 'https://ipleak.net', category: 'tools' },
       { key: '🪛', name: 'Speedtest', url: 'https://real-debrid.com/speedtest', category: 'tools' },
-      { key: '📡', name: 'Seedbox', url: 'https://seedbox.room300.net', category: 'tools' },
-      { key: '📡', name: 'Soulseek', url: 'https://soulseek.room300.net', category: 'media' },
+      { key: '📡', name: 'Seedbox', url: 'https://seedbox.chooch.net', category: 'tools' },
+      { key: '📡', name: 'Soulseek', url: 'https://soulseek.chooch.net', category: 'media' },
       { key: '🗄️', name: 'Debrid', url: 'https://real-debrid.com', category: 'tools' },
-      { key: '🗑️', name: 'Bin', url: 'https://bin.room300.net', category: 'storage' },
-      { key: '📷', name: 'Photos', url: 'https://photos.room300.net', category: 'media' },
-      { key: '🧑‍💻', name: 'Admin', url: 'https://admin.room300.net', category: 'tools' },
+      { key: '🗑️', name: 'Bin', url: 'https://bin.chooch.net', category: 'storage' },
+      { key: '📷', name: 'Photos', url: 'https://photos.chooch.net', category: 'media' },
+      { key: '🧑‍💻', name: 'Admin', url: 'https://admin.chooch.net', category: 'tools' },
     ];
 
     // DOM Elements
@@ -1220,10 +1319,11 @@
       );
       
       // Show search suggestions if we have results
-      if (filtered.length > 0) {
+      if (filtered.length > 0 || query.length > 1) {
         elements.searchSuggestions.innerHTML = '';
         elements.searchSuggestions.style.display = 'block';
         
+        // Add filtered commands
         filtered.slice(0, 5).forEach(command => {
           const item = document.createElement('div');
           item.className = 'suggestion-item';
@@ -1241,11 +1341,15 @@
           elements.searchSuggestions.appendChild(item);
         });
         
-        // Add web search suggestion
+        // Add Startpage web search suggestion
         const webSearchItem = document.createElement('div');
         webSearchItem.className = 'suggestion-item';
         webSearchItem.innerHTML = `
-          <div>🔍 Search the web for "${query}"</div>
+          <div style="display: flex; align-items: center;">
+            <span style="margin-right: 8px; font-size: 1.2rem;">🔍</span>
+            <span>Search for "${query}" on Startpage</span>
+          </div>
+          <div style="color: var(--color-text-secondary); font-size: 0.8rem;">Private, secure search</div>
         `;
         
         webSearchItem.addEventListener('click', () => {
@@ -1256,25 +1360,48 @@
         });
         
         elements.searchSuggestions.appendChild(webSearchItem);
+        
+        // Add DuckDuckGo search suggestion
+        const duckSearchItem = document.createElement('div');
+        duckSearchItem.className = 'suggestion-item';
+        duckSearchItem.innerHTML = `
+          <div style="display: flex; align-items: center;">
+            <span style="margin-right: 8px; font-size: 1.2rem;">🦆</span>
+            <span>Search for "${query}" on DuckDuckGo</span>
+          </div>
+          <div style="color: var(--color-text-secondary); font-size: 0.8rem;">Private search engine</div>
+        `;
+        
+        duckSearchItem.addEventListener('click', () => {
+          const searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(query)}`;
+          window.open(searchUrl, state.openInNewTab ? '_blank' : '_self');
+          elements.searchBar.value = '';
+          elements.searchSuggestions.style.display = 'none';
+        });
+        
+        elements.searchSuggestions.appendChild(duckSearchItem);
+        
+        // Add Brave search suggestion
+        const braveSearchItem = document.createElement('div');
+        braveSearchItem.className = 'suggestion-item';
+        braveSearchItem.innerHTML = `
+          <div style="display: flex; align-items: center;">
+            <span style="margin-right: 8px; font-size: 1.2rem;">🦁</span>
+            <span>Search for "${query}" on Brave Search</span>
+          </div>
+          <div style="color: var(--color-text-secondary); font-size: 0.8rem;">Independent search engine</div>
+        `;
+        
+        braveSearchItem.addEventListener('click', () => {
+          const searchUrl = `https://search.brave.com/search?q=${encodeURIComponent(query)}`;
+          window.open(searchUrl, state.openInNewTab ? '_blank' : '_self');
+          elements.searchBar.value = '';
+          elements.searchSuggestions.style.display = 'none';
+        });
+        
+        elements.searchSuggestions.appendChild(braveSearchItem);
       } else {
-        // Just show web search option
-        elements.searchSuggestions.innerHTML = '';
-        elements.searchSuggestions.style.display = 'block';
-        
-        const webSearchItem = document.createElement('div');
-        webSearchItem.className = 'suggestion-item';
-        webSearchItem.innerHTML = `
-          <div>🔍 Search the web for "${query}"</div>
-        `;
-        
-        webSearchItem.addEventListener('click', () => {
-          const searchUrl = state.searchEngine.replace('{}', encodeURIComponent(query));
-          window.open(searchUrl, state.openInNewTab ? '_blank' : '_self');
-          elements.searchBar.value = '';
-          elements.searchSuggestions.style.display = 'none';
-        });
-        
-        elements.searchSuggestions.appendChild(webSearchItem);
+        elements.searchSuggestions.style.display = 'none';
       }
     }
 
@@ -1341,7 +1468,9 @@
       const seconds = now.getSeconds().toString().padStart(2, '0');
       const ampm = state.is24Hour ? '' : now.getHours() >= 12 ? ' PM' : ' AM';
       
-      elements.digitalClock.textContent = `${hours}:${minutes}:${seconds}${ampm}`;
+      const clockText = `${hours}:${minutes}:${seconds}${ampm}`;
+      elements.digitalClock.textContent = clockText;
+      elements.digitalClock.setAttribute('data-text', clockText);
       
       // Update date display
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -1349,6 +1478,11 @@
       
       // Update header time
       const headerHours = state.is24Hour ? now.getHours() : now.getHours() % 12 || 12;
+      const headerMinutes = now.getMinutes().toString().padStart(2, '0');
+      const headerAmpm = state.is24Hour ? '' : now.getHours() >= 12 ? ' PM' : ' AM';
+      
+      elements.currentTime.textContent = `${headerHours}:${headerMinutes}${headerAmpm}`;
+    } = state.is24Hour ? now.getHours() : now.getHours() % 12 || 12;
       const headerMinutes = now.getMinutes().toString().padStart(2, '0');
       const headerAmpm = state.is24Hour ? '' : now.getHours() >= 12 ? ' PM' : ' AM';
       
@@ -1383,63 +1517,97 @@
       state.canvas.width = window.innerWidth;
       state.canvas.height = window.innerHeight;
       
-      // Initialize particles
-      const particles = [];
-      const particleCount = Math.floor(window.innerWidth / 20);
+      // Initialize grid for vaporwave effect
+      const gridSize = 20;
+      const gridSpacing = 80;
+      const grid = [];
       
-      for (let i = 0; i < particleCount; i++) {
-        particles.push({
-          x: Math.random() * state.canvas.width,
-          y: Math.random() * state.canvas.height,
-          radius: Math.random() * 2 + 1,
-          color: i % 3 === 0 ? 'var(--color-accent-primary)' : i % 3 === 1 ? 'var(--color-accent-secondary)' : 'var(--color-accent-tertiary)',
-          speed: Math.random() * 0.5 + 0.1,
-          direction: Math.random() * Math.PI * 2
-        });
+      for (let x = 0; x < gridSize; x++) {
+        for (let y = 0; y < gridSize; y++) {
+          grid.push({
+            x: x * gridSpacing - (gridSize * gridSpacing) / 2,
+            y: y * gridSpacing - (gridSize * gridSpacing) / 2,
+            z: 0,
+            origX: x * gridSpacing - (gridSize * gridSpacing) / 2,
+            origY: y * gridSpacing - (gridSize * gridSpacing) / 2
+          });
+        }
       }
       
       // Animation function
       function animate() {
         state.ctx.clearRect(0, 0, state.canvas.width, state.canvas.height);
         
-        particles.forEach(particle => {
-          // Move particles
-          particle.x += Math.cos(particle.direction) * particle.speed;
-          particle.y += Math.sin(particle.direction) * particle.speed;
-          
-          // Bounce off edges
-          if (particle.x < 0 || particle.x > state.canvas.width) {
-            particle.direction = Math.PI - particle.direction;
-          }
-          
-          if (particle.y < 0 || particle.y > state.canvas.height) {
-            particle.direction = -particle.direction;
-          }
-          
-          // Draw particle
-          state.ctx.beginPath();
-          state.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-          state.ctx.fillStyle = particle.color;
-          state.ctx.fill();
-        });
+        // Draw the vaporwave grid
+        state.ctx.save();
+        state.ctx.translate(state.canvas.width / 2, state.canvas.height / 2);
         
-        // Draw connections
-        state.ctx.beginPath();
-        for (let i = 0; i < particles.length; i++) {
-          for (let j = i + 1; j < particles.length; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance < 100) {
-              state.ctx.moveTo(particles[i].x, particles[i].y);
-              state.ctx.lineTo(particles[j].x, particles[j].y);
+        const now = Date.now() / 1000;
+        
+        // Update grid points
+        for (let i = 0; i < grid.length; i++) {
+          const point = grid[i];
+          point.z = Math.sin(now + point.origX / 100) * 50 + Math.cos(now + point.origY / 100) * 50;
+        }
+        
+        // Draw grid lines
+        state.ctx.strokeStyle = 'rgba(255, 0, 255, 0.3)';
+        state.ctx.lineWidth = 1;
+        
+        // Draw horizontal grid lines
+        for (let y = 0; y < gridSize; y++) {
+          state.ctx.beginPath();
+          for (let x = 0; x < gridSize; x++) {
+            const point = grid[y * gridSize + x];
+            if (x === 0) {
+              state.ctx.moveTo(point.x, point.y + point.z);
+            } else {
+              state.ctx.lineTo(point.x, point.y + point.z);
             }
           }
+          state.ctx.stroke();
         }
-        state.ctx.strokeStyle = 'rgba(124, 58, 237, 0.1)';
-        state.ctx.lineWidth = 0.5;
-        state.ctx.stroke();
+        
+        // Draw vertical grid lines
+        for (let x = 0; x < gridSize; x++) {
+          state.ctx.beginPath();
+          for (let y = 0; y < gridSize; y++) {
+            const point = grid[y * gridSize + x];
+            if (y === 0) {
+              state.ctx.moveTo(point.x, point.y + point.z);
+            } else {
+              state.ctx.lineTo(point.x, point.y + point.z);
+            }
+          }
+          state.ctx.stroke();
+        }
+        
+        // Draw floating geometric shapes
+        const numShapes = 20;
+        for (let i = 0; i < numShapes; i++) {
+          const t = now * 0.5 + i * 100;
+          const x = Math.sin(t / 1000) * state.canvas.width * 0.4;
+          const y = Math.cos(t / 1000) * state.canvas.height * 0.3;
+          const size = 20 + Math.sin(t / 800) * 15;
+          
+          // Alternate between triangles and rectangles
+          if (i % 2 === 0) {
+            // Draw triangle
+            state.ctx.beginPath();
+            state.ctx.moveTo(x, y - size);
+            state.ctx.lineTo(x + size, y + size);
+            state.ctx.lineTo(x - size, y + size);
+            state.ctx.closePath();
+            state.ctx.fillStyle = `rgba(0, 255, 255, ${0.1 + Math.sin(t / 500) * 0.05})`;
+            state.ctx.fill();
+          } else {
+            // Draw rectangle
+            state.ctx.fillStyle = `rgba(255, 0, 255, ${0.1 + Math.cos(t / 500) * 0.05})`;
+            state.ctx.fillRect(x - size / 2, y - size / 2, size, size);
+          }
+        }
+        
+        state.ctx.restore();
         
         state.animationId = requestAnimationFrame(animate);
       }
