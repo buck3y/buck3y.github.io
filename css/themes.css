@@ -34,21 +34,21 @@
 }
 
 /* Light theme specific adjustments */
-[data-theme="light"] .service {
+[data-theme="light"] .action-btn {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-[data-theme="light"] .service:hover {
+[data-theme="light"] .action-btn:hover {
   box-shadow: 
     0 8px 24px rgba(0, 0, 0, 0.15),
     var(--glow-primary);
 }
 
-[data-theme="light"] .category {
+[data-theme="light"] .category-section {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
-[data-theme="light"] .category:hover {
+[data-theme="light"] .category-section:hover {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
 }
 
@@ -93,7 +93,7 @@
 }
 
 /* Theme-specific animations */
-[data-theme="cyberpunk"] .service:hover {
+[data-theme="cyberpunk"] .action-btn:hover {
   box-shadow: 
     0 0 20px var(--accent-primary),
     0 0 40px var(--accent-primary),
@@ -111,6 +111,6 @@
   animation: glow 2s ease-in-out infinite;
 }
 
-[data-theme="matrix"] .service::before {
+[data-theme="matrix"] .action-btn::before {
   background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
 }
