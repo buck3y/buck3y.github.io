@@ -264,6 +264,8 @@
       border-radius: 8px;
       transition: all var(--transition-speed);
       backdrop-filter: blur(5px);
+      margin-bottom: 0.6rem;
+      align-items: center;
     }
 
     .key {
@@ -271,12 +273,14 @@
       display: inline-block;
       text-align: center;
       width: 3ch;
+      font-size: 1.8rem;
       text-shadow: 0 0 5px currentColor;
     }
 
     .name {
       color: var(--color-text-subtle);
       transition: color var(--transition-speed);
+      font-size: 1.2rem;
     }
 
     .command:where(:focus, :hover) .name {
@@ -311,19 +315,10 @@
       }
     }
 
-    input,
-    button {
-      -moz-appearance: none;
-      -webkit-appearance: none;
-      background: transparent;
-      border: 0;
-      display: block;
-      outline: 0;
-    }
-
+    /* Style updates for search and suggestions */
     .dialog {
       align-items: center;
-      background: var(--color-background-overlay);
+      background: rgba(26, 26, 26, 0.95);
       backdrop-filter: blur(10px);
       border: none;
       display: none;
@@ -335,6 +330,7 @@
       top: 0;
       width: 100%;
       position: fixed;
+      z-index: 100;
     }
 
     .dialog[open] {
@@ -343,6 +339,8 @@
 
     .form {
       width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
     }
 
     .input {
@@ -353,6 +351,9 @@
       text-align: center;
       width: 100%;
       text-shadow: 0 0 10px currentColor;
+      background: transparent;
+      border: none;
+      outline: none;
     }
 
     .suggestions {
@@ -362,9 +363,10 @@
       flex-wrap: wrap;
       justify-content: center;
       list-style: none;
-      margin: var(--space-2) 0 0;
+      margin: var(--space-2) auto;
       overflow: hidden;
       padding: 0;
+      max-width: 800px;
     }
 
     .suggestion {
@@ -378,6 +380,8 @@
       z-index: 1;
       border-radius: 8px;
       backdrop-filter: blur(5px);
+      text-decoration: none;
+      display: block;
     }
 
     .suggestion:where(:focus, :hover) {
@@ -651,7 +655,21 @@
       window.addEventListener('resize', resizeCanvas);
     }
 
-    // Search functionality
+    // Enhanced Search functionality with suggestions
+    function setupSearch() {
+      const dialog = document.getElementById('searchDialog');
+      const form = document.querySelector('.form');
+      const input = document.getElementById('searchInput');
+      const suggestions = document.getElementById('suggestions');
+      
+      // Helper functions
+      function attachSearchPrefix(array, { key, splitBy }) {
+        if (!splitBy) return array;
+        return array.map((search) => `${key}${splitBy}${search}`);
+      }
+      
+      function escapeRegexCharacters(s) {
+        return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\// Search functionality
     function setupSearch() {
       const dialog = document.getElementById('searchDialog');
       const input = document.getElementById('searchInput');
@@ -708,6 +726,227 @@
         
         window.open(url, CONFIG.openLinksInNewTab ? '_blank' : '_self', 'noopener noreferrer');
         closeSearch();
+      });
+    }');
+      }
+      
+      function fetchDuckDuckGoSuggestions(search) {
+        return new Promise((resolve) => {
+          window.autocompleteCallback = (res) => {
+            const suggestions = [];
+            for (const item of res) {
+              if (item.phrase === search.toLowerCase()) continue;
+              suggestions.push(item.phrase);
+            }
+            resolve(suggestions);
+          };
+          const script = document.createElement('script');
+          document.querySelector('head').appendChild(script);
+          script.src = `https://duckduckgo.com/ac/?callback=autocompleteCallback&q=${search}`;
+          script.onload = script.remove;
+        });
+      }
+      
+      function hasProtocol(s) {
+        return /^[a-zA-Z]+:\/\//i.test(s);
+      }
+      
+      function isUrl(s) {
+        return /^((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)$/i.test(s);
+      }
+      
+      function splitUrl(url) {
+        const parser = document.createElement('a');
+        parser.href = url;
+        const baseUrl = `${parser.protocol}//${parser.hostname}`;
+        const rest = `${parser.pathname}${parser.search}`;
+        return [baseUrl, rest];
+      }
+      
+      function formatSearchUrl(url, searchPath, search) {
+        if (!searchPath) return url;
+        const [baseUrl] = splitUrl(url);
+        const urlQuery = encodeURIComponent(search);
+        searchPath = searchPath.replace(/{}/g, urlQuery);
+        return baseUrl + searchPath;
+      }
+      
+      function parseQuery(raw) {
+        const query = raw.trim();
+        if (isUrl(query)) {
+          const url = hasProtocol(query) ? query : `https://${query}`;
+          return { query, url };
+        }
+        
+        // Check command map
+        const commandMap = new Map(COMMANDS.map(([key, name, url]) => [key, { name, url }]));
+        
+        if (commandMap.has(query)) {
+          const { url } = commandMap.get(query);
+          return { key: query, query, url };
+        }
+        
+        // Try search delimiter
+        let splitBy = CONFIG.commandSearchDelimiter;
+        const [searchKey, rawSearch] = query.split(new RegExp(`${splitBy}(.*)`));
+        
+        if (commandMap.has(searchKey) && rawSearch) {
+          const { url: base } = commandMap.get(searchKey);
+          const search = rawSearch.trim();
+          const url = formatSearchUrl(base, null, search);
+          return { key: searchKey, query, search, splitBy, url };
+        }
+        
+        // Try path delimiter
+        splitBy = CONFIG.commandPathDelimiter;
+        const [pathKey, path] = query.split(new RegExp(`${splitBy}(.*)`));
+        
+        if (commandMap.has(pathKey) && path) {
+          const { url: base } = commandMap.get(pathKey);
+          const [baseUrl] = splitUrl(base);
+          const url = `${baseUrl}/${path}`;
+          return { key: pathKey, path, query, splitBy, url };
+        }
+        
+        // Default search
+        const [baseUrl, rest] = splitUrl(CONFIG.defaultSearchTemplate);
+        const url = formatSearchUrl(baseUrl, rest, query).replace(/%s/g, encodeURIComponent(query));
+        return { query, search: query, url };
+      }
+      
+      function closeSearch() {
+        input.value = '';
+        input.blur();
+        dialog.close();
+        suggestions.innerHTML = '';
+      }
+      
+      function execute(query) {
+        const { url } = parseQuery(query);
+        const target = CONFIG.openLinksInNewTab ? '_blank' : '_self';
+        window.open(url, target, 'noopener noreferrer');
+        closeSearch();
+      }
+      
+      async function onInput() {
+        const oq = parseQuery(input.value);
+        if (!oq.query) {
+          closeSearch();
+          return;
+        }
+        
+        // Get suggestions
+        let suggestionList = [];
+        if (oq.search && suggestionList.length < CONFIG.suggestionLimit) {
+          const res = await fetchDuckDuckGoSuggestions(oq.search);
+          const formatted = attachSearchPrefix(res, oq);
+          suggestionList = suggestionList.concat(formatted);
+        }
+        
+        const nq = parseQuery(input.value);
+        if (nq.query !== oq.query) return;
+        
+        renderSuggestions(suggestionList, oq.query);
+      }
+      
+      function renderSuggestions(suggestions, query) {
+        suggestions.innerHTML = '';
+        const sliced = suggestions.slice(0, CONFIG.suggestionLimit);
+        
+        for (const [index, suggestion] of sliced.entries()) {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.className = 'suggestion';
+          a.dataset.index = index;
+          a.dataset.suggestion = suggestion;
+          a.href = '#';
+          a.tabIndex = 0;
+          
+          const escapedQuery = escapeRegexCharacters(query);
+          const matched = suggestion.match(new RegExp(escapedQuery, 'i'));
+          
+          if (matched) {
+            const pre = suggestion.slice(0, matched.index);
+            const match = suggestion.slice(matched.index, matched.index + matched[0].length);
+            const post = suggestion.slice(matched.index + matched[0].length);
+            
+            a.innerHTML = pre;
+            const matchSpan = document.createElement('span');
+            matchSpan.className = 'match';
+            matchSpan.innerText = match;
+            a.appendChild(matchSpan);
+            a.innerHTML += post;
+          } else {
+            a.innerText = suggestion;
+          }
+          
+          li.appendChild(a);
+          suggestions.appendChild(li);
+        }
+      }
+      
+      function focusNextSuggestion(previous = false) {
+        const active = document.activeElement;
+        let nextIndex;
+        
+        if (active.dataset && active.dataset.index) {
+          const activeIndex = Number(active.dataset.index);
+          nextIndex = previous ? activeIndex - 1 : activeIndex + 1;
+        } else {
+          nextIndex = previous ? suggestions.childElementCount - 1 : 0;
+        }
+        
+        const next = suggestions.children[nextIndex];
+        if (next) next.querySelector('.suggestion').focus();
+        else input.focus();
+      }
+      
+      // Setup event listeners
+      input.addEventListener('input', onInput);
+      
+      suggestions.addEventListener('click', (e) => {
+        e.preventDefault();
+        const suggestion = e.target.closest('.suggestion');
+        if (!suggestion) return;
+        execute(suggestion.dataset.suggestion);
+      });
+      
+      document.addEventListener('keydown', (e) => {
+        if (!dialog.open) {
+          dialog.show();
+          input.focus();
+          requestAnimationFrame(() => {
+            if (!input.value) closeSearch();
+          });
+          return;
+        }
+        
+        if (e.key === 'Escape') {
+          closeSearch();
+          return;
+        }
+        
+        const alt = e.altKey ? 'alt-' : '';
+        const ctrl = e.ctrlKey ? 'ctrl-' : '';
+        const meta = e.metaKey ? 'meta-' : '';
+        const shift = e.shiftKey ? 'shift-' : '';
+        const modifierPrefixedKey = `${alt}${ctrl}${meta}${shift}${e.key}`;
+        
+        if (/^(ArrowDown|Tab|ctrl-n)$/.test(modifierPrefixedKey)) {
+          e.preventDefault();
+          focusNextSuggestion();
+          return;
+        }
+        
+        if (/^(ArrowUp|ctrl-p|shift-Tab)$/.test(modifierPrefixedKey)) {
+          e.preventDefault();
+          focusNextSuggestion(true);
+        }
+      });
+      
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        execute(input.value);
       });
     }
 
