@@ -1,145 +1,1777 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="color-scheme" content="dark light" />
-  <title>Room300: Command Center</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark light">
+  <meta name="robots" content="noindex">
+  <title>CHOOCH.NET | Command Center</title>
   <style>
     :root {
-      --bg: #0d0d0d;
-      --text-primary: #70ff00;
-      --text-secondary: #999;
-      --accent: #8f00ff;
-      --card-bg: #1a1a1a;
-      --border: rgba(255, 255, 255, 0.1);
-      --font: 'JetBrains Mono', monospace;
+      /* Core color palette - cyberpunk neon with depth */
+      --color-background: #0a0a0f;
+      --color-background-alt: #12121a;
+      --color-background-overlay: rgba(6, 6, 12, 0.8);
+      --color-primary: #00f0ff;
+      --color-secondary: #ff0055;
+      --color-tertiary: #e1ff00;
+      --color-quaternary: #9000ff;
+      --color-text: #e0e0e2;
+      --color-text-dim: rgba(224, 224, 226, 0.65);
+      --color-text-bright: #ffffff;
+      
+      /* Command categories */
+      --color-media: #ff0055;
+      --color-productivity: #00f0ff;
+      --color-social: #9000ff;
+      --color-tools: #e1ff00;
+      --color-system: #00ff73;
+      
+      /* UI elements */
+      --color-terminal: #000711;
+      --color-terminal-text: #00f0ff;
+      --color-glass: rgba(255, 255, 255, 0.07);
+      --color-glass-hover: rgba(255, 255, 255, 0.12);
+      --color-glass-border: rgba(255, 255, 255, 0.1);
+      
+      /* Fonts */
+      --font-main: 'JetBrains Mono', 'Fira Code', monospace;
+      --font-display: 'Orbitron', 'Rajdhani', sans-serif;
+      --font-size-xs: 0.75rem;
+      --font-size-sm: 0.875rem;
+      --font-size-md: 1rem;
+      --font-size-lg: 1.25rem;
+      --font-size-xl: 1.75rem;
+      --font-size-xxl: 3rem;
+      
+      /* Spacing */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-xxl: 4rem;
+      
+      /* Effects */
+      --glow-primary: 0 0 10px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.2);
+      --glow-secondary: 0 0 10px rgba(255, 0, 85, 0.5), 0 0 20px rgba(255, 0, 85, 0.2);
+      --glow-tertiary: 0 0 10px rgba(225, 255, 0, 0.5), 0 0 20px rgba(225, 255, 0, 0.2);
+      --glow-quaternary: 0 0 10px rgba(144, 0, 255, 0.5), 0 0 20px rgba(144, 0, 255, 0.2);
+      
+      /* Animations */
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+      
+      /* Borders & Shadows */
+      --border-radius-sm: 4px;
+      --border-radius-md: 8px;
+      --border-radius-lg: 12px;
+      --border-radius-xl: 20px;
+      
+      --shadow-subtle: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-medium: 0 10px 15px rgba(0, 0, 0, 0.2);
+      --shadow-strong: 0 15px 25px rgba(0, 0, 0, 0.3);
+      
+      /* Z-index layers */
+      --z-background: -10;
+      --z-base: 1;
+      --z-overlay: 10;
+      --z-modal: 100;
+      --z-tooltip: 200;
+      --z-highest: 9999;
     }
-
-    body {
+    
+    /* Imported fonts */
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Orbitron:wght@400;600;900&family=Rajdhani:wght@500;700&display=swap');
+    
+    /* Core resets */
+    * {
       margin: 0;
       padding: 0;
-      background: var(--bg);
-      font-family: var(--font);
-      color: var(--text-primary);
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      height: 100vh;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%;
+      width: 100%;
       overflow: hidden;
+      background-color: var(--color-background);
+      color: var(--color-text);
+      font-family: var(--font-main);
+      font-size: 16px;
+      line-height: 1.5;
     }
-
-    nav {
-      background: var(--card-bg);
-      border-right: 1px solid var(--border);
-      padding: 2rem 1rem;
-      overflow-y: auto;
-    }
-
-    nav h1 {
-      color: var(--accent);
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-    }
-
-    nav ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    nav li {
-      margin: 0.5rem 0;
-    }
-
-    nav a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
-      transition: background 0.2s;
-    }
-
-    nav a:hover {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .main {
+    
+    body {
       position: relative;
-      padding: 2rem;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
     }
-
-    .search-bar {
-      width: 100%;
-      max-width: 600px;
-      position: relative;
+    
+    a {
+      color: inherit;
+      text-decoration: none;
     }
-
-    .search-bar input {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1.2rem;
+    
+    button, input {
+      font-family: inherit;
       border: none;
-      border-radius: 0.5rem;
-      background: var(--card-bg);
-      color: var(--text-primary);
+      background: none;
+      color: inherit;
+      outline: none;
     }
-
-    .clock {
-      margin-top: 2rem;
-      font-size: 2rem;
-      color: var(--text-secondary);
+    
+    ul, ol {
+      list-style: none;
     }
-
-    .rain {
+    
+    /* Dynamic background */
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: var(--z-background);
+      overflow: hidden;
+    }
+    
+    .bg-grid {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+      background-size: 50px 50px;
+      background-image:
+        linear-gradient(to right, rgba(40, 40, 60, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(40, 40, 60, 0.05) 1px, transparent 1px);
+      transform-origin: center;
+      animation: grid-drift 120s linear infinite;
+    }
+    
+    @keyframes grid-drift {
+      0% {
+        transform: perspective(1000px) rotateX(60deg) translateY(0);
+      }
+      100% {
+        transform: perspective(1000px) rotateX(60deg) translateY(50px);
+      }
+    }
+    
+    .bg-radial {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(255, 0, 85, 0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 20% 80%, rgba(225, 255, 0, 0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(144, 0, 255, 0.08) 0%, transparent 50%);
+    }
+    
+    .bg-scanlines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, 
+                  transparent 50%, 
+                  rgba(10, 10, 15, 0.02) 50%);
+      background-size: 100% 4px;
       pointer-events: none;
+      opacity: 0.2;
+    }
+    
+    .particles-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      display: block;
+      pointer-events: none;
+      opacity: 0;
+      border-radius: 50%;
+      animation: float 10s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0% {
+        opacity: 0;
+        transform: translateY(100vh) translateX(0px);
+      }
+      10% {
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100px) translateX(50px);
+      }
+    }
+    
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: var(--space-lg) var(--space-md);
+      margin-top: var(--space-md);
+      position: relative;
+      z-index: var(--z-base);
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      position: relative;
+      margin-bottom: var(--space-md);
+    }
+    
+    .brand-logo {
+      font-family: var(--font-display);
+      font-size: var(--font-size-xxl);
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-text-bright);
+      text-shadow: var(--glow-primary);
+      position: relative;
+      user-select: none;
+      white-space: nowrap;
+    }
+    
+    .brand-logo::before,
+    .brand-logo::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: -1;
+    }
+    
+    .brand-logo::before {
+      color: var(--color-secondary);
+      animation: glitch-1 4s infinite linear alternate-reverse;
+    }
+    
+    .brand-logo::after {
+      color: var(--color-tertiary);
+      animation: glitch-2 3s infinite linear alternate-reverse;
+    }
+    
+    @keyframes glitch-1 {
+      0%, 100% { transform: translate(0); }
+      34% { transform: translate(-5px, 2px); }
+      68% { transform: translate(5px, -2px); }
+      84% { transform: translate(1px, 3px); }
+    }
+    
+    @keyframes glitch-2 {
+      0%, 100% { transform: translate(0); }
+      33% { transform: translate(5px, -2px); }
+      67% { transform: translate(-3px, 1px); }
+      83% { transform: translate(2px, 3px); }
+    }
+    
+    .brand-tagline {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: var(--space-xs);
+    }
+    
+    /* Main content */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 var(--space-md) var(--space-lg);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-glass) transparent;
+      position: relative;
+      z-index: var(--z-base);
+      margin-top: var(--space-sm);
+    }
+    
+    /* Clock and date */
+    .time-widget {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-lg);
+      pointer-events: none;
+    }
+    
+    .digital-clock {
+      font-family: var(--font-display);
+      font-size: var(--font-size-xl);
+      color: var(--color-primary);
+      text-shadow: var(--glow-primary);
+      letter-spacing: 0.05em;
+    }
+    
+    .date-display {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-dim);
+      margin-top: var(--space-xs);
+    }
+    
+    /* Terminal input & search */
+    .terminal-container {
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: var(--space-lg);
+    }
+    
+    .terminal {
+      background: var(--color-terminal);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-md);
+      display: flex;
+      border: 1px solid var(--color-primary);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+      transition: all var(--transition-normal);
+    }
+    
+    .terminal:focus-within {
+      box-shadow: var(--glow-primary);
+    }
+    
+    .terminal-prefix {
+      color: var(--color-primary);
+      margin-right: var(--space-sm);
+      user-select: none;
+      font-weight: bold;
+    }
+    
+    .terminal-input {
+      flex: 1;
+      background: transparent;
+      color: var(--color-terminal-text);
+      caret-color: var(--color-primary);
+      font-family: var(--font-main);
+      font-size: var(--font-size-md);
+      border: none;
+      outline: none;
+      width: 100%;
+    }
+    
+    /* Command categories */
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-md);
+      width: 100%;
+      max-width: 1200px;
+      margin-bottom: var(--space-xl);
+    }
+    
+    .category {
+      flex: 1;
+      min-width: 200px;
+      max-width: 280px;
+      background: var(--color-glass);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--color-glass-border);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+      transition: all var(--transition-normal);
+    }
+    
+    .category:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .category-header {
+      display: flex;
+      align-items: center;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--color-glass-border);
+      color: var(--color-text-bright);
+    }
+    
+    .category-icon {
+      margin-right: var(--space-sm);
+      font-size: var(--font-size-lg);
+    }
+    
+    .category-title {
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: var(--font-size-sm);
+    }
+    
+    .command-list {
+      padding: var(--space-sm);
+    }
+    
+    .command {
+      display: flex;
+      align-items: center;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--border-radius-sm);
+      transition: all var(--transition-fast);
+    }
+    
+    .command:hover {
+      background: var(--color-glass-hover);
+    }
+    
+    .command-icon {
+      margin-right: var(--space-sm);
+      font-size: var(--font-size-md);
+      transition: all var(--transition-fast);
+    }
+    
+    .command-name {
+      flex: 1;
+      font-size: var(--font-size-sm);
+      transition: all var(--transition-fast);
+    }
+    
+    .command-shortcut {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-dim);
+      padding: var(--space-xs);
+      border-radius: var(--border-radius-sm);
+      background: rgba(255, 255, 255, 0.05);
+      transition: all var(--transition-fast);
+    }
+    
+    /* Category themes */
+    .category-media .category-header {
+      color: var(--color-media);
+    }
+    
+    .category-media:hover {
+      box-shadow: 0 10px 20px rgba(255, 0, 85, 0.15);
+    }
+    
+    .category-productivity .category-header {
+      color: var(--color-productivity);
+    }
+    
+    .category-productivity:hover {
+      box-shadow: 0 10px 20px rgba(0, 240, 255, 0.15);
+    }
+    
+    .category-social .category-header {
+      color: var(--color-social);
+    }
+    
+    .category-social:hover {
+      box-shadow: 0 10px 20px rgba(144, 0, 255, 0.15);
+    }
+    
+    .category-tools .category-header {
+      color: var(--color-tertiary);
+    }
+    
+    .category-tools:hover {
+      box-shadow: 0 10px 20px rgba(225, 255, 0, 0.15);
+    }
+    
+    .category-system .category-header {
+      color: var(--color-system);
+    }
+    
+    .category-system:hover {
+      box-shadow: 0 10px 20px rgba(0, 255, 115, 0.15);
+    }
+    
+    /* Command hover effects */
+    .category-media .command:hover .command-icon,
+    .category-media .command:hover .command-name {
+      color: var(--color-media);
+    }
+    
+    .category-productivity .command:hover .command-icon,
+    .category-productivity .command:hover .command-name {
+      color: var(--color-productivity);
+    }
+    
+    .category-social .command:hover .command-icon,
+    .category-social .command:hover .command-name {
+      color: var(--color-social);
+    }
+    
+    .category-tools .command:hover .command-icon,
+    .category-tools .command:hover .command-name {
+      color: var(--color-tertiary);
+    }
+    
+    .category-system .command:hover .command-icon,
+    .category-system .command:hover .command-name {
+      color: var(--color-system);
+    }
+    
+    /* System stats */
+    .system-stats {
+      position: fixed;
+      bottom: var(--space-md);
+      right: var(--space-md);
+      display: flex;
+      align-items: center;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--color-glass);
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--color-glass-border);
+      backdrop-filter: blur(10px);
+      font-size: var(--font-size-xs);
+      color: var(--color-text-dim);
+      z-index: var(--z-overlay);
+    }
+    
+    .stat {
+      display: flex;
+      align-items: center;
+      margin-right: var(--space-md);
+    }
+    
+    .stat:last-child {
+      margin-right: 0;
+    }
+    
+    .stat-icon {
+      margin-right: var(--space-xs);
+      font-size: var(--font-size-sm);
+    }
+    
+    /* Search suggestions */
+    .search-results {
+      background: var(--color-terminal);
+      border: 1px solid var(--color-primary);
+      border-top: none;
+      border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+      margin-top: -5px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition-fast);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .search-results.visible {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .search-suggestion {
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .search-suggestion:hover {
+      background: rgba(0, 240, 255, 0.1);
+    }
+    
+    .suggestion-icon {
+      margin-right: var(--space-sm);
+      color: var(--color-text-dim);
+    }
+    
+    .suggestion-text {
+      color: var(--color-text);
+    }
+    
+    .suggestion-match {
+      color: var(--color-primary);
+    }
+    
+    /* Weather widget */
+    .weather-widget {
+      position: fixed;
+      top: var(--space-md);
+      right: var(--space-md);
+      display: flex;
+      align-items: center;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--color-glass);
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--color-glass-border);
+      backdrop-filter: blur(10px);
+      font-size: var(--font-size-sm);
+      z-index: var(--z-overlay);
+    }
+    
+    .weather-icon {
+      font-size: var(--font-size-lg);
+      margin-right: var(--space-sm);
+      color: var(--color-tertiary);
+    }
+    
+    .weather-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .weather-temp {
+      font-weight: 600;
+      color: var(--color-text-bright);
+    }
+    
+    .weather-location {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-dim);
+    }
+    
+    /* Modal & dialog */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--color-background-overlay);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: var(--z-modal);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-normal);
+    }
+    
+    .modal.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .dialog {
+      background: var(--color-background-alt);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--color-glass-border);
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: var(--space-lg);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all var(--transition-normal);
+    }
+    
+    .modal.visible .dialog {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .dialog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--color-glass-border);
+    }
+    
+    .dialog-title {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      color: var(--color-text-bright);
+    }
+    
+    .dialog-close {
+      background: none;
+      border: none;
+      color: var(--color-text-dim);
+      cursor: pointer;
+      font-size: var(--font-size-lg);
+      transition: color var(--transition-fast);
+    }
+    
+    .dialog-close:hover {
+      color: var(--color-text-bright);
+    }
+    
+    .dialog-content {
+      margin-bottom: var(--space-lg);
+    }
+    
+    .dialog-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--space-md);
+    }
+    
+    .btn {
+      background: var(--color-glass);
+      border: 1px solid var(--color-glass-border);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-sm) var(--space-lg);
+      color: var(--color-text);
+      font-family: var(--font-main);
+      font-size: var(--font-size-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .btn:hover {
+      background: var(--color-glass-hover);
+    }
+    
+    .btn-primary {
+      background: var(--color-primary);
+      color: var(--color-terminal);
+      border: none;
+    }
+    
+    .btn-primary:hover {
+      background: var(--color-primary);
+      box-shadow: var(--glow-primary);
+    }
+    
+    /* Konami code easter egg */
+    .konami {
+      position: fixed;
+      bottom: var(--space-md);
+      left: var(--space-md);
+      color: var(--color-text-dim);
+      font-size: var(--font-size-xs);
+      opacity: 0.3;
+      transition: opacity var(--transition-normal);
+      z-index: var(--z-overlay);
+    }
+    
+    .konami:hover {
+      opacity: 1;
+      color: var(--color-secondary);
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .categories {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .category {
+        width: 100%;
+        max-width: 100%;
+      }
+      
+      .weather-widget {
+        display: none;
+      }
+      
+      .system-stats {
+        width: 100%;
+        justify-content: center;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-radius: 0;
+      }
+      
+      .brand-logo {
+        font-size: var(--font-size-xl);
+      }
+    }
+    
+    /* Animations */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    /* Theme toggle */
+    .theme-toggle {
+      position: fixed;
+      top: var(--space-md);
+      left: var(--space-md);
+      background: var(--color-glass);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-glass-border);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      z-index: var(--z-overlay);
+      transition: all var(--transition-normal);
+    }
+    
+    .theme-toggle:hover {
+      background: var(--color-glass-hover);
+      transform: rotate(45deg);
+    }
+    
+    .theme-icon {
+      font-size: var(--font-size-md);
+      color: var(--color-quaternary);
+    }
+    
+    /* Tooltip */
+    [data-tooltip] {
+      position: relative;
+    }
+    
+    [data-tooltip]:before {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-5px);
+      background: var(--color-background-overlay);
+      color: var(--color-text);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--border-radius-sm);
+      font-size: var(--font-size-xs);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: all var(--transition-fast);
+      z-index: var(--z-tooltip);
+    }
+    
+    [data-tooltip]:hover:before {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-10px);
     }
   </style>
 </head>
 <body>
-  <nav>
-    <h1>Room300</h1>
-    <ul>
-      <li><a href="https://mail.tutanota.com">📬 Tutanota</a></li>
-      <li><a href="https://zemail.me">📬 Temp Mail</a></li>
-      <li><a href="https://rss.room300.net">🛜 RSS</a></li>
-      <li><a href="https://drive.room300.net">📂 Drive</a></li>
-      <li><a href="https://notebook.room300.net">📔 Notebook</a></li>
-      <li><a href="https://jukebox.room300.net">🎵 Jukebox</a></li>
-      <li><a href="https://tv.room300.net">📺 Jellyfin</a></li>
-      <li><a href="https://photos.room300.net">📷 Photos</a></li>
-      <li><a href="https://real-debrid.com">🗄️ Debrid</a></li>
-      <li><a href="https://bin.room300.net">🗑️ Bin</a></li>
-      <li><a href="https://admin.room300.net">🧑‍💻 Admin</a></li>
-    </ul>
-  </nav>
-  <main class="main">
-    <div class="search-bar">
-      <input type="text" placeholder="Enter command or search..." autofocus />
+  <!-- Dynamic background -->
+  <div class="background">
+    <div class="bg-grid"></div>
+    <div class="bg-radial"></div>
+    <div class="bg-scanlines"></div>
+    <div class="particles-container" id="particles"></div>
+  </div>
+  
+  <!-- Theme toggle -->
+  <div class="theme-toggle" id="theme-toggle" data-tooltip="Toggle theme">
+    <div class="theme-icon">☯</div>
+  </div>
+  
+  <!-- Weather widget -->
+  <div class="weather-widget">
+    <div class="weather-icon">☀️</div>
+    <div class="weather-info">
+      <div class="weather-temp">72°F</div>
+      <div class="weather-location">Your Location</div>
     </div>
-    <div class="clock" id="clock"></div>
-    <canvas class="rain"></canvas>
+  </div>
+  
+  <!-- Header with branding -->
+  <header class="header">
+    <div class="brand">
+      <div class="brand-logo" data-text="CHOOCH.NET">CHOOCH.NET</div>
+      <div class="brand-tagline">PERSONAL COMMAND CENTER</div>
+    </div>
+  </header>
+  
+  <!-- Main content area -->
+  <main class="main">
+    <!-- Clock widget -->
+    <div class="time-widget">
+      <div class="digital-clock" id="clock">00:00:00</div>
+      <div class="date-display" id="date">Tuesday, May 20, 2025</div>
+    </div>
+    
+    <!-- Terminal input -->
+    <div class="terminal-container">
+      <div class="terminal">
+        <span class="terminal-prefix">></span>
+        <input type="text" class="terminal-input" id="terminal-input" placeholder="Type a command or search..." autofocus>
+      </div>
+      <div class="search-results" id="search-results"></div>
+    </div>
+    
+    <!-- Command categories -->
+    <div class="categories">
+      <!-- Media category -->
+      <div class="category category-media">
+        <div class="category-header">
+          <span class="category-icon">🎬</span>
+          <h2 class="category-title">Media</h2>
+        </div>
+        <div class="command-list">
+          <a href="https://tv.chooch.net" class="command">
+            <span class="command-icon">📺</span>
+            <span class="command-name">Jellyfin</span>
+            <span class="command-shortcut">tv</span>
+          </a>
+          <a href="https://jukebox.chooch.net" class="command">
+            <span class="command-icon">🎵</span>
+            <span class="command-name">Jukebox</span>
+            <span class="command-shortcut">j</span>
+          </a>
+          <a href="https://music.youtube.com" class="command">
+            <span class="command-icon">🎧</span>
+            <span class="command-name">YT Music</span>
+            <span class="command-shortcut">ytm</span>
+          </a>
+          <a href="https://youtube.com" class="command">
+            <span class="command-icon">▶️</span>
+            <span class="command-name">YouTube</span>
+            <span class="command-shortcut">yt</span>
+          </a>
+          <a href="https://photos.chooch.net" class="command">
+            <span class="command-icon">📷</span>
+            <span class="command-name">Photos</span>
+            <span class="command-shortcut">ph</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Productivity category -->
+      <div class="category category-productivity">
+        <div class="category-header">
+          <span class="category-icon">⚡</span>
+          <h2 class="category-title">Productivity</h2>
+        </div>
+        <div class="command-list">
+          <a href="https://drive.chooch.net" class="command">
+            <span class="command-icon">📂</span>
+            <span class="command-name">Drive</span>
+            <span class="command-shortcut">d</span>
+          </a>
+          <a href="https://notebook.chooch.net" class="command">
+            <span class="command-icon">📔</span>
+            <span class="command-name">Notebook</span>
+            <span class="command-shortcut">nb</span>
+          </a>
+          <a href="https://calendar.google.com" class="command">
+            <span class="command-icon">📅</span>
+            <span class="command-name">Calendar</span>
+            <span class="command-shortcut">cal</span>
+          </a>
+          <a href="https://tasks.google.com" class="command">
+            <span class="command-icon">✓</span>
+            <span class="command-name">Tasks</span>
+            <span class="command-shortcut">t</span>
+          </a>
+          <a href="https://code.visualstudio.com" class="command">
+            <span class="command-icon">🧩</span>
+            <span class="command-name">VS Code</span>
+            <span class="command-shortcut">code</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Social category -->
+      <div class="category category-social">
+        <div class="category-header">
+          <span class="category-icon">💬</span>
+          <h2 class="category-title">Social</h2>
+        </div>
+        <div class="command-list">
+          <a href="https://mail.tutanota.com" class="command">
+            <span class="command-icon">📬</span>
+            <span class="command-name">Tutanota</span>
+            <span class="command-shortcut">tu</span>
+          </a>
+          <a href="https://webmail.disroot.org/" class="command">
+            <span class="command-icon">📧</span>
+            <span class="command-name">Disroot</span>
+            <span class="command-shortcut">dr</span>
+          </a>
+          <a href="https://discord.com/app" class="command">
+            <span class="command-icon">👾</span>
+            <span class="command-name">Discord</span>
+            <span class="command-shortcut">dc</span>
+          </a>
+          <a href="https://signal.org/download" class="command">
+            <span class="command-icon">📱</span>
+            <span class="command-name">Signal</span>
+            <span class="command-shortcut">sig</span>
+          </a>
+          <a href="https://zemail.me/" class="command">
+            <span class="command-icon">💌</span>
+            <span class="command-name">Temp Mail</span>
+            <span class="command-shortcut">tm</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Tools category -->
+      <div class="category category-tools">
+        <div class="category-header">
+          <span class="category-icon">🔧</span>
+          <h2 class="category-title">Tools</h2>
+        </div>
+        <div class="command-list">
+          <a href="https://ipleak.net/" class="command">
+            <span class="command-icon">📍</span>
+            <span class="command-name">IP Location</span>
+            <span class="command-shortcut">ip</span>
+          </a>
+          <a href="https://real-debrid.com/speedtest" class="command">
+            <span class="command-icon">🪛</span>
+            <span class="command-name">Speedtest</span>
+            <span class="command-shortcut">st</span>
+          </a>
+          <a href="https://bin.chooch.net" class="command">
+            <span class="command-icon">🗑️</span>
+            <span class="command-name">Bin</span>
+            <span class="command-shortcut">bin</span>
+          </a>
+          <a href="https://rss.chooch.net" class="command">
+            <span class="command-icon">🛜</span>
+            <span class="command-name">RSS</span>
+            <span class="command-shortcut">rss</span>
+          </a>
+          <a href="https://translate.google.com" class="command">
+            <span class="command-icon">🔤</span>
+            <span class="command-name">Translate</span>
+            <span class="command-shortcut">tr</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- System category -->
+      <div class="category category-system">
+        <div class="category-header">
+          <span class="category-icon">⚙️</span>
+          <h2 class="category-title">System</h2>
+        </div>
+        <div class="command-list">
+          <a href="https://admin.chooch.net" class="command">
+            <span class="command-icon">🧑‍💻</span>
+            <span class="command-name">Admin</span>
+            <span class="command-shortcut">a</span>
+          </a>
+          <a href="https://seedbox.chooch.net" class="command">
+            <span class="command-icon">📡</span>
+            <span class="command-name">Seedbox</span>
+            <span class="command-shortcut">sb</span>
+          </a>
+          <a href="https://soulseek.chooch.net" class="command">
+            <span class="command-icon">🔍</span>
+            <span class="command-name">Soulseek</span>
+            <span class="command-shortcut">sl</span>
+          </a>
+          <a href="https://real-debrid.com/" class="command">
+            <span class="command-icon">🗄️</span>
+            <span class="command-name">Debrid</span>
+            <span class="command-shortcut">rd</span>
+          </a>
+          <a href="#" class="command" id="customize-btn">
+            <span class="command-icon">🎨</span>
+            <span class="command-name">Customize</span>
+            <span class="command-shortcut">edit</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </main>
+  
+  <!-- System stats -->
+  <div class="system-stats">
+    <div class="stat">
+      <span class="stat-icon">⏱️</span>
+      <span class="stat-value" id="uptime">Uptime: 24d 12h 36m</span>
+    </div>
+    <div class="stat">
+      <span class="stat-icon">📊</span>
+      <span class="stat-value" id="cpu">CPU: 12%</span>
+    </div>
+    <div class="stat">
+      <span class="stat-icon">💾</span>
+      <span class="stat-value" id="memory">RAM: 3.2/16GB</span>
+    </div>
+    <div class="stat">
+      <span class="stat-icon">💿</span>
+      <span class="stat-value" id="storage">Storage: 1.2TB/4TB</span>
+    </div>
+  </div>
+  
+  <!-- Konami code easter egg -->
+  <div class="konami">↑↑↓↓←→←→BA</div>
+  
+  <!-- Customize modal -->
+  <div class="modal" id="customize-modal">
+    <div class="dialog">
+      <div class="dialog-header">
+        <h3 class="dialog-title">Customize Chooch.net</h3>
+        <button class="dialog-close" id="close-modal">×</button>
+      </div>
+      <div class="dialog-content">
+        <p>Customize your command center experience by editing settings, changing themes, or adding new command shortcuts.</p>
+        <div style="margin-top: 20px;">
+          <h4 style="margin-bottom: 10px;">Color Theme</h4>
+          <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button class="btn" data-theme="cyberpunk">Cyberpunk</button>
+            <button class="btn" data-theme="synthwave">Synthwave</button>
+            <button class="btn" data-theme="terminal">Terminal</button>
+            <button class="btn" data-theme="midnight">Midnight</button>
+          </div>
+          
+          <h4 style="margin-bottom: 10px;">Background Effects</h4>
+          <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <label style="display: flex; align-items: center; margin-right: 15px;">
+              <input type="checkbox" checked id="toggle-grid"> Grid
+            </label>
+            <label style="display: flex; align-items: center; margin-right: 15px;">
+              <input type="checkbox" checked id="toggle-particles"> Particles
+            </label>
+            <label style="display: flex; align-items: center;">
+              <input type="checkbox" checked id="toggle-scanlines"> Scanlines
+            </label>
+          </div>
+          
+          <h4 style="margin-bottom: 10px;">Layout</h4>
+          <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button class="btn" data-layout="grid">Grid</button>
+            <button class="btn" data-layout="list">List</button>
+            <button class="btn" data-layout="compact">Compact</button>
+          </div>
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button class="btn" id="cancel-customize">Cancel</button>
+        <button class="btn btn-primary" id="save-customize">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
   <script>
+    // DOM Elements
+    const terminalInput = document.getElementById('terminal-input');
+    const searchResults = document.getElementById('search-results');
+    const clockElement = document.getElementById('clock');
+    const dateElement = document.getElementById('date');
+    const customizeBtn = document.getElementById('customize-btn');
+    const customizeModal = document.getElementById('customize-modal');
+    const closeModalBtn = document.getElementById('close-modal');
+    const cancelCustomizeBtn = document.getElementById('cancel-customize');
+    const saveCustomizeBtn = document.getElementById('save-customize');
+    const themeToggle = document.getElementById('theme-toggle');
+    const particlesContainer = document.getElementById('particles');
+    
+    // Commands and shortcuts mapping
+    const commands = new Map([
+      // Media commands
+      ['tv', { name: 'Jellyfin', url: 'https://tv.chooch.net', icon: '📺', category: 'media' }],
+      ['jukebox', { name: 'Jukebox', url: 'https://jukebox.chooch.net', icon: '🎵', category: 'media' }],
+      ['j', { name: 'Jukebox', url: 'https://jukebox.chooch.net', icon: '🎵', category: 'media' }],
+      ['ytm', { name: 'YT Music', url: 'https://music.youtube.com', icon: '🎧', category: 'media' }],
+      ['yt', { name: 'YouTube', url: 'https://youtube.com', icon: '▶️', category: 'media' }],
+      ['photos', { name: 'Photos', url: 'https://photos.chooch.net', icon: '📷', category: 'media' }],
+      ['ph', { name: 'Photos', url: 'https://photos.chooch.net', icon: '📷', category: 'media' }],
+      
+      // Productivity commands
+      ['drive', { name: 'Drive', url: 'https://drive.chooch.net', icon: '📂', category: 'productivity' }],
+      ['d', { name: 'Drive', url: 'https://drive.chooch.net', icon: '📂', category: 'productivity' }],
+      ['notebook', { name: 'Notebook', url: 'https://notebook.chooch.net', icon: '📔', category: 'productivity' }],
+      ['nb', { name: 'Notebook', url: 'https://notebook.chooch.net', icon: '📔', category: 'productivity' }],
+      ['calendar', { name: 'Calendar', url: 'https://calendar.google.com', icon: '📅', category: 'productivity' }],
+      ['cal', { name: 'Calendar', url: 'https://calendar.google.com', icon: '📅', category: 'productivity' }],
+      ['tasks', { name: 'Tasks', url: 'https://tasks.google.com', icon: '✓', category: 'productivity' }],
+      ['t', { name: 'Tasks', url: 'https://tasks.google.com', icon: '✓', category: 'productivity' }],
+      ['code', { name: 'VS Code', url: 'https://code.visualstudio.com', icon: '🧩', category: 'productivity' }],
+      
+      // Social commands
+      ['tutanota', { name: 'Tutanota', url: 'https://mail.tutanota.com', icon: '📬', category: 'social' }],
+      ['tu', { name: 'Tutanota', url: 'https://mail.tutanota.com', icon: '📬', category: 'social' }],
+      ['disroot', { name: 'Disroot', url: 'https://webmail.disroot.org/', icon: '📧', category: 'social' }],
+      ['dr', { name: 'Disroot', url: 'https://webmail.disroot.org/', icon: '📧', category: 'social' }],
+      ['discord', { name: 'Discord', url: 'https://discord.com/app', icon: '👾', category: 'social' }],
+      ['dc', { name: 'Discord', url: 'https://discord.com/app', icon: '👾', category: 'social' }],
+      ['signal', { name: 'Signal', url: 'https://signal.org/download', icon: '📱', category: 'social' }],
+      ['sig', { name: 'Signal', url: 'https://signal.org/download', icon: '📱', category: 'social' }],
+      ['tempmail', { name: 'Temp Mail', url: 'https://zemail.me/', icon: '💌', category: 'social' }],
+      ['tm', { name: 'Temp Mail', url: 'https://zemail.me/', icon: '💌', category: 'social' }],
+      
+      // Tools commands
+      ['iplocation', { name: 'IP Location', url: 'https://ipleak.net/', icon: '📍', category: 'tools' }],
+      ['ip', { name: 'IP Location', url: 'https://ipleak.net/', icon: '📍', category: 'tools' }],
+      ['speedtest', { name: 'Speedtest', url: 'https://real-debrid.com/speedtest', icon: '🪛', category: 'tools' }],
+      ['st', { name: 'Speedtest', url: 'https://real-debrid.com/speedtest', icon: '🪛', category: 'tools' }],
+      ['bin', { name: 'Bin', url: 'https://bin.chooch.net', icon: '🗑️', category: 'tools' }],
+      ['rss', { name: 'RSS', url: 'https://rss.chooch.net', icon: '🛜', category: 'tools' }],
+      ['translate', { name: 'Translate', url: 'https://translate.google.com', icon: '🔤', category: 'tools' }],
+      ['tr', { name: 'Translate', url: 'https://translate.google.com', icon: '🔤', category: 'tools' }],
+      
+      // System commands
+      ['admin', { name: 'Admin', url: 'https://admin.chooch.net', icon: '🧑‍💻', category: 'system' }],
+      ['a', { name: 'Admin', url: 'https://admin.chooch.net', icon: '🧑‍💻', category: 'system' }],
+      ['seedbox', { name: 'Seedbox', url: 'https://seedbox.chooch.net', icon: '📡', category: 'system' }],
+      ['sb', { name: 'Seedbox', url: 'https://seedbox.chooch.net', icon: '📡', category: 'system' }],
+      ['soulseek', { name: 'Soulseek', url: 'https://soulseek.chooch.net', icon: '🔍', category: 'system' }],
+      ['sl', { name: 'Soulseek', url: 'https://soulseek.chooch.net', icon: '🔍', category: 'system' }],
+      ['debrid', { name: 'Debrid', url: 'https://real-debrid.com/', icon: '🗄️', category: 'system' }],
+      ['rd', { name: 'Debrid', url: 'https://real-debrid.com/', icon: '🗄️', category: 'system' }],
+      ['customize', { name: 'Customize', url: '#', icon: '🎨', category: 'system', action: 'openCustomize' }],
+      ['edit', { name: 'Customize', url: '#', icon: '🎨', category: 'system', action: 'openCustomize' }],
+      
+      // Search engines
+      ['g', { name: 'Google', url: 'https://www.google.com/search?q=', icon: '🔍', category: 'search', isSearch: true }],
+      ['ddg', { name: 'DuckDuckGo', url: 'https://duckduckgo.com/?q=', icon: '🦆', category: 'search', isSearch: true }],
+      ['sp', { name: 'Startpage', url: 'https://www.startpage.com/sp/search?q=', icon: '🔒', category: 'search', isSearch: true }],
+      ['yt', { name: 'YouTube', url: 'https://www.youtube.com/results?search_query=', icon: '▶️', category: 'search', isSearch: true }],
+      ['w', { name: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Special:Search?search=', icon: '📚', category: 'search', isSearch: true }],
+      ['r', { name: 'Reddit', url: 'https://www.reddit.com/search/?q=', icon: '👽', category: 'search', isSearch: true }],
+      ['gh', { name: 'GitHub', url: 'https://github.com/search?q=', icon: '🐙', category: 'search', isSearch: true }],
+    ]);
+    
+    // Default search engine
+    const defaultSearchEngine = 'https://www.startpage.com/sp/search?q=';
+    
+    // Clock and date
     function updateClock() {
       const now = new Date();
-      const clock = document.getElementById('clock');
-      clock.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      // Clock
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+      
+      // Date
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const day = days[now.getDay()];
+      const date = now.getDate();
+      const month = months[now.getMonth()];
+      const year = now.getFullYear();
+      dateElement.textContent = `${day}, ${month} ${date}, ${year}`;
     }
+    
+    // Update clock every second
     setInterval(updateClock, 1000);
-    updateClock();
+    updateClock(); // Initial call
+    
+    // Terminal input handling
+    terminalInput.addEventListener('input', function() {
+      const input = this.value.trim().toLowerCase();
+      if (input.length === 0) {
+        searchResults.innerHTML = '';
+        searchResults.classList.remove('visible');
+        return;
+      }
+      
+      // Find matching commands
+      const results = [];
+      for (const [key, cmd] of commands.entries()) {
+        if (key.includes(input) || cmd.name.toLowerCase().includes(input)) {
+          results.push({ key, ...cmd });
+          
+          // Limit to 5 results
+          if (results.length >= 5) break;
+        }
+      }
+      
+      // Display results
+      if (results.length > 0) {
+        searchResults.innerHTML = '';
+        results.forEach(result => {
+          const suggestion = document.createElement('div');
+          suggestion.className = 'search-suggestion';
+          suggestion.dataset.key = result.key;
+          suggestion.dataset.url = result.url;
+          suggestion.dataset.action = result.action || '';
+          suggestion.dataset.isSearch = result.isSearch || false;
+          
+          const icon = document.createElement('span');
+          icon.className = 'suggestion-icon';
+          icon.textContent = result.icon;
+          
+          const text = document.createElement('span');
+          text.className = 'suggestion-text';
+          
+          // Highlight the matching part
+          const keyIndex = result.key.indexOf(input);
+          const nameIndex = result.name.toLowerCase().indexOf(input);
+          
+          if (keyIndex !== -1) {
+            text.innerHTML = `${result.name} <span class="suggestion-match">(${result.key.substring(0, keyIndex)}<strong>${result.key.substring(keyIndex, keyIndex + input.length)}</strong>${result.key.substring(keyIndex + input.length)})</span>`;
+          } else if (nameIndex !== -1) {
+            const name = result.name;
+            text.innerHTML = `${name.substring(0, nameIndex)}<strong>${name.substring(nameIndex, nameIndex + input.length)}</strong>${name.substring(nameIndex + input.length)} <span class="suggestion-match">(${result.key})</span>`;
+          } else {
+            text.textContent = `${result.name} (${result.key})`;
+          }
+          
+          suggestion.appendChild(icon);
+          suggestion.appendChild(text);
+          searchResults.appendChild(suggestion);
+        });
+        
+        searchResults.classList.add('visible');
+      } else {
+        // Show search engine suggestion
+        searchResults.innerHTML = '';
+        const suggestion = document.createElement('div');
+        suggestion.className = 'search-suggestion';
+        suggestion.dataset.search = input;
+        
+        const icon = document.createElement('span');
+        icon.className = 'suggestion-icon';
+        icon.textContent = '🔍';
+        
+        const text = document.createElement('span');
+        text.className = 'suggestion-text';
+        text.textContent = `Search for "${input}"`;
+        
+        suggestion.appendChild(icon);
+        suggestion.appendChild(text);
+        searchResults.appendChild(suggestion);
+        
+        searchResults.classList.add('visible');
+      }
+    });
+    
+    // Handle clicking on search suggestions
+    searchResults.addEventListener('click', function(event) {
+      const suggestion = event.target.closest('.search-suggestion');
+      if (!suggestion) return;
+      
+      let url = '';
+      let actionToPerform = '';
+      
+      if (suggestion.dataset.search) {
+        // Web search
+        url = `${defaultSearchEngine}${encodeURIComponent(suggestion.dataset.search)}`;
+      } else if (suggestion.dataset.action) {
+        // Special action
+        actionToPerform = suggestion.dataset.action;
+      } else if (suggestion.dataset.isSearch === 'true') {
+        // Command with search parameter
+        const searchTerm = terminalInput.value.trim().split(' ').slice(1).join(' ');
+        if (searchTerm) {
+          url = `${suggestion.dataset.url}${encodeURIComponent(searchTerm)}`;
+        } else {
+          url = suggestion.dataset.url.split('?')[0]; // Base URL without params
+        }
+      } else {
+        // Regular command
+        url = suggestion.dataset.url;
+      }
+      
+      // Execute action or navigate
+      if (actionToPerform) {
+        if (actionToPerform === 'openCustomize') {
+          openCustomizeModal();
+        }
+      } else if (url) {
+        window.location.href = url;
+      }
+      
+      // Clear input and hide results
+      terminalInput.value = '';
+      searchResults.innerHTML = '';
+      searchResults.classList.remove('visible');
+    });
+    
+    // Handle terminal input form submission
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && document.activeElement === terminalInput) {
+        const input = terminalInput.value.trim();
+        if (!input) return;
+        
+        // Parse command
+        const parts = input.toLowerCase().split(' ');
+        const command = parts[0];
+        const args = parts.slice(1).join(' ');
+        
+        if (commands.has(command)) {
+          const cmd = commands.get(command);
+          
+          if (cmd.action) {
+            // Execute special action
+            if (cmd.action === 'openCustomize') {
+              openCustomizeModal();
+            }
+          } else if (cmd.isSearch && args) {
+            // Command with search
+            window.location.href = `${cmd.url}${encodeURIComponent(args)}`;
+          } else {
+            // Regular command
+            window.location.href = cmd.url;
+          }
+        } else {
+          // Default search
+          window.location.href = `${defaultSearchEngine}${encodeURIComponent(input)}`;
+        }
+        
+        // Clear input and hide results
+        terminalInput.value = '';
+        searchResults.innerHTML = '';
+        searchResults.classList.remove('visible');
+      }
+    });
+    
+    // Floating particles effect
+    function createParticles() {
+      // Clear existing particles
+      particlesContainer.innerHTML = '';
+      
+      // Create new particles
+      const colors = [
+        'var(--color-primary)',
+        'var(--color-secondary)',
+        'var(--color-tertiary)',
+        'var(--color-quaternary)'
+      ];
+      
+      for (let i = 0; i < 15; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // Random properties
+        const size = Math.floor(Math.random() * 5) + 2;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const left = Math.random() * 100;
+        const delay = Math.random() * 5;
+        const duration = Math.random() * 6 + 4;
+        
+        // Apply styles
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.backgroundColor = color;
+        particle.style.left = `${left}%`;
+        particle.style.animationDelay = `${delay}s`;
+        particle.style.animationDuration = `${duration}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+    
+    // Create particles on load
+    createParticles();
+    setInterval(createParticles, 10000); // Refresh particles every 10 seconds
+    
+    // Modal functions
+    function openCustomizeModal() {
+      customizeModal.classList.add('visible');
+    }
+    
+    function closeCustomizeModal() {
+      customizeModal.classList.remove('visible');
+    }
+    
+    // Modal event listeners
+    customizeBtn.addEventListener('click', openCustomizeModal);
+    closeModalBtn.addEventListener('click', closeCustomizeModal);
+    cancelCustomizeBtn.addEventListener('click', closeCustomizeModal);
+    saveCustomizeBtn.addEventListener('click', function() {
+      // Here you would save the customization settings
+      // For demo purposes, we'll just close the modal
+      closeCustomizeModal();
+    });
+    
+    // Theme toggle
+    themeToggle.addEventListener('click', function() {
+      document.body.classList.toggle('alt-theme');
+      
+      // Store preference in localStorage
+      const currentTheme = document.body.classList.contains('alt-theme') ? 'alt' : 'default';
+      localStorage.setItem('chooch-theme', currentTheme);
+    });
+    
+    // Load theme preference from localStorage
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('chooch-theme');
+      if (savedTheme === 'alt') {
+        document.body.classList.add('alt-theme');
+      }
+    });
+    
+    // Konami code Easter egg
+    let konamiSequence = [];
+    const konamiCode = [
+      'ArrowUp', 'ArrowUp', 
+      'ArrowDown', 'ArrowDown', 
+      'ArrowLeft', 'ArrowRight', 
+      'ArrowLeft', 'ArrowRight', 
+      'b', 'a'
+    ];
+    
+    document.addEventListener('keydown', function(event) {
+      // Add the key to the sequence
+      konamiSequence.push(event.key);
+      
+      // Keep only the last 10 keys
+      if (konamiSequence.length > 10) {
+        konamiSequence.shift();
+      }
+      
+      // Check if the sequence matches the Konami code
+      if (konamiSequence.join(',') === konamiCode.join(',')) {
+        // Activate cool Konami effect
+        activateKonamiMode();
+      }
+    });
+    
+    function activateKonamiMode() {
+      // Create a flashy effect
+      document.body.style.transition = 'filter 2s';
+      document.body.style.filter = 'hue-rotate(180deg) contrast(1.5)';
+      
+      // Show a message
+      const konamiMessage = document.createElement('div');
+      konamiMessage.textContent = '🎮 GOD MODE ACTIVATED 🎮';
+      konamiMessage.style.position = 'fixed';
+      konamiMessage.style.top = '50%';
+      konamiMessage.style.left = '50%';
+      konamiMessage.style.transform = 'translate(-50%, -50%)';
+      konamiMessage.style.color = 'var(--color-tertiary)';
+      konamiMessage.style.fontFamily = 'var(--font-display)';
+      konamiMessage.style.fontSize = '3rem';
+      konamiMessage.style.fontWeight = 'bold';
+      konamiMessage.style.textShadow = '0 0 10px currentColor';
+      konamiMessage.style.zIndex = '9999';
+      konamiMessage.style.textAlign = 'center';
+      konamiMessage.style.animation = 'pulse 0.5s infinite alternate';
+      
+      document.body.appendChild(konamiMessage);
+      
+      // Return to normal after a few seconds
+      setTimeout(function() {
+        document.body.style.filter = '';
+        document.body.removeChild(konamiMessage);
+        
+        // Add some permanent easter egg feature
+        // For example, unlock a hidden command or feature
+        document.body.classList.add('konami-activated');
+        
+        // Add new secret command
+        commands.set('godmode', {
+          name: 'God Mode', 
+          url: '#', 
+          icon: '👾', 
+          category: 'system',
+          action: 'activateGodMode'
+        });
+      }, 3000);
+    }
+    
+    // Weather data fetching (simulated)
+    function updateWeather() {
+      // In a real implementation, you would fetch data from a weather API
+      // For demo purposes, we'll just update the widget with simulated data
+      const weatherWidget = document.querySelector('.weather-widget');
+      const weatherIcon = weatherWidget.querySelector('.weather-icon');
+      const weatherTemp = weatherWidget.querySelector('.weather-temp');
+      const weatherLocation = weatherWidget.querySelector('.weather-location');
+      
+      // Random weather conditions for demo
+      const conditions = ['☀️', '🌤️', '☁️', '🌧️', '⛈️', '❄️'];
+      const temps = ['68°F', '72°F', '75°F', '81°F', '66°F', '70°F'];
+      const locations = ['Your Location', 'Home', 'Office', 'Current'];
+      
+      // Update with random values (in a real app, use actual API data)
+      weatherIcon.textContent = conditions[Math.floor(Math.random() * conditions.length)];
+      weatherTemp.textContent = temps[Math.floor(Math.random() * temps.length)];
+      weatherLocation.textContent = locations[Math.floor(Math.random() * locations.length)];
+    }
+    
+    // Update weather every hour (simulated)
+    updateWeather();
+    setInterval(updateWeather, 3600000);
+    
+    // System stats simulation
+    function updateSystemStats() {
+      // In a real implementation, you would fetch actual system metrics
+      // For demo purposes, we'll just update with random values
+      document.getElementById('cpu').textContent = `CPU: ${Math.floor(Math.random() * 30) + 5}%`;
+      document.getElementById('memory').textContent = `RAM: ${(Math.random() * 8 + 2).toFixed(1)}/16GB`;
+      
+      // Simulate uptime increasing
+      const uptimeEl = document.getElementById('uptime');
+      const currentUptime = uptimeEl.textContent;
+      const match = currentUptime.match(/Uptime: (\d+)d (\d+)h (\d+)m/);
+      
+      if (match) {
+        let days = parseInt(match[1], 10);
+        let hours = parseInt(match[2], 10);
+        let minutes = parseInt(match[3], 10) + 30; // Add 30 minutes each update
+        
+        if (minutes >= 60) {
+          hours += Math.floor(minutes / 60);
+          minutes %= 60;
+        }
+        
+        if (hours >= 24) {
+          days += Math.floor(hours / 24);
+          hours %= 24;
+        }
+        
+        uptimeEl.textContent = `Uptime: ${days}d ${hours}h ${minutes}m`;
+      }
+    }
+    
+    // Update system stats every 30 minutes (simulated)
+    updateSystemStats();
+    setInterval(updateSystemStats, 1800000);
+    
+    // Focus the terminal input when the page loads
+    window.addEventListener('load', function() {
+      terminalInput.focus();
+    });
+    
+    // Listen for / key to focus the terminal input
+    document.addEventListener('keydown', function(event) {
+      if (event.key === '/' && document.activeElement !== terminalInput) {
+        event.preventDefault();
+        terminalInput.focus();
+      }
+      
+      // Listen for Escape key to blur the terminal input
+      if (event.key === 'Escape' && document.activeElement === terminalInput) {
+        terminalInput.blur();
+        searchResults.classList.remove('visible');
+      }
+    });
+    
+    // Handle arrow keys for suggestion navigation
+    terminalInput.addEventListener('keydown', function(event) {
+      if (searchResults.classList.contains('visible')) {
+        const suggestions = searchResults.querySelectorAll('.search-suggestion');
+        const currentIndex = Array.from(suggestions).findIndex(s => s.classList.contains('active'));
+        
+        if (event.key === 'ArrowDown') {
+          event.preventDefault();
+          
+          // Remove active class from current suggestion
+          if (currentIndex >= 0) {
+            suggestions[currentIndex].classList.remove('active');
+          }
+          
+          // Add active class to next suggestion
+          const nextIndex = (currentIndex + 1) % suggestions.length;
+          suggestions[nextIndex].classList.add('active');
+        } else if (event.key === 'ArrowUp') {
+          event.preventDefault();
+          
+          // Remove active class from current suggestion
+          if (currentIndex >= 0) {
+            suggestions[currentIndex].classList.remove('active');
+          }
+          
+          // Add active class to previous suggestion
+          const prevIndex = (currentIndex - 1 + suggestions.length) % suggestions.length;
+          suggestions[prevIndex].classList.add('active');
+        } else if (event.key === 'Tab') {
+          event.preventDefault();
+          
+          // Auto-complete with the active suggestion or the first one
+          const activeSuggestion = searchResults.querySelector('.search-suggestion.active') || suggestions[0];
+          if (activeSuggestion) {
+            if (activeSuggestion.dataset.key) {
+              terminalInput.value = activeSuggestion.dataset.key;
+            } else if (activeSuggestion.dataset.search) {
+              terminalInput.value = activeSuggestion.dataset.search;
+            }
+            
+            // Keep the cursor at the end
+            terminalInput.selectionStart = terminalInput.selectionEnd = terminalInput.value.length;
+            
+            // Trigger input event to update suggestions
+            terminalInput.dispatchEvent(new Event('input'));
+          }
+        }
+      }
+    });
+    
+    // Add alt-theme class with different color scheme
+    document.head.insertAdjacentHTML('beforeend', `
+      <style>
+        .alt-theme {
+          --color-background: #0f1320;
+          --color-background-alt: #1a1f2e;
+          --color-primary: #f45eff;
+          --color-secondary: #00b8ff;
+          --color-tertiary: #ffcc00;
+          --color-quaternary: #00ffaa;
+          --color-terminal: #05080f;
+          --color-terminal-text: #f45eff;
+          --glow-primary: 0 0 10px rgba(244, 94, 255, 0.5), 0 0 20px rgba(244, 94, 255, 0.2);
+        }
+        
+        .alt-theme .bg-radial {
+          background: radial-gradient(circle at 50% 50%, rgba(244, 94, 255, 0.08) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 20%, rgba(0, 184, 255, 0.08) 0%, transparent 50%),
+                      radial-gradient(circle at 20% 80%, rgba(255, 204, 0, 0.08) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 80%, rgba(0, 255, 170, 0.08) 0%, transparent 50%);
+        }
+        
+        .alt-theme .category-media .category-header {
+          color: var(--color-secondary);
+        }
+        
+        .alt-theme .category-productivity .category-header {
+          color: var(--color-primary);
+        }
+        
+        .alt-theme .category-tools .category-header {
+          color: var(--color-quaternary);
+        }
+        
+        .alt-theme .category-media .command:hover .command-icon,
+        .alt-theme .category-media .command:hover .command-name {
+          color: var(--color-secondary);
+        }
+        
+        .alt-theme .category-productivity .command:hover .command-icon,
+        .alt-theme .category-productivity .command:hover .command-name {
+          color: var(--color-primary);
+        }
+        
+        .alt-theme .category-tools .command:hover .command-icon,
+        .alt-theme .category-tools .command:hover .command-name {
+          color: var(--color-quaternary);
+        }
+        
+        /* Special Konami mode styles */
+        .konami-activated .brand-logo {
+          background: linear-gradient(90deg, 
+            var(--color-primary), 
+            var(--color-secondary), 
+            var(--color-tertiary), 
+            var(--color-quaternary)
+          );
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: gradient-shift 4s linear infinite;
+        }
+        
+        @keyframes gradient-shift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+      </style>
+    `);
   </script>
 </body>
 </html>
