@@ -435,3 +435,108 @@ body {
   60% { transform: translateX(2px); }
   80% { transform: translateX(-2px); }
 }
+/* Add to main.css */
+
+/* Enhanced Header Styling for centered logo with vaporwave effect */
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center everything */
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+/* Make the logo centered and more prominent */
+.logo {
+  /* Reset any inherited gradient styles */
+  background: transparent !important;
+  background-clip: unset !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  
+  /* Vaporwave styling */
+  position: relative;
+  color: #00ff41; /* Matrix green */
+  font-size: 3rem;
+  font-weight: 700;
+  text-decoration: none;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+}
+
+/* Enhanced vaporwave glitch effect */
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.8;
+}
+
+.glitch::before {
+  color: #ff6b6b; /* Red shift */
+  animation: glitch-1 0.5s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch::after {
+  color: #4ecdc4; /* Cyan shift */
+  animation: glitch-2 0.5s infinite;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch-1 {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-2px); }
+  40% { transform: translateX(2px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+
+@keyframes glitch-2 {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(2px); }
+  40% { transform: translateX(-2px); }
+  60% { transform: translateX(2px); }
+  80% { transform: translateX(-2px); }
+}
+
+/* Ensure the matrix rain effect works well */
+rain-component {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Adjust search functionality to work with the design */
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 250px;
+  margin-left: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .logo {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-md);
+  }
+  
+  .header-content {
+    flex-direction: column;
+  }
+  
+  .search-container {
+    margin: 0 auto;
+  }
+}
