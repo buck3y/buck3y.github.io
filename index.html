@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Chooch.net - Your Personal Hub for Essential Services & Tools">
+  <meta name="description" content="buck3y.github.io - Your Personal Hub for Projects & Tools">
   <meta name="theme-color" content="#0a0a0a">
-  <title>Chooch.net</title>
+  <title>buck3y.github.io</title>
   
   <!-- Preload critical resources -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,13 +22,13 @@
 <body>
 <header class="header">
   <div class="header-content">
-    <a href="/" class="logo glitch" data-text="Chooch.net">Chooch.net</a>
+    <a href="/" class="logo glitch" data-text="buck3y.io">buck3y.io</a>
     <div class="header-controls">
       <div class="search-container">
         <input 
           type="text" 
           class="search-input" 
-          placeholder="Search services..."
+          placeholder="Search projects..."
           id="search-input"
           autocomplete="off"
         >
@@ -44,286 +44,141 @@
     <div class="status-bar">
       <div class="status-item">
         <div class="status-indicator"></div>
-        <span>Jellyfin Server</span>
+        <span>GitHub</span>
       </div>
       <div class="status-item">
         <div class="status-indicator"></div>
-        <span>Jukebox</span>
+        <span>Projects</span>
       </div>
       <div class="status-item">
         <div class="status-indicator"></div>
-        <span>RSS Feed</span>
+        <span>Blog</span>
       </div>
       <div class="status-item">
-        <div class="status-indicator offline"></div>
-        <span>Seedbox</span>
+        <div class="status-indicator"></div>
+        <span>APIs</span>
       </div>
     </div>
 
     <div class="quick-actions">
       <h2>Quick Actions</h2>
       <div class="actions-grid">
-        <a href="https://pastebin.com" class="action-btn">
+        <a href="#projects" class="action-btn">
           <span>📋</span>
-          Share Text
+          Projects
         </a>
-        <a href="https://catbox.moe" class="action-btn">
-          <span>📤</span>
-          Upload File
+        <a href="#resume" class="action-btn">
+          <span>📄</span>
+          Resume
         </a>
-        <a href="https://real-debrid.com" class="action-btn">
-          <span>⚡</span>
-          Check RD
+        <a href="#skills" class="action-btn">
+          <span>🛠️</span>
+          Skills
         </a>
-        <a href="https://ipleak.net" class="action-btn">
-          <span>🌐</span>
-          IP Check
+        <a href="#contact" class="action-btn">
+          <span>📨</span>
+          Contact
         </a>
       </div>
     </div>
 
-    <div class="categories-grid" id="categories-grid">
-      <div class="category fade-in">
+    <div class="categories-container">
+      <!-- Development Category -->
+      <div class="category-section fade-in">
         <div class="category-header">
-          <span class="category-icon">📧</span>
-          <h2 class="category-title">Email & Communication</h2>
+          <span class="category-icon">💻</span>
+          <h2 class="category-title">Development</h2>
           <span class="category-count">4</span>
         </div>
-        <div class="services-grid">
-          <a href="https://mail.tutanota.com" class="service">
-            <div class="service-icon icon-tutanota">✉️</div>
-            <span class="service-name">Tutanota</span>
-            <div class="service-status"></div>
+        <div class="actions-grid">
+          <a href="https://github.com/buck3y" class="action-btn">
+            <span>🐙</span>
+            GitHub
           </a>
-          <a href="https://webmail.disroot.org" class="service">
-            <div class="service-icon icon-disroot">📬</div>
-            <span class="service-name">Disroot</span>
-            <div class="service-status"></div>
+          <a href="#projects" class="action-btn">
+            <span>📂</span>
+            Projects
           </a>
-          <a href="https://gmail.com" class="service">
-            <div class="service-icon icon-gmail">✉️</div>
-            <span class="service-name">Gmail</span>
-            <div class="service-status"></div>
+          <a href="#apis" class="action-btn">
+            <span>🔌</span>
+            APIs
           </a>
-          <a href="https://zemail.me" class="service">
-            <div class="service-icon icon-tempmail">📧</div>
-            <span class="service-name">Temp Mail</span>
-            <div class="service-status"></div>
-          </a>
-            <a href="https://app.simplelogin.io/dashboard/" class="service">
-            <div class="service-icon icon-tutanota">✉️</div>
-            <span class="service-name">Simple Login</span>
-            <div class="service-status"></div>
+          <a href="#skills" class="action-btn">
+            <span>🔧</span>
+            Skills
           </a>
         </div>
       </div>
 
-      <div class="category fade-in">
+      <!-- Portfolio Category -->
+      <div class="category-section fade-in">
         <div class="category-header">
-          <span class="category-icon">🎬</span>
-          <h2 class="category-title">Entertainment</h2>
-          <span class="category-count">4</span>
-        </div>
-        <div class="services-grid">
-          <a href="https://youtube.com" class="service">
-            <div class="service-icon icon-youtube">▶️</div>
-            <span class="service-name">YouTube</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://music.youtube.com" class="service">
-            <div class="service-icon icon-ytmusic">🎵</div>
-            <span class="service-name">YT Music</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://jellyfin.chooch.net" class="service">
-            <div class="service-icon icon-jellyfin">📺</div>
-            <span class="service-name">Jellyfin</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://plex.chooch.net" class="service">
-            <div class="service-icon icon-plex">🎬</div>
-            <span class="service-name">Plex</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://jukebox.chooch.net" class="service">
-            <div class="service-icon icon-jukebox">🎶</div>
-            <span class="service-name">Jukebox</span>
-            <div class="service-status"></div>
-          </a>
-        </div>
-      </div>
-
-      <div class="category fade-in">
-        <div class="category-header">
-          <span class="category-icon">📁</span>
-          <h2 class="category-title">Files & Storage</h2>
-          <span class="category-count">2</span>
-        </div>
-        <div class="services-grid">
-            <a href="https://drive.chooch.net" class="service">
-            <div class="service-icon icon-drive">📁</div>
-            <span class="service-name">Drive</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://catbox.moe" class="service">
-            <div class="service-icon icon-catbox">🐱</div>
-            <span class="service-name">Catbox</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://litterbox.catbox.moe/" class="service">
-            <div class="service-icon icon-litterbox">🐱</div>
-            <span class="service-name">Litterbox</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://buzzheavier.com" class="service">
-            <div class="service-icon icon-buzzheavier">🔥</div>
-            <span class="service-name">BuzzHeavier</span>
-            <div class="service-status"></div>
-          </a>
-        </div>
-      </div>
-
-      <div class="category fade-in">
-        <div class="category-header">
-          <span class="category-icon">🏴‍☠️</span>
-          <h2 class="category-title">Torrenting</h2>
-          <span class="category-count">4</span>
-        </div>
-        <div class="services-grid">
-          <a href="https://real-debrid.com" class="service">
-            <div class="service-icon icon-realdebrid">⚡</div>
-            <span class="service-name">Real-Debrid</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://seedbox.chooch.net" class="service">
-            <div class="service-icon icon-seedbox">📦</div>
-            <span class="service-name">Seedbox</span>
-            <div class="service-status offline"></div>
-          </a>
-          <a href="https://soulseek.chooch.net" class="service">
-            <div class="service-icon icon-soulseek">🎵</div>
-            <span class="service-name">Soulseek</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://steamrip.com" class="service">
-            <div class="service-icon icon-steamrip">🎮</div>
-            <span class="service-name">SteamRip</span>
-            <div class="service-status"></div>
-          </a>
-        </div>
-      </div>
-
-      <div class="category fade-in">
-        <div class="category-header">
-          <span class="category-icon">🔐</span>
-          <h2 class="category-title">Security & Privacy</h2>
-          <span class="category-count">4</span>
-        </div>
-        <div class="services-grid">
-          <a href="https://bitwarden.com" class="service">
-            <div class="service-icon icon-bitwarden">🔐</div>
-            <span class="service-name">Bitwarden</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://proton.me/mail" class="service">
-            <div class="service-icon icon-protonmail">🔒</div>
-            <span class="service-name">ProtonMail</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://www.torproject.org" class="service">
-            <div class="service-icon icon-tor">🌐</div>
-            <span class="service-name">Tor Browser</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://ublockorigin.com" class="service">
-            <div class="service-icon icon-ublock">🚫</div>
-            <span class="service-name">uBlock</span>
-            <div class="service-status"></div>
-          </a>
-        </div>
-      </div>
-
-      <div class="category fade-in">
-        <div class="category-header">
-          <span class="category-icon">🛠️</span>
-          <h2 class="category-title">Developer Tools</h2>
-          <span class="category-count">4</span>
-        </div>
-        <div class="services-grid">
-          <a href="https://github.com" class="service">
-            <div class="service-icon icon-github">🐙</div>
-            <span class="service-name">GitHub</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://gitlab.com" class="service">
-            <div class="service-icon icon-gitlab">🦊</div>
-            <span class="service-name">GitLab</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://vscode.dev" class="service">
-            <div class="service-icon icon-vscode">💻</div>
-            <span class="service-name">VS Code</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://notion.so" class="service">
-            <div class="service-icon icon-notion">📝</div>
-            <span class="service-name">Notion</span>
-            <div class="service-status"></div>
-          </a>
-        </div>
-      </div>
-
-      <div class="category fade-in">
-        <div class="category-header">
-          <span class="category-icon">📚</span>
-          <h2 class="category-title">Research & Learning</h2>
-          <span class="category-count">4</span>
-        </div>
-        <div class="services-grid">
-          <a href="https://libgen.is" class="service">
-            <div class="service-icon icon-libgen">📚</div>
-            <span class="service-name">LibGen</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://z-lib.org" class="service">
-            <div class="service-icon icon-zlibrary">📖</div>
-            <span class="service-name">Z-Library</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://udemy.com" class="service">
-            <div class="service-icon icon-udemy">🎯</div>
-            <span class="service-name">Udemy</span>
-            <div class="service-status"></div>
-          </a>
-          <a href="https://coursera.org" class="service">
-            <div class="service-icon icon-coursera">🎓</div>
-            <span class="service-name">Coursera</span>
-            <div class="service-status"></div>
-          </a>
-        </div>
-      </div>
-
-      <div class="category fade-in">
-        <div class="category-header">
-          <span class="category-icon">🛠️</span>
-          <h2 class="category-title">Network & Tools</h2>
+          <span class="category-icon">🎓</span>
+          <h2 class="category-title">Portfolio & Resume</h2>
           <span class="category-count">3</span>
         </div>
-        <div class="services-grid">
-          <a href="https://ipleak.net" class="service">
-            <div class="service-icon icon-iplocation">🌐</div>
-            <span class="service-name">IP Location</span>
-            <div class="service-status"></div>
+        <div class="actions-grid">
+          <a href="#resume" class="action-btn">
+            <span>📄</span>
+            Resume
           </a>
-          <a href="https://real-debrid.com/speedtest" class="service">
-            <div class="service-icon icon-speedtest">⚡</div>
-            <span class="service-name">Speedtest</span>
-            <div class="service-status"></div>
+          <a href="#portfolio" class="action-btn">
+            <span>🖼️</span>
+            Portfolio
           </a>
-          <a href="https://rss.chooch.net" class="service">
-            <div class="service-icon icon-rss">📡</div>
-            <span class="service-name">RSS</span>
-            <div class="service-status"></div>
+          <a href="#education" class="action-btn">
+            <span>🎓</span>
+            Education
+          </a>
+        </div>
+      </div>
+
+      <!-- Blog Category -->
+      <div class="category-section fade-in">
+        <div class="category-header">
+          <span class="category-icon">📝</span>
+          <h2 class="category-title">Blog & Content</h2>
+          <span class="category-count">3</span>
+        </div>
+        <div class="actions-grid">
+          <a href="#blog" class="action-btn">
+            <span>📝</span>
+            Blog
+          </a>
+          <a href="#tutorials" class="action-btn">
+            <span>📚</span>
+            Tutorials
+          </a>
+          <a href="#notes" class="action-btn">
+            <span>📓</span>
+            Notes
+          </a>
+        </div>
+      </div>
+
+      <!-- Connect Category -->
+      <div class="category-section fade-in">
+        <div class="category-header">
+          <span class="category-icon">🔗</span>
+          <h2 class="category-title">Connect</h2>
+          <span class="category-count">4</span>
+        </div>
+        <div class="actions-grid">
+          <a href="mailto:your-email@example.com" class="action-btn">
+            <span>✉️</span>
+            Email
+          </a>
+          <a href="https://linkedin.com/in/your-profile" class="action-btn">
+            <span>🔗</span>
+            LinkedIn
+          </a>
+          <a href="https://twitter.com/your-handle" class="action-btn">
+            <span>🐦</span>
+            Twitter
+          </a>
+          <a href="#contact" class="action-btn">
+            <span>📨</span>
+            Contact Form
           </a>
         </div>
       </div>
@@ -331,7 +186,7 @@
   </main>
 
   <footer class="footer">
-    <p>&copy; 2025 Chooch.net | Your Personal Hub | Room300 Forever</p>
+    <p>&copy; 2025 buck3y.io | Your Personal Hub</p>
   </footer>
 
   <!-- Scripts -->
