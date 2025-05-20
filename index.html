@@ -1,628 +1,3103 @@
-<!DOCTYPE html>
+</style>
+</head>
+<body>
+  <!-- Background effects -->
+  <div class="dynamic-bg">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+  </div>
+  
+  <!-- Matrix rain effect (enabled only when matrix theme active) -->
+  <canvas class="matrix-rain" id="matrix-rain"></canvas>
+  
+  <div class="app-container">
+    <header class="header">
+      <div class="header-content">
+        <div class="logo-container">
+          <a href="/" class="logo glitch" data-text="Chooch.net">Chooch.net</a>
+        </div>
+        <div class="header-controls">
+          <div class="search-container">
+            <input 
+              type="text" 
+              class="search-input" 
+              placeholder="Search services or type a URL..."
+              id="search-input"
+              autocomplete="off"
+            >
+            <div id="search-suggestions" class="search-suggestions"></div>
+          </div>
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+            <span class="theme-icon">🌙</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- System stats with live data -->
+      <div class="system-stats">
+        <div class="system-stat">
+          <div class="stat-header">
+            <span>🕒</span>
+            <span>Current Time</span>
+          </div>
+          <div class="stat-value" id="current-time">12:34 PM</div>
+          <div class="stat-footer" id="current-date">Monday, May 19, 2025</div>
+        </div>
+        
+        <div class="system-stat">
+          <div class="stat-header">
+            <span>🌤️</span>
+            <span>Weather</span>
+          </div>
+          <div class="stat-value" id="current-temp">72°F</div>
+          <div class="stat-footer" id="weather-desc">Partly Cloudy</div>
+        </div>
+        
+        <div class="system-stat">
+          <div class="stat-header">
+            <span>📊</span>
+            <span>Services Status</span>
+          </div>
+          <div class="stat-value" id="services-count">18/20</div>
+          <div class="stat-footer">Services Online</div>
+        </div>
+        
+        <div class="system-stat">
+          <div class="stat-header">
+            <span>⚡</span>
+            <span>Network</span>
+          </div>
+          <div class="stat-value" id="network-status">100ms</div>
+          <div class="stat-footer">Response Time</div>
+        </div>
+      </div>
+      
+      <!-- Two column layout: Sidebar + Services -->
+      <div class="content-columns">
+        <!-- Sidebar with quick actions and status -->
+        <div class="sidebar">
+          <!-- Quick Actions Section -->
+          <div class="quick-actions">
+            <div class="section-header">
+              <span>🚀</span>
+              <h2 class="section-title">Quick Actions</h2>
+            </div>
+            <div class="actions-list">
+              <a href="https://pastebin.com" class="action-btn">
+                <div class="action-icon">📋</div>
+                <div class="action-details">
+                  <div class="action-name">Share Text</div>
+                  <div class="action-description">Quickly share snippets and code</div>
+                </div>
+                <div class="action-shortcut">Alt+1</div>
+              </a>
+              
+              <a href="https://catbox.moe" class="action-btn">
+                <div class="action-icon">📤</div>
+                <div class="action-details">
+                  <div class="action-name">Upload File</div>
+                  <div class="action-description">Fast and simple file sharing</div>
+                </div>
+                <div class="action-shortcut">Alt+2</div>
+              </a>
+              
+              <a href="https://real-debrid.com" class="action-btn">
+                <div class="action-icon">⚡</div>
+                <div class="action-details">
+                  <div class="action-name">Check RD</div>
+                  <div class="action-description">Manage downloads and links</div>
+                </div>
+                <div class="action-shortcut">Alt+3</div>
+              </a>
+              
+              <a href="https://ipleak.net" class="action-btn">
+                <div class="action-icon">🌐</div>
+                <div class="action-details">
+                  <div class="action-name">IP Check</div>
+                  <div class="action-description">Verify your connection security</div>
+                </div>
+                <div class="action-shortcut">Alt+4</div>
+              </a>
+              
+              <a href="#" class="action-btn" id="toggle-theme-btn">
+                <div class="action-icon">🎨</div>
+                <div class="action-details">
+                  <div class="action-name">Switch Theme</div>
+                  <div class="action-description">Change your visual experience</div>
+                </div>
+                <div class="action-shortcut">Alt+T</div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Status Panel Section -->
+          <div class="status-panel">
+            <div class="section-header">
+              <span>📊</span>
+              <h2 class="section-title">System Status</h2>
+            </div>
+            <div class="status-list">
+              <div class="status-item">
+                <div class="status-indicator"></div>
+                <div class="status-details">
+                  <div class="status-name">Jellyfin Server</div>
+                  <div class="status-metrics">
+                    <span class="status-metric">
+                      <span>CPU:</span>
+                      <span class="status-metric-value">12%</span>
+                    </span>
+                    <span class="status-metric">
+                      <span>RAM:</span>
+                      <span class="status-metric-value">1.2GB</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="status-item">
+                <div class="status-indicator"></div>
+                <div class="status-details">
+                  <div class="status-name">Jukebox</div>
+                  <div class="status-metrics">
+                    <span class="status-metric">
+                      <span>Active:</span>
+                      <span class="status-metric-value">2 users</span>
+                    </span>
+                    <span class="status-metric">
+                      <span>Storage:</span>
+                      <span class="status-metric-value">68%</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="status-item">
+                <div class="status-indicator"></div>
+                <div class="status-details">
+                  <div class="status-name">RSS Feed</div>
+                  <div class="status-metrics">
+                    <span class="status-metric">
+                      <span>Updates:</span>
+                      <span class="status-metric-value">12 new</span>
+                    </span>
+                    <span class="status-metric">
+                      <span>Last:</span>
+                      <span class="status-metric-value">5m ago</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="status-item">
+                <div class="status-indicator offline"></div>
+                <div class="status-details">
+                  <div class="status-name">Seedbox</div>
+                  <div class="status-metrics">
+                    <span class="status-metric">
+                      <span>Status:</span>
+                      <span class="status-metric-value">Offline</span>
+                    </span>
+                    <span class="status-metric">
+                      <span>Since:</span>
+                      <span class="status-metric-value">2h ago</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Weather Widget -->
+          <div class="quick-actions">
+            <div class="section-header">
+              <span>🌤️</span>
+              <h2 class="section-title">Weather</h2>
+            </div>
+            <div style="padding: var(--space-md);">
+              <div class="weather-widget">
+                <div class="weather-current">
+                  <div class="weather-icon" id="weather-icon">🌤️</div>
+                  <div class="weather-details">
+                    <div class="weather-temp" id="weather-temp">72°F</div>
+                    <div class="weather-desc" id="weather-cond">Partly Cloudy</div>
+                    <div class="weather-meta">
+                      <span id="weather-humidity">Humidity: 65%</span>
+                      <span id="weather-wind">Wind: 5 mph</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="weather-forecast">
+                  <div class="forecast-day">
+                    <div class="forecast-date">Tue</div>
+                    <div class="forecast-icon">☀️</div>
+                    <div class="forecast-temp">75°</div>
+                  </div>
+                  <div class="forecast-day">
+                    <div class="forecast-date">Wed</div>
+                    <div class="forecast-icon">⛅</div>
+                    <div class="forecast-temp">71°</div>
+                  </div>
+                  <div class="forecast-day">
+                    <div class="forecast-date">Thu</div>
+                    <div class="forecast-icon">🌧️</div>
+                    <div class="forecast-temp">68°</div>
+                  </div>
+                  <div class="forecast-day">
+                    <div class="forecast-date">Fri</div>
+                    <div class="forecast-icon">🌤️</div>
+                    <div class="forecast-temp">73°</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Main Services Section -->
+        <div class="services-content">
+          <!-- Email Category -->
+          <div class="category fade-in">
+            <div class="category-header">
+              <span class="category-icon">📧</span>
+              <h2 class="category-title">Email & Communication</h2>
+              <span class="category-count">5</span>
+            </div>
+            <div class="services-grid">
+              <a href="https://mail.tutanota.com" class="service">
+                <div class="service-icon">✉️</div>
+                <span class="service-name">Tutanota</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">E+1</div>
+              </a>
+              <a href="https://webmail.disroot.org" class="service">
+                <div class="service-icon">📬</div>
+                <span class="service-name">Disroot</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">E+2</div>
+              </a>
+              <a href="https://gmail.com" class="service">
+                <div class="service-icon">✉️</div>
+                <span class="service-name">Gmail</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">E+3</div>
+              </a>
+              <a href="https://zemail.me" class="service">
+                <div class="service-icon">📧</div>
+                <span class="service-name">Temp Mail</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">E+4</div>
+              </a>
+              <a href="https://app.simplelogin.io/dashboard/" class="service">
+                <div class="service-icon">✉️</div>
+                <span class="service-name">Simple Login</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">E+5</div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Entertainment Category -->
+          <div class="category fade-in">
+            <div class="category-header">
+              <span class="category-icon">🎬</span>
+              <h2 class="category-title">Entertainment</h2>
+              <span class="category-count">5</span>
+            </div>
+            <div class="services-grid">
+              <a href="https://youtube.com" class="service">
+                <div class="service-icon">▶️</div>
+                <span class="service-name">YouTube</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">M+1</div>
+              </a>
+              <a href="https://music.youtube.com" class="service">
+                <div class="service-icon">🎵</div>
+                <span class="service-name">YT Music</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">M+2</div>
+              </a>
+              <a href="https://jellyfin.chooch.net" class="service featured">
+                <div class="service-icon">📺</div>
+                <span class="service-name">Jellyfin</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">M+3</div>
+              </a>
+              <a href="https://plex.chooch.net" class="service">
+                <div class="service-icon">🎬</div>
+                <span class="service-name">Plex</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">M+4</div>
+              </a>
+              <a href="https://jukebox.chooch.net" class="service">
+                <div class="service-icon">🎶</div>
+                <span class="service-name">Jukebox</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">M+5</div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Files Category -->
+          <div class="category fade-in">
+            <div class="category-header">
+              <span class="category-icon">📁</span>
+              <h2 class="category-title">Files & Storage</h2>
+              <span class="category-count">4</span>
+            </div>
+            <div class="services-grid">
+              <a href="https://drive.chooch.net" class="service featured">
+                <div class="service-icon">📁</div>
+                <span class="service-name">Drive</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">F+1</div>
+              </a>
+              <a href="https://catbox.moe" class="service">
+                <div class="service-icon">🐱</div>
+                <span class="service-name">Catbox</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">F+2</div>
+              </a>
+              <a href="https://litterbox.catbox.moe/" class="service">
+                <div class="service-icon">🐱</div>
+                <span class="service-name">Litterbox</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">F+3</div>
+              </a>
+              <a href="https://buzzheavier.com" class="service">
+                <div class="service-icon">🔥</div>
+                <span class="service-name">BuzzHeavier</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">F+4</div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Torrenting Category -->
+          <div class="category fade-in">
+            <div class="category-header">
+              <span class="category-icon">🏴‍☠️</span>
+              <h2 class="category-title">Torrenting</h2>
+              <span class="category-count">4</span>
+            </div>
+            <div class="services-grid">
+              <a href="https://real-debrid.com" class="service featured">
+                <div class="service-icon">⚡</div>
+                <span class="service-name">Real-Debrid</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">T+1</div>
+              </a>
+              <a href="https://seedbox.chooch.net" class="service">
+                <div class="service-icon">📦</div>
+                <span class="service-name">Seedbox</span>
+                <div class="service-status offline"></div>
+                <div class="shortcut-tooltip">T+2</div>
+              </a>
+              <a href="https://soulseek.chooch.net" class="service">
+                <div class="service-icon">🎵</div>
+                <span class="service-name">Soulseek</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">T+3</div>
+              </a>
+              <a href="https://steamrip.com" class="service">
+                <div class="service-icon">🎮</div>
+                <span class="service-name">SteamRip</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">T+4</div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Security Category -->
+          <div class="category fade-in">
+            <div class="category-header">
+              <span class="category-icon">🔐</span>
+              <h2 class="category-title">Security & Privacy</h2>
+              <span class="category-count">4</span>
+            </div>
+            <div class="services-grid">
+              <a href="https://bitwarden.com" class="service featured">
+                <div class="service-icon">🔐</div>
+                <span class="service-name">Bitwarden</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">S+1</div>
+              </a>
+              <a href="https://proton.me/mail" class="service">
+                <div class="service-icon">🔒</div>
+                <span class="service-name">ProtonMail</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">S+2</div>
+              </a>
+              <a href="https://www.torproject.org" class="service">
+                <div class="service-icon">🌐</div>
+                <span class="service-name">Tor Browser</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">S+3</div>
+              </a>
+              <a href="https://ublockorigin.com" class="service">
+                <div class="service-icon">🚫</div>
+                <span class="service-name">uBlock</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">S+4</div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Developer Tools Category -->
+          <div class="category fade-in">
+            <div class="category-header">
+              <span class="category-icon">🛠️</span>
+              <h2 class="category-title">Developer Tools</h2>
+              <span class="category-count">4</span>
+            </div>
+            <div class="services-grid">
+              <a href="https://github.com" class="service featured">
+                <div class="service-icon">🐙</div>
+                <span class="service-name">GitHub</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">D+1</div>
+              </a>
+              <a href="https://gitlab.com" class="service">
+                <div class="service-icon">🦊</div>
+                <span class="service-name">GitLab</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">D+2</div>
+              </a>
+              <a href="https://vscode.dev" class="service">
+                <div class="service-icon">💻</div>
+                <span class="service-name">VS Code</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">D+3</div>
+              </a>
+              <a href="https://notion.so" class="service">
+                <div class="service-icon">📝</div>
+                <span class="service-name">Notion</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">D+4</div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Research Category -->
+          <div class="category fade-in">
+            <div class="category-header">
+              <span class="category-icon">📚</span>
+              <h2 class="category-title">Research & Learning</h2>
+              <span class="category-count">4</span>
+            </div>
+            <div class="services-grid">
+              <a href="https://libgen.is" class="service featured">
+                <div class="service-icon">📚</div>
+                <span class="service-name">LibGen</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">R+1</div>
+              </a>
+              <a href="https://z-lib.org" class="service">
+                <div class="service-icon">📖</div>
+                <span class="service-name">Z-Library</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">R+2</div>
+              </a>
+              <a href="https://udemy.com" class="service">
+                <div class="service-icon">🎯</div>
+                <span class="service-name">Udemy</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">R+3</div>
+              </a>
+              <a href="https://coursera.org" class="service">
+                <div class="service-icon">🎓</div>
+                <span class="service-name">Coursera</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">R+4</div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Network & Tools Category -->
+          <div class="category fade-in">
+            <div class="category-header">
+              <span class="category-icon">🛠️</span>
+              <h2 class="category-title">Network & Tools</h2>
+              <span class="category-count">3</span>
+            </div>
+            <div class="services-grid">
+              <a href="https://ipleak.net" class="service">
+                <div class="service-icon">🌐</div>
+                <span class="service-name">IP Location</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">N+1</div>
+              </a>
+              <a href="https://real-debrid.com/speedtest" class="service">
+                <div class="service-icon">⚡</div>
+                <span class="service-name">Speedtest</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">N+2</div>
+              </a>
+              <a href="https://rss.chooch.net" class="service">
+                <div class="service-icon">📡</div>
+                <span class="service-name">RSS</span>
+                <div class="service-status"></div>
+                <div class="shortcut-tooltip">N+3</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="#" class="footer-link" id="add-service-btn">Add Service</a>
+          <a href="#" class="footer-link" id="edit-layout-btn">Edit Layout</a>
+          <a href="#" class="footer-link" id="settings-btn">Settings</a>
+          <a href="#" class="footer-link" id="about-btn">About</a>
+        </div>
+        <p>&copy; 2025 Chooch.net | Your Personal Command Center | Room300 Forever</p>
+      </div>
+    </footer>
+    
+    <!-- Theme Menu (hidden by default) -->
+    <div class="theme-menu" id="theme-menu">
+      <div class="theme-menu-title">Select Theme</div>
+      <div class="theme-options">
+        <div class="theme-option" data-theme="dark">
+          <div class="theme-color dark"></div>
+          <span>Dark (Default)</span>
+        </div>
+        <div class="theme-option" data-theme="light">
+          <div class="theme-color light"></div>
+          <span>Light</span>
+        </div>
+        <div class="theme-option" data-theme="cyberpunk">
+          <div class="theme-color cyberpunk"></div>
+          <span>Cyberpunk</span>
+        </div>
+        <div class="theme-option" data-theme="matrix">
+          <div class="theme-color matrix"></div>
+          <span>Matrix</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Notification container -->
+    <div class="notification-container" id="notification-container">
+      <!-- Notifications will be added here dynamically -->
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize all components
+      initThemeManager();
+      initSearch();
+      initClock();
+      initStatusUpdater();
+      initMatrixRain();
+      initKeyboardShortcuts();
+      initNotifications();
+      
+      // Show welcome notification
+      showNotification('Welcome to Chooch.net', 'Your personal command center is ready. Press "/" to search.', 'info');
+    });
+    
+    /**
+     * Theme Manager
+     * Handles theme switching and preferences
+     */
+    function initThemeManager() {
+      const html = document.documentElement;
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeIcon = themeToggle.querySelector('.theme-icon');
+      const themeMenu = document.getElementById('theme-menu');
+      const themeOptions = document.querySelectorAll('.theme-option');
+      const toggleThemeBtn = document.getElementById('toggle-theme-btn');
+      
+      // Icons for different themes
+      const themeIcons = {
+        'dark': '🌙',
+        'light': '☀️',
+        'cyberpunk': '🤖',
+        'matrix': '💚'
+      };
+      
+      // Get saved theme or use system preference
+      function getSavedTheme() {
+        return localStorage.getItem('theme') || 'dark';
+      }
+      
+      // Set theme and update UI
+      function setTheme(theme) {
+        html.setAttribute('data-theme', theme);
+        themeIcon.textContent = themeIcons[theme] || '🌙';
+        localStorage.setItem('theme', theme);
+        
+        // Update active state in menu
+        themeOptions.forEach(option => {
+          if (option.dataset.theme === theme) {
+            option.classList.add('active');
+          } else {
+            option.classList.remove('active');
+          }
+        });
+        
+        // Special handling for Matrix theme
+        if (theme === 'matrix') {
+          document.getElementById('matrix-rain').style.display = 'block';
+        } else {
+          document.getElementById('matrix-rain').style.display = 'none';
+        }
+      }
+      
+      // Initialize with saved theme
+      setTheme(getSavedTheme());
+      
+      // Toggle theme menu
+      themeToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        themeMenu.style.display = themeMenu.style.display === 'block' ? 'none' : 'block';
+      });
+      
+      // Toggle theme button in quick actions
+      toggleThemeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        themeMenu.style.display = 'block';
+      });
+      
+      // Handle theme selection
+      themeOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          const theme = option.dataset.theme;
+          setTheme(theme);
+          themeMenu.style.display = 'none';
+          showNotification('Theme Changed', `Theme set to ${theme.charAt(0).toUpperCase() + theme.slice(1)}`, 'info');
+        });
+      });
+      
+      // Close theme menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (themeMenu.style.display === 'block' && !themeMenu.contains(e.target) && e.target !== themeToggle) {
+          themeMenu.style.display = 'none';
+        }
+      });
+    }
+    
+    /**
+     * Search Functionality
+     * Handles search and suggestions
+     */
+    function initSearch() {
+      const searchInput = document.getElementById('search-input');
+      const searchSuggestions = document.getElementById('search-suggestions');
+      const services = document.querySelectorAll('.service');
+      const categories = document.querySelectorAll('.category');
+      
+      // Get all services data
+      const servicesData = [];
+      services.forEach(service => {
+        const name = service.querySelector('.service-name').textContent;
+        const url = service.href;
+        const categoryName = service.closest('.category').querySelector('.category-title').textContent;
+        const icon = service.querySelector('.service-icon').textContent;
+        
+        servicesData.push({ name, url, categoryName, icon });
+      });
+      
+      // Handle input in search
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim().toLowerCase();
+        
+        if (!query) {
+          searchSuggestions.classList.remove('show');
+          return;
+        }
+        
+        // Filter services that match query
+        const matches = servicesData.filter(service => 
+          service.name.toLowerCase().includes(query) || 
+          service.categoryName.toLowerCase().includes(query)
+        );
+        
+        // Limit to top 5 matches
+        const topMatches = matches.slice(0, 5);
+        
+        // Clear previous suggestions
+        searchSuggestions.innerHTML = '';
+        
+        // If we have matches, display them
+        if (topMatches.length > 0) {
+          topMatches.forEach(match => {
+            const suggestionItem = document.createElement('div');
+            suggestionItem.className = 'search-suggestion-item';
+            suggestionItem.innerHTML = `
+              <div class="suggestion-icon">${match.icon}</div>
+              <div class="suggestion-text">
+                <div class="suggestion-name">${match.name}</div>
+                <div class="suggestion-category">${match.categoryName}</div>
+              </div>
+            `;
+            
+            // Click on suggestion to navigate
+            suggestionItem.addEventListener('click', () => {
+              window.location.href = match.url;
+            });
+            
+            searchSuggestions.appendChild(suggestionItem);
+          });
+          
+          searchSuggestions.classList.add('show');
+        } else {
+          // If no matches, show option to search web
+          const webSearchItem = document.createElement('div');
+          webSearchItem.className = 'search-suggestion-item';
+          webSearchItem.innerHTML = `
+            <div class="suggestion-icon">🔍</div>
+            <div class="suggestion-text">
+              <div class="suggestion-name">Search Web for "${query}"</div>
+              <div class="suggestion-category">Press Enter to search</div>
+            </div>
+          `;
+          
+          webSearchItem.addEventListener('click', () => {
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+            searchInput.value = '';
+            searchSuggestions.classList.remove('show');
+          });
+          
+          searchSuggestions.appendChild(webSearchItem);
+          searchSuggestions.classList.add('show');
+        }
+      });
+      
+      // Handle key navigation
+      searchInput.addEventListener('keydown', (e) => {
+        const suggestions = searchSuggestions.querySelectorAll('.search-suggestion-item');
+        let activeIndex = Array.from(suggestions).findIndex(item => item.classList.contains('highlighted'));
+        
+        switch (e.key) {
+          case 'ArrowDown':
+            e.preventDefault();
+            if (activeIndex < suggestions.length - 1) {
+              if (activeIndex >= 0) {
+                suggestions[activeIndex].classList.remove('highlighted');
+              }
+              suggestions[activeIndex + 1].classList.add('highlighted');
+            } else if (suggestions.length > 0 && activeIndex === -1) {
+              suggestions[0].classList.add('highlighted');
+            }
+            break;
+            
+          case 'ArrowUp':
+            e.preventDefault();
+            if (activeIndex > 0) {
+              suggestions[activeIndex].classList.remove('highlighted');
+              suggestions[activeIndex - 1].classList.add('highlighted');
+            }
+            break;
+            
+          case 'Enter':
+            if (activeIndex >= 0) {
+              e.preventDefault();
+              suggestions[activeIndex].click();
+            } else if (searchInput.value.trim() !== '') {
+              // If no suggestion highlighted but there's a query, search web
+              window.open(`https://www.google.com/search?q=${encodeURIComponent(searchInput.value.trim())}`, '_blank');
+              searchInput.value = '';
+              searchSuggestions.classList.remove('show');
+            }
+            break;
+            
+          case 'Escape':
+            searchInput.value = '';
+            searchSuggestions.classList.remove('show');
+            searchInput.blur();
+            break;
+        }
+      });
+      
+      // Handle URL input (if user types a valid URL)
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const input = searchInput.value.trim();
+          
+          // Check if input is a URL
+          if (/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i.test(input)) {
+            const url = input.startsWith('http') ? input : `https://${input}`;
+            window.open(url, '_blank');
+            searchInput.value = '';
+            searchSuggestions.classList.remove('show');
+          }
+        }
+      });
+      
+      // Close suggestions when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
+          searchSuggestions.classList.remove('show');
+        }
+      });
+    }
+    
+    /**
+     * Clock and Date
+     * Updates the time and date
+     */
+    function initClock() {
+      const timeElement = document.getElementById('current-time');
+      const dateElement = document.getElementById('current-date');
+      
+      function updateClock() {
+        const now = new Date();
+        
+        // Format time
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = hours % 12 || 12;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        
+        timeElement.textContent = `${formattedHours}:${formattedMinutes} ${ampm}`;
+        
+        // Format date
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        
+        const day = days[now.getDay()];
+        const date = now.getDate();
+        const month = months[now.getMonth()];
+        const year = now.getFullYear();
+        
+        dateElement.textContent = `${day}, ${month} ${date}, ${year}`;
+      }
+      
+      // Update immediately and then every second
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
+    
+    /**
+     * Status Updater
+     * Simulates checking status of services and updating indicators
+     */
+    function initStatusUpdater() {
+      const statusIndicators = document.querySelectorAll('.service-status:not(.offline)');
+      const serviceCountEl = document.getElementById('services-count');
+      const networkStatusEl = document.getElementById('network-status');
+      
+      // Simulate checking service status
+      function updateStatuses() {
+        let onlineCount = 0;
+        const totalServices = document.querySelectorAll('.service-status').length;
+        
+        statusIndicators.forEach(indicator => {
+          // Simulate 95% uptime (5% chance of being offline)
+          const isOnline = Math.random() > 0.05;
+          indicator.classList.toggle('offline', !isOnline);
+          
+          if (isOnline) onlineCount++;
+        });
+        
+        // Add offline services count
+        const offlineIndicators = document.querySelectorAll('.service-status.offline');
+        const onlineTotal = totalServices - offlineIndicators.length;
+        
+        // Update services count stat
+        serviceCountEl.textContent = `${onlineTotal}/${totalServices}`;
+        
+        // Simulate network latency between 30-300ms
+        const latency = Math.floor(Math.random() * 270) + 30;
+        networkStatusEl.textContent = `${latency}ms`;
+        
+        // Highlight if latency is high
+        if (latency > 150) {
+          networkStatusEl.style.color = '#f59e0b';
+        } else {
+          networkStatusEl.style.color = '';
+        }
+      }
+      
+      // Update immediately and then every 30 seconds
+      updateStatuses();
+      setInterval(updateStatuses, 30000);
+    }
+    
+    /**
+     * Matrix Rain Effect
+     * Creates a green "Matrix" effect for the Matrix theme
+     */
+    function initMatrixRain() {
+      const canvas = document.getElementById('matrix-rain');
+      const ctx = canvas.getContext('2d');
+      
+      // Set canvas to full window size
+      function setCanvasSize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      
+      // Initialize on first call
+      setCanvasSize();
+      window.addEventListener('resize', setCanvasSize);
+      
+      // Characters to display in the rain
+      const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%"\'#&_(),.;:?!\\|{}<>[]^~';
+      
+      // Rain drops
+      const drops = [];
+      const columns = Math.floor(canvas.width / 20);
+      
+      // Initialize drops
+      for (let i = 0; i < columns; i++) {
+        drops[i] = Math.floor(Math.random() * -canvas.height);
+      }
+      
+      function draw() {
+        // Slightly fade out the previous frame for trail effect
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.font = '15px monospace';
+        
+        for (let i = 0; i < drops.length; i++) {
+          // Pick random character
+          const char = chars[Math.floor(Math.random() * chars.length)];
+          
+          // Different shades of green for depth
+          const green = Math.floor(Math.random() * 155) + 100;
+          ctx.fillStyle = `rgba(0, ${green}, 65, 0.8)`;
+          
+          // Draw character
+          ctx.fillText(char, i * 20, drops[i]);
+          
+          // Move drop down
+          drops[i] += 20;
+          
+          // Reset drop to top with some randomness
+          if (drops[i] > canvas.height && Math.random() > 0.975) {
+            drops[i] = Math.floor(Math.random() * -100);
+          }
+        }
+      }
+      
+      // Only animate if matrix theme is active
+      function animateMatrixRain() {
+        if (document.documentElement.getAttribute('data-theme') === 'matrix') {
+          draw();
+        }
+        requestAnimationFrame(animateMatrixRain);
+      }
+      
+      animateMatrixRain();
+    }
+    
+    /**
+     * Keyboard Shortcuts
+     * Handles keyboard navigation for the hub
+     */
+    function initKeyboardShortcuts() {
+      document.addEventListener('keydown', (e) => {
+        // Don't trigger shortcuts when typing in search
+        if (e.target.tagName === 'INPUT') return;
+        
+        const key = e.key.toLowerCase();
+        
+        // Slash key for search focus
+        if (key === '/') {
+          e.preventDefault();
+          document.getElementById('search-input').focus();
+        }
+        
+        // Alt + T for theme toggle
+        if (e.altKey && key === 't') {
+          e.preventDefault();
+          document.getElementById('toggle-theme-btn').click();
+        }
+        
+        // Alt + number for quick actions
+        if (e.altKey && !isNaN(parseInt(key)) && parseInt(key) > 0 && parseInt(key) <= 4) {
+          e.preventDefault();
+          const index = parseInt(key) - 1;
+          const quickActions = document.querySelectorAll('.action-btn');
+          
+          if (quickActions[index]) {
+            quickActions[index].click();
+          }
+        }
+        
+        // Handle category shortcuts
+        const categoryKeys = {
+          'e': 'Email & Communication',
+          'm': 'Entertainment',
+          'f': 'Files & Storage',
+          't': 'Torrenting',
+          's': 'Security & Privacy',
+          'd': 'Developer Tools',
+          'r': 'Research & Learning',
+          'n': 'Network & Tools'
+        };
+        
+        if (e.altKey && categoryKeys[key]) {
+          const categories = document.querySelectorAll('.category');
+          const targetCategory = Array.from(categories).find(
+            category => category.querySelector('.category-title').textContent === categoryKeys[key]
+          );
+          
+          if (targetCategory) {
+            e.preventDefault();
+            targetCategory.scrollIntoView({ behavior: 'smooth' });
+            
+            // Flash highlight effect
+            targetCategory.style.transition = 'box-shadow 0.3s';
+            targetCategory.style.boxShadow = '0 0 0 2px var(--accent-primary)';
+            
+            setTimeout(() => {
+              targetCategory.style.boxShadow = '';
+            }, 1000);
+          }
+        }
+        
+        // Service shortcuts (Category+Number) like E+1 for first email service
+        if (e.altKey && e.shiftKey && !isNaN(parseInt(key)) && parseInt(key) > 0) {
+          const number = parseInt(key);
+          
+          // Find the focused category by checking which is in view
+          const categories = document.querySelectorAll('.category');
+          const visibleCategory = Array.from(categories).find(category => {
+            const rect = category.getBoundingClientRect();
+            return rect.top >= 0 && rect.bottom <= window.innerHeight;
+          });
+          
+          if (visibleCategory) {
+            const services = visibleCategory.querySelectorAll('.service');
+            if (services[number - 1]) {
+              e.preventDefault();
+              services[number - 1].click();
+            }
+          }
+        }
+      });
+    }
+    
+    /**
+     * Notification System
+     * Shows temporary notifications to the user
+     */
+    function initNotifications() {
+      // Notification container already exists in the DOM
+      const container = document.getElementById('notification-container');
+    }
+    
+    // Show a notification
+    function showNotification(title, message, type = 'info') {
+      const container = document.getElementById('notification-container');
+      
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.dataset.type = type;
+      
+      // Choose icon based on type
+      let icon = '🔔';
+      if (type === 'success') icon = '✅';
+      if (type === 'error') icon = '❌';
+      if (type === 'warning') icon = '⚠️';
+      
+      // Set content
+      notification.innerHTML = `
+        <div class="notification-icon">${icon}</div>
+        <div class="notification-content">
+          <div class="notification-title">${title}</div>
+          <div class="notification-message">${message}</div>
+        </div>
+        <button class="notification-close">×</button>
+      `;
+      
+      // Add to container
+      container.appendChild(notification);
+      
+      // Add close functionality
+      const closeBtn = notification.querySelector('.notification-close');
+      closeBtn.addEventListener('click', () => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+          notification.remove();
+        }, 300);
+      });
+      
+      // Auto-remove after 5 seconds
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.style.opacity = '0';
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.remove();
+            }
+          }, 300);
+        }
+      }, 5000);
+    }
+    
+    // Initialize fade-in animations for elements
+    function initFadeInAnimations() {
+      const fadeElements = document.querySelectorAll('.fade-in');
+      
+      // Create observer
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = 1;
+            entry.target.style.transform = 'translateY(0)';
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      // Observe each element
+      fadeElements.forEach(element => {
+        element.style.opacity = 0;
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(element);
+      });
+    }
+    
+    // Initialize fade-in animations
+    initFadeInAnimations();
+  </script>
+</body>
+</html><!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Chooch.net - Your Personal Hub for Essential Services & Tools">
+  <meta name="description" content="Chooch.net - Your Personal Command Center">
   <meta name="theme-color" content="#0a0a0a">
   <title>Chooch.net</title>
   
   <!-- Preload critical resources -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preload" as="style" href="css/main.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/animations.css">
-  <link rel="stylesheet" href="css/themes.css">
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-
-  <!-- Matrix Rain Templates and Scripts -->
-  <template id="rain-template">
-    <style>
-      canvas {
-        left: 0;
-        position: absolute;
-        top: 0;
-        z-index: -1;
+  <style>
+    /* Design System */
+    :root {
+      /* Colors */
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #121212;
+      --bg-tertiary: #1e1e1e;
+      --bg-elevated: #252525;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --text-muted: #666666;
+      --accent-primary: #00ff41;
+      --accent-secondary: #4ade80;
+      --accent-tertiary: #22d3ee;
+      --accent-quaternary: #8b5cf6;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --glass-bg: rgba(18, 18, 18, 0.8);
+      
+      /* Effects */
+      --glow-primary: 0 0 20px rgba(0, 255, 65, 0.3);
+      --glow-secondary: 0 0 30px rgba(74, 222, 128, 0.2);
+      --backdrop-blur: blur(16px);
+      
+      /* Transitions */
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-medium: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      /* Spacing */
+      --space-xs: 0.5rem;
+      --space-sm: 0.75rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-2xl: 3rem;
+      
+      /* Typography */
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-size-xs: 0.75rem;
+      --font-size-sm: 0.875rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.125rem;
+      --font-size-xl: 1.25rem;
+      --font-size-2xl: 1.5rem;
+      --font-size-3xl: 2rem;
+      --font-size-4xl: 2.5rem;
+      
+      /* Shapes */
+      --border-radius-sm: 6px;
+      --border-radius: 12px;
+      --border-radius-lg: 16px;
+      --border-radius-xl: 24px;
+      
+      /* Z-index layers */
+      --z-base: 1;
+      --z-overlay: 10;
+      --z-dropdown: 20;
+      --z-sticky: 30;
+      --z-drawer: 40;
+      --z-modal: 50;
+      --z-tooltip: 60;
+    }
+    
+    /* Light Theme */
+    [data-theme="light"] {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f5;
+      --bg-tertiary: #e5e5e5;
+      --bg-elevated: #eaeaea;
+      --text-primary: #1a1a1a;
+      --text-secondary: #4a4a4a;
+      --text-muted: #8a8a8a;
+      --accent-primary: #10b981;
+      --accent-secondary: #34d399;
+      --border-color: rgba(0, 0, 0, 0.1);
+      --glass-bg: rgba(245, 245, 245, 0.8);
+    }
+    
+    /* Cyberpunk Theme */
+    [data-theme="cyberpunk"] {
+      --bg-primary: #000911;
+      --bg-secondary: #0a1022;
+      --bg-tertiary: #121a33;
+      --bg-elevated: #192444;
+      --text-primary: #ff9f00;
+      --text-secondary: #cc7f00;
+      --text-muted: #664400;
+      --accent-primary: #ff00ff;
+      --accent-secondary: #9f00ff;
+      --accent-tertiary: #00ffff;
+      --accent-quaternary: #ff0066;
+      --glass-bg: rgba(10, 16, 34, 0.8);
+    }
+    
+    /* Matrix Theme */
+    [data-theme="matrix"] {
+      --bg-primary: #000000;
+      --bg-secondary: #001100;
+      --bg-tertiary: #002200;
+      --bg-elevated: #003300;
+      --text-primary: #00ff41;
+      --text-secondary: #00cc33;
+      --text-muted: #009922;
+      --accent-primary: #00ff41;
+      --accent-secondary: #44ff77;
+      --accent-tertiary: #88ffaa;
+      --glass-bg: rgba(0, 17, 0, 0.8);
+    }
+    
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    
+    button {
+      font: inherit;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: inherit;
+    }
+    
+    input, select {
+      font: inherit;
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { 
+        opacity: 0; 
+        transform: translateY(10px); 
       }
-    </style>
-    <canvas class="rain" height="715" width="1294"></canvas>
-  </template>
-  
-  <script>
-    // Matrix Rain Configuration
-    const CONFIG = {
-      rainColumns: 200,
-      rainFade: 0.2,
-      rainFrameRate: 1000 / 18,
-      rainResilience: 0.8,
-      rainSpeed: 1,
-      // Search Configuration
-      commandPathDelimiter: '/',
-      commandSearchDelimiter: ' ',
-      defaultSearchTemplate: 'https://www.startpage.com/sp/search?query={}&abp=1&t=night&lui=english&cat=web&abd=1',
-      openLinksInNewTab: false,
-      suggestionLimit: 4,
-    };
-  </script>
-
-  <!-- Search Templates -->
-  <template id="search-template">
-    <style>
-      input,
-      button {
-        -moz-appearance: none;
-        -webkit-appearance: none;
-        background: transparent;
-        border: 0;
-        display: block;
-        outline: 0;
+      to { 
+        opacity: 1; 
+        transform: translateY(0); 
       }
-
-      .dialog {
-        align-items: center;
-        background: var(--bg-primary);
-        border: none;
-        display: none;
-        flex-direction: column;
-        height: 100%;
-        justify-content: center;
-        left: 0;
-        padding: 0;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 1000;
+    }
+    
+    @keyframes pulseGlow {
+      0%, 100% { 
+        filter: drop-shadow(0 0 8px var(--accent-primary)); 
       }
-
-      .dialog[open] {
-        display: flex;
+      50% { 
+        filter: drop-shadow(0 0 15px var(--accent-primary)); 
       }
-
-      .form {
-        width: 100%;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { 
+        opacity: 1; 
       }
-
-      .input {
-        color: var(--accent-primary);
-        font-size: var(--font-size-3xl);
-        font-weight: 700;
-        padding: 0;
-        text-align: center;
-        width: 100%;
+      50% { 
+        opacity: 0.6; 
       }
-
-      .suggestions {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
+    }
+    
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+    
+    @keyframes gradientFlow {
+      0% {
+        background-position: 0% 50%
+      }
+      50% {
+        background-position: 100% 50%
+      }
+      100% {
+        background-position: 0% 50%
+      }
+    }
+    
+    /* Dynamic background */
+    .dynamic-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .bg-grid {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 50px 50px;
+      transform: rotate(45deg);
+      animation: subtleFloat 120s infinite linear;
+    }
+    
+    .bg-glow {
+      position: absolute;
+      top: 30%;
+      width: 60%;
+      height: 40%;
+      border-radius: 50%;
+      background: radial-gradient(circle, 
+                                rgba(0, 255, 65, 0.05) 0%, 
+                                rgba(0, 255, 65, 0.02) 40%, 
+                                transparent 70%);
+      filter: blur(60px);
+      animation: pulseSlow 15s infinite alternate;
+    }
+    
+    @keyframes subtleFloat {
+      0% {
+        transform: rotate(45deg) translateY(0px);
+      }
+      25% {
+        transform: rotate(45deg) translateY(-20px);
+      }
+      50% {
+        transform: rotate(45deg) translateY(0px);
+      }
+      75% {
+        transform: rotate(45deg) translateY(20px);
+      }
+      100% {
+        transform: rotate(45deg) translateY(0px);
+      }
+    }
+    
+    @keyframes pulseSlow {
+      0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.8;
+        transform: scale(1.2);
+      }
+    }
+    
+    /* Main Components */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      position: relative;
+      z-index: var(--z-base);
+    }
+    
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: var(--z-sticky);
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
+      background: var(--glass-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: var(--space-md) 0;
+      transition: all var(--transition-medium);
+    }
+    
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-2xl);
+      font-weight: 700;
+      position: relative;
+      color: var(--accent-primary);
+      text-decoration: none;
+      transition: all var(--transition-medium);
+    }
+    
+    /* Glitch effect */
+    .glitch {
+      position: relative;
+      animation: pulseGlow 4s infinite;
+    }
+    
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.8;
+    }
+    
+    .glitch::before {
+      color: var(--accent-quaternary);
+      animation: glitch-1 4s infinite linear alternate-reverse;
+      clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+      transform: translateX(-2px);
+    }
+    
+    .glitch::after {
+      color: var(--accent-tertiary);
+      animation: glitch-2 3s infinite linear alternate-reverse;
+      clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+      transform: translateX(2px);
+    }
+    
+    @keyframes glitch-1 {
+      0%, 5%, 10%, 100% { opacity: 0.8; transform: translateX(-2px); }
+      2%, 8% { opacity: 0.9; transform: translateX(2px); }
+    }
+    
+    @keyframes glitch-2 {
+      0%, 5%, 10%, 100% { opacity: 0.8; transform: translateX(2px); }
+      2%, 8% { opacity: 0.9; transform: translateX(-2px); }
+    }
+    
+    /* Header Controls */
+    .header-controls {
+      display: flex;
+      gap: var(--space-md);
+      align-items: center;
+    }
+    
+    /* Search */
+    .search-container {
+      position: relative;
+      width: 300px;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: var(--space-sm) var(--space-lg);
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      color: var(--text-primary);
+      font-size: var(--font-size-sm);
+      transition: all var(--transition-fast);
+      outline: none;
+    }
+    
+    .search-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: var(--glow-primary);
+    }
+    
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+    
+    /* Search suggestions */
+    .search-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-top: none;
+      border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+      max-height: 300px;
+      overflow-y: auto;
+      z-index: var(--z-dropdown);
+      display: none;
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .search-suggestions.show {
+      display: block;
+    }
+    
+    .search-suggestion-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .search-suggestion-item:last-child {
+      border-bottom: none;
+    }
+    
+    .search-suggestion-item.highlighted,
+    .search-suggestion-item:hover {
+      background: var(--bg-tertiary);
+    }: #4ade80;
+      --accent-tertiary: #22d3ee;
+      --accent-quaternary: #8b5cf6;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --glass-bg: rgba(18, 18, 18, 0.8);
+      
+      /* Effects */
+      --glow-primary: 0 0 20px rgba(0, 255, 65, 0.3);
+      --glow-secondary: 0 0 30px rgba(74, 222, 128, 0.2);
+      --backdrop-blur: blur(16px);
+      
+      /* Transitions */
+      --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-medium: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      /* Spacing */
+      --space-xs: 0.5rem;
+      --space-sm: 0.75rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-2xl: 3rem;
+      
+      /* Typography */
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-size-xs: 0.75rem;
+      --font-size-sm: 0.875rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.125rem;
+      --font-size-xl: 1.25rem;
+      --font-size-2xl: 1.5rem;
+      --font-size-3xl: 2rem;
+      --font-size-4xl: 2.5rem;
+      
+      /* Shapes */
+      --border-radius-sm: 6px;
+      --border-radius: 12px;
+      --border-radius-lg: 16px;
+      --border-radius-xl: 24px;
+      
+      /* Z-index layers */
+      --z-base: 1;
+      --z-overlay: 10;
+      --z-dropdown: 20;
+      --z-sticky: 30;
+      --z-drawer: 40;
+      --z-modal: 50;
+      --z-tooltip: 60;
+    }
+    
+    /* Light Theme */
+    [data-theme="light"] {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f5;
+      --bg-tertiary: #e5e5e5;
+      --bg-elevated: #eaeaea;
+      --text-primary: #1a1a1a;
+      --text-secondary: #4a4a4a;
+      --text-muted: #8a8a8a;
+      --accent-primary: #10b981;
+      --accent-secondary: #34d399;
+      --border-color: rgba(0, 0, 0, 0.1);
+      --glass-bg: rgba(245, 245, 245, 0.8);
+    }
+    
+    /* Cyberpunk Theme */
+    [data-theme="cyberpunk"] {
+      --bg-primary: #000911;
+      --bg-secondary: #0a1022;
+      --bg-tertiary: #121a33;
+      --bg-elevated: #192444;
+      --text-primary: #ff9f00;
+      --text-secondary: #cc7f00;
+      --text-muted: #664400;
+      --accent-primary: #ff00ff;
+      --accent-secondary: #9f00ff;
+      --accent-tertiary: #00ffff;
+      --accent-quaternary: #ff0066;
+      --glass-bg: rgba(10, 16, 34, 0.8);
+    }
+    
+    /* Matrix Theme */
+    [data-theme="matrix"] {
+      --bg-primary: #000000;
+      --bg-secondary: #001100;
+      --bg-tertiary: #002200;
+      --bg-elevated: #003300;
+      --text-primary: #00ff41;
+      --text-secondary: #00cc33;
+      --text-muted: #009922;
+      --accent-primary: #00ff41;
+      --accent-secondary: #44ff77;
+      --accent-tertiary: #88ffaa;
+      --glass-bg: rgba(0, 17, 0, 0.8);
+    }
+    
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    
+    button {
+      font: inherit;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: inherit;
+    }
+    
+    input, select {
+      font: inherit;
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0); 
+      }
+    }
+    
+    @keyframes pulseGlow {
+      0%, 100% { 
+        filter: drop-shadow(0 0 8px var(--accent-primary)); 
+      }
+      50% { 
+        filter: drop-shadow(0 0 15px var(--accent-primary)); 
+      }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { 
+        opacity: 1; 
+      }
+      50% { 
+        opacity: 0.6; 
+      }
+    }
+    
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+    
+    @keyframes gradientFlow {
+      0% {
+        background-position: 0% 50%
+      }
+      50% {
+        background-position: 100% 50%
+      }
+      100% {
+        background-position: 0% 50%
+      }
+    }
+    
+    /* Dynamic background */
+    .dynamic-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .bg-grid {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 50px 50px;
+      transform: rotate(45deg);
+      animation: subtleFloat 120s infinite linear;
+    }
+    
+    .bg-glow {
+      position: absolute;
+      top: 30%;
+      width: 60%;
+      height: 40%;
+      border-radius: 50%;
+      background: radial-gradient(circle, 
+                                rgba(0, 255, 65, 0.05) 0%, 
+                                rgba(0, 255, 65, 0.02) 40%, 
+                                transparent 70%);
+      filter: blur(60px);
+      animation: pulseSlow 15s infinite alternate;
+    }
+    
+    @keyframes subtleFloat {
+      0% {
+        transform: rotate(45deg) translateY(0px);
+      }
+      25% {
+        transform: rotate(45deg) translateY(-20px);
+      }
+      50% {
+        transform: rotate(45deg) translateY(0px);
+      }
+      75% {
+        transform: rotate(45deg) translateY(20px);
+      }
+      100% {
+        transform: rotate(45deg) translateY(0px);
+      }
+    }
+    
+    @keyframes pulseSlow {
+      0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.8;
+        transform: scale(1.2);
+      }
+    }
+    
+    /* Main Components */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      position: relative;
+      z-index: var(--z-base);
+    }
+    
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: var(--z-sticky);
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
+      background: var(--glass-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: var(--space-md) 0;
+      transition: all var(--transition-medium);
+    }
+    
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-2xl);
+      font-weight: 700;
+      position: relative;
+      color: var(--accent-primary);
+      text-decoration: none;
+      transition: all var(--transition-medium);
+    }
+    
+    /* Glitch effect */
+    .glitch {
+      position: relative;
+      animation: pulseGlow 4s infinite;
+    }
+    
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.8;
+    }
+    
+    .glitch::before {
+      color: var(--accent-quaternary);
+      animation: glitch-1 4s infinite linear alternate-reverse;
+      clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+      transform: translateX(-2px);
+    }
+    
+    .glitch::after {
+      color: var(--accent-tertiary);
+      animation: glitch-2 3s infinite linear alternate-reverse;
+      clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+      transform: translateX(2px);
+    }
+    
+    @keyframes glitch-1 {
+      0%, 5%, 10%, 100% { opacity: 0.8; transform: translateX(-2px); }
+      2%, 8% { opacity: 0.9; transform: translateX(2px); }
+    }
+    
+    @keyframes glitch-2 {
+      0%, 5%, 10%, 100% { opacity: 0.8; transform: translateX(2px); }
+      2%, 8% { opacity: 0.9; transform: translateX(-2px); }
+    }
+    
+    /* Header Controls */
+    .header-controls {
+      display: flex;
+      gap: var(--space-md);
+      align-items: center;
+    }
+    
+    /* Search */
+    .search-container {
+      position: relative;
+      width: 300px;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: var(--space-sm) var(--space-lg);
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      color: var(--text-primary);
+      font-size: var(--font-size-sm);
+      transition: all var(--transition-fast);
+      outline: none;
+    }
+    
+    .search-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: var(--glow-primary);
+    }
+    
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+    
+    /* Search suggestions */
+    .search-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-top: none;
+      border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+      max-height: 300px;
+      overflow-y: auto;
+      z-index: var(--z-dropdown);
+      display: none;
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .search-suggestions.show {
+      display: block;
+    }
+    
+    .search-suggestion-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .search-suggestion-item:last-child {
+      border-bottom: none;
+    }
+    
+    .search-suggestion-item.highlighted,
+    .search-suggestion-item:hover {
+      background: var(--bg-tertiary);
+    }
+    
+    .suggestion-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--border-radius-sm);
+      background: var(--bg-elevated);
+      font-size: var(--font-size-xl);
+    }
+    
+    .suggestion-text {
+      flex-grow: 1;
+    }
+    
+    .suggestion-name {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    .suggestion-category {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    
+    /* Theme toggle */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      transition: all var(--transition-fast);
+      color: var(--text-primary);
+      font-size: var(--font-size-lg);
+    }
+    
+    .theme-toggle:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+      box-shadow: var(--glow-primary);
+    }
+    
+    /* Main Content */
+    .main {
+      flex: 1;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: var(--space-xl) var(--space-lg);
+    }
+    
+    /* System Stats */
+    .system-stats {
+      display: flex;
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+      flex-wrap: wrap;
+    }
+    
+    .system-stat {
+      flex: 1;
+      min-width: 180px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--border-color);
+      padding: var(--space-md);
+      transition: all var(--transition-medium);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    
+    .system-stat:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-4px);
+      box-shadow: var(--glow-primary);
+    }
+    
+    .stat-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      color: var(--text-secondary);
+      font-size: var(--font-size-sm);
+    }
+    
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xl);
+      font-weight: 700;
+      color: var(--accent-primary);
+    }
+    
+    .stat-footer {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+    }
+    
+    /* Two-column layout for main content */
+    .content-columns {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: var(--space-xl);
+      margin-bottom: var(--space-xl);
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+      background: var(--glass-bg);
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    
+    .section-header {
+      padding: var(--space-md);
+      border-bottom: 1px solid var(--border-color);
+      background: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    
+    .section-title {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .actions-list {
+      display: flex;
+      flex-direction: column;
+      padding: var(--space-sm);
+    }
+    
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      color: var(--text-primary);
+      border-radius: var(--border-radius);
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .action-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.7s;
+    }
+    
+    .action-btn:hover::before {
+      left: 100%;
+    }
+    
+    .action-btn:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+    }
+    
+    .action-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--border-radius-sm);
+      background: var(--bg-elevated);
+      font-size: var(--font-size-xl);
+    }
+    
+    .action-details {
+      flex-grow: 1;
+    }
+    
+    .action-name {
+      font-weight: 500;
+    }
+    
+    .action-description {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+    }
+    
+    .action-shortcut {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      padding: var(--space-xs);
+      background: var(--bg-elevated);
+      border-radius: var(--border-radius-sm);
+    }
+    
+    /* Main Content */
+    .main {
+      flex: 1;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: var(--space-xl) var(--space-lg);
+    }
+    
+    /* System Stats */
+    .system-stats {
+      display: flex;
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+      flex-wrap: wrap;
+    }
+    
+    .system-stat {
+      flex: 1;
+      min-width: 180px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--border-color);
+      padding: var(--space-md);
+      transition: all var(--transition-medium);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    
+    .system-stat:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-4px);
+      box-shadow: var(--glow-primary);
+    }
+    
+    .stat-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      color: var(--text-secondary);
+      font-size: var(--font-size-sm);
+    }
+    
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xl);
+      font-weight: 700;
+      color: var(--accent-primary);
+    }
+    
+    .stat-footer {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+    }
+    
+    /* Two-column layout for main content */
+    .content-columns {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: var(--space-xl);
+      margin-bottom: var(--space-xl);
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+      background: var(--glass-bg);
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    
+    .section-header {
+      padding: var(--space-md);
+      border-bottom: 1px solid var(--border-color);
+      background: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    
+    .section-title {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .actions-list {
+      display: flex;
+      flex-direction: column;
+      padding: var(--space-sm);
+    }
+    
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      color: var(--text-primary);
+      border-radius: var(--border-radius);
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .action-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.7s;
+    }
+    
+    .action-btn:hover::before {
+      left: 100%;
+    }
+    
+    .action-btn:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+    }
+    
+    .action-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--border-radius-sm);
+      background: var(--bg-elevated);
+      font-size: var(--font-size-xl);
+    }
+    
+    .action-details {
+      flex-grow: 1;
+    }
+    
+    .action-name {
+      font-weight: 500;
+    }
+    
+    .action-description {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+    }
+    
+    .action-shortcut {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      padding: var(--space-xs);
+      background: var(--bg-elevated);
+      border-radius: var(--border-radius-sm);
+    }
+    
+    /* Status Panel */
+    .status-panel {
+      background: var(--glass-bg);
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    
+    .status-list {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .status-item:last-child {
+      border-bottom: none;
+    }
+    
+    .status-indicator {
+      position: relative;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent-secondary);
+    }
+    
+    .status-indicator::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: inherit;
+      filter: blur(2px);
+      opacity: 0.6;
+      animation: pulse 2s infinite;
+    }
+    
+    .status-indicator.offline {
+      background: #ef4444;
+    }
+    
+    .status-details {
+      flex-grow: 1;
+    }
+    
+    .status-name {
+      font-weight: 500;
+    }
+    
+    .status-metrics {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    
+    .status-metric {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .status-metric-value {
+      color: var(--text-secondary);
+    }
+    
+    /* Main Services Grid */
+    .services-content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xl);
+    }
+    
+    .category {
+      background: var(--glass-bg);
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      transition: all var(--transition-medium);
+    }
+    
+    .category:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      border-color: var(--accent-primary);
+    }
+    
+    .category-header {
+      padding: var(--space-lg);
+      background: linear-gradient(to right, var(--bg-tertiary), var(--bg-secondary));
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+    
+    .category-icon {
+      font-size: var(--font-size-2xl);
+    }
+    
+    .category-title {
+      font-size: var(--font-size-xl);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .category-count {
+      margin-left: auto;
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      background: var(--bg-tertiary);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: var(--space-md);
+      padding: var(--space-lg);
+    }
+    
+    .service {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-lg);
+      text-decoration: none;
+      color: var(--text-primary);
+      border-radius: var(--border-radius-lg);
+      transition: all var(--transition-fast);
+      position: relative;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    
+    .service.featured {
+      border-color: var(--accent-primary);
+      background: linear-gradient(135deg, var(--bg-tertiary), rgba(0, 255, 65, 0.05));
+    }
+    
+    .service::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transition: left 0.5s;
+    }
+    
+    .service:hover::before {
+      left: 100%;
+    }
+    
+    .service:hover {
+      transform: translateY(-8px) scale(1.05);
+      background: var(--bg-elevated);
+      border-color: var(--accent-primary);
+      box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(0, 255, 65, 0.2);
+    }
+    
+    .service:hover .service-icon {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px var(--accent-primary);
+    }
+    
+    .service-icon {
+      width: 54px;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--border-radius);
+      background: var(--bg-elevated);
+      font-size: var(--font-size-2xl);
+      transition: all var(--transition-medium);
+    }
+    
+    .service-name {
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      text-align: center;
+      transition: all var(--transition-fast);
+    }
+    
+    .service:hover .service-name {
+      color: var(--accent-primary);
+    }
+    
+    .service-status {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-secondary);
+    }
+    
+    .service-status.offline {
+      background: #ef4444;
+    }
+    
+    /* Keyboard shortcut tooltip */
+    .shortcut-tooltip {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      background: var(--bg-elevated);
+      padding: 2px 6px;
+      border-radius: var(--border-radius-sm);
+      opacity: 0.6;
+      transition: opacity var(--transition-fast);
+    }
+    
+    .service:hover .shortcut-tooltip {
+      opacity: 1;
+    }
+    
+    /* Footer */
+    .footer {
+      width: 100%;
+      background: var(--glass-bg);
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
+      border-top: 1px solid var(--border-color);
+      padding: var(--space-lg) var(--space-md);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+    
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-lg);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-md);
+    }
+    
+    .footer-link {
+      color: var(--text-secondary);
+      transition: color var(--transition-fast);
+    }
+    
+    .footer-link:hover {
+      color: var(--accent-primary);
+    }
+    
+    /* Weather Widget */
+    .weather-widget {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      width: 100%;
+    }
+    
+    .weather-current {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+    
+    .weather-icon {
+      font-size: var(--font-size-3xl);
+    }
+    
+    .weather-details {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .weather-temp {
+      font-size: var(--font-size-xl);
+      font-weight: 600;
+    }
+    
+    .weather-desc {
+      color: var(--text-secondary);
+      font-size: var(--font-size-sm);
+    }
+    
+    .weather-meta {
+      display: flex;
+      gap: var(--space-md);
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+    }
+    
+    .weather-forecast {
+      display: flex;
+      gap: var(--space-sm);
+      overflow-x: auto;
+      padding-bottom: var(--space-sm);
+    }
+    
+    .forecast-day {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 60px;
+      padding: var(--space-sm);
+      background: var(--bg-tertiary);
+      border-radius: var(--border-radius);
+    }
+    
+    .forecast-date {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+    }
+    
+    .forecast-icon {
+      font-size: var(--font-size-xl);
+      margin: var(--space-xs) 0;
+    }
+    
+    .forecast-temp {
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+    }
+    
+    /* Date and Time Widget */
+    .datetime-widget {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      width: 100%;
+    }
+    
+    .time {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-3xl);
+      font-weight: 700;
+      color: var(--accent-primary);
+    }
+    
+    .date {
+      font-size: var(--font-size-lg);
+      color: var(--text-secondary);
+    }
+    
+    /* Resource Monitor */
+    .resource-monitor {
+      width: 100%;
+    }
+    
+    .resource-bars {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    
+    .resource-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    
+    .resource-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--font-size-xs);
+    }
+    
+    .resource-name {
+      color: var(--text-secondary);
+    }
+    
+    .resource-value {
+      color: var(--text-muted);
+    }
+    
+    .resource-bar {
+      height: 6px;
+      background: var(--bg-tertiary);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .resource-progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      border-radius: 3px;
+      transition: width var(--transition-medium);
+    }
+    
+    /* Theme menu */
+    .theme-menu {
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      padding: var(--space-md);
+      min-width: 200px;
+      z-index: var(--z-dropdown);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      transform-origin: top right;
+      animation: scaleIn 0.2s ease-out;
+      display: none;
+    }
+    
+    .theme-menu.show {
+      display: block;
+    }
+    
+    @keyframes scaleIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    
+    .theme-menu-title {
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      margin-bottom: var(--space-sm);
+      color: var(--text-primary);
+    }
+    
+    .theme-options {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    
+    .theme-option {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm);
+      border-radius: var(--border-radius);
+      transition: background var(--transition-fast);
+      cursor: pointer;
+    }
+    
+    .theme-option:hover {
+      background: var(--bg-tertiary);
+    }
+    
+    .theme-option.active {
+      background: var(--bg-tertiary);
+      color: var(--accent-primary);
+    }
+    
+    .theme-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+    
+    .theme-color.dark {
+      background: #121212;
+      border: 1px solid #333;
+    }
+    
+    .theme-color.light {
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+    }
+    
+    .theme-color.cyberpunk {
+      background: linear-gradient(45deg, #ff00ff, #00ffff);
+    }
+    
+    .theme-color.matrix {
+      background: #00ff41;
+    }
+    
+    /* Notification System */
+    .notification-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      z-index: var(--z-tooltip);
+      max-width: 350px;
+    }
+    
+    .notification {
+      background: var(--glass-bg);
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      padding: var(--space-md);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      transform-origin: top right;
+      animation: slideInRight 0.3s ease-out;
+    }
+    
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    .notification-icon {
+      font-size: var(--font-size-xl);
+      color: var(--accent-primary);
+    }
+    
+    .notification-content {
+      flex-grow: 1;
+    }
+    
+    .notification-title {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    
+    .notification-message {
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary);
+    }
+    
+    .notification-close {
+      color: var(--text-muted);
+      font-size: var(--font-size-lg);
+      cursor: pointer;
+      padding: 4px;
+      margin: -4px;
+      transition: color var(--transition-fast);
+    }
+    
+    .notification-close:hover {
+      color: var(--text-primary);
+    }
+    
+    /* Particle/Matrix rain effect for matrix theme */
+    [data-theme="matrix"] .matrix-rain {
+      display: block;
+    }
+    
+    .matrix-rain {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.5;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .content-columns {
+        grid-template-columns: 1fr 2fr;
+      }
+    }
+    
+    @media (max-width: 992px) {
+      .content-columns {
+        grid-template-columns: 1fr;
+      }
+      
+      .system-stats {
+        flex-wrap: wrap;
+      }
+      
+      .system-stat {
+        min-width: 120px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .header-content {
         flex-wrap: wrap;
         justify-content: center;
-        list-style: none;
-        margin: var(--space-lg) 0 0;
-        overflow: hidden;
-        padding: 0;
-      }
-
-      .suggestion {
-        color: var(--accent-primary);
-        cursor: pointer;
-        font-size: var(--font-size-xl);
-        padding: var(--space-lg);
-        position: relative;
-        transition: all var(--transition-fast);
-        white-space: nowrap;
-        z-index: 1;
-      }
-
-      .suggestion:where(:focus, :hover) {
-        color: var(--bg-primary);
-      }
-
-      .suggestion::before {
-        background-color: var(--accent-primary);
-        bottom: var(--space-lg);
-        content: ' ';
-        left: var(--space-lg);
-        opacity: 0;
-        position: absolute;
-        right: var(--space-lg);
-        top: var(--space-lg);
-        transform: translateY(0.5em);
-        transition: all var(--transition-fast);
-        z-index: -1;
-      }
-
-      .suggestion:where(:focus, :hover)::before {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      .match {
-        color: var(--text-muted);
-        transition: color var(--transition-fast);
-      }
-
-      .suggestion:where(:focus, :hover) .match {
-        color: var(--bg-primary);
-      }
-
-      @media (min-width: 700px) {
-        .suggestions {
-          flex-direction: row;
-        }
-      }
-    </style>
-    <dialog class="dialog">
-      <form autocomplete="off" class="form" method="dialog" spellcheck="false">
-        <input class="input" title="search" type="text">
-        <menu class="suggestions"></menu>
-      </form>
-    </dialog>
-  </template>
-  <template id="suggestion-template">
-    <li>
-      <button class="suggestion" type="button"></button>
-    </li>
-  </template>
-  <template id="match-template">
-    <span class="match"></span>
-  </template>
-</head>
-<body>
-  <!-- Matrix Rain Effect -->
-  <rain-component></rain-component>
-  
-  <!-- Search Component -->
-  <search-component></search-component>
-
-  <header class="header">
-    <div class="header-content">
-      <a href="/" class="logo glitch" data-text="Chooch.net">Chooch.net</a>
-      <div class="header-controls">
-        <div class="search-container">
-          <input 
-            type="text" 
-            class="search-input" 
-            placeholder="Search services..."
-            id="search-input"
-            autocomplete="off"
-          >
-        </div>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-          <span class="theme-icon">🌙</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main class="main">
-    <div class="status-bar">
-      <div class="status-item">
-        <div class="status-indicator"></div>
-        <span>Jellyfin Server</span>
-      </div>
-      <div class="status-item">
-        <div class="status-indicator"></div>
-        <span>Jukebox</span>
-      </div>
-      <div class="status-item">
-        <div class="status-indicator"></div>
-        <span>RSS Feed</span>
-      </div>
-      <div class="status-item">
-        <div class="status-indicator offline"></div>
-        <span>Seedbox</span>
-      </div>
-    </div>
-
-    <div class="quick-actions">
-      <h2>Quick Actions</h2>
-      <div class="actions-grid">
-        <a href="https://pastebin.com" class="action-btn">
-          <span>📋</span>
-          Share Text
-        </a>
-        <a href="https://catbox.moe" class="action-btn">
-          <span>📤</span>
-          Upload File
-        </a>
-        <a href="https://real-debrid.com" class="action-btn">
-          <span>⚡</span>
-          Check RD
-        </a>
-        <a href="https://ipleak.net" class="action-btn">
-          <span>🌐</span>
-          IP Check
-        </a>
-      </div>
-    </div>
-
-    <div class="categories-container">
-      <!-- Email & Communication -->
-      <div class="category-section fade-in">
-        <div class="category-header">
-          <span class="category-icon">📧</span>
-          <h2 class="category-title">Email & Communication</h2>
-          <span class="category-count">4</span>
-        </div>
-        <div class="actions-grid">
-          <a href="https://mail.tutanota.com" class="action-btn">
-            <span>✉️</span>
-            Tutanota
-          </a>
-          <a href="https://webmail.disroot.org" class="action-btn">
-            <span>📬</span>
-            Disroot
-          </a>
-          <a href="https://gmail.com" class="action-btn">
-            <span>✉️</span>
-            Gmail
-          </a>
-          <a href="https://zemail.me" class="action-btn">
-            <span>📧</span>
-            Temp Mail
-          </a>
-          <a href="https://app.simplelogin.io/dashboard/" class="action-btn">
-            <span>✉️</span>
-            Simple Login
-          </a>
-        </div>
-      </div>
-
-      <!-- Entertainment -->
-      <div class="category-section fade-in">
-        <div class="category-header">
-          <span class="category-icon">🎬</span>
-          <h2 class="category-title">Entertainment</h2>
-          <span class="category-count">4</span>
-        </div>
-        <div class="actions-grid">
-          <a href="https://youtube.com" class="action-btn">
-            <span>▶️</span>
-            YouTube
-          </a>
-          <a href="https://music.youtube.com" class="action-btn">
-            <span>🎵</span>
-            YT Music
-          </a>
-          <a href="https://jellyfin.chooch.net" class="action-btn">
-            <span>📺</span>
-            Jellyfin
-          </a>
-          <a href="https://plex.chooch.net" class="action-btn">
-            <span>🎬</span>
-            Plex
-          </a>
-          <a href="https://jukebox.chooch.net" class="action-btn">
-            <span>🎶</span>
-            Jukebox
-          </a>
-        </div>
-      </div>
-
-      <!-- Files & Storage -->
-      <div class="category-section fade-in">
-        <div class="category-header">
-          <span class="category-icon">📁</span>
-          <h2 class="category-title">Files & Storage</h2>
-          <span class="category-count">2</span>
-        </div>
-        <div class="actions-grid">
-          <a href="https://drive.chooch.net" class="action-btn">
-            <span>📁</span>
-            Drive
-          </a>
-          <a href="https://catbox.moe" class="action-btn">
-            <span>🐱</span>
-            Catbox
-          </a>
-          <a href="https://litterbox.catbox.moe/" class="action-btn">
-            <span>🐱</span>
-            Litterbox
-          </a>
-          <a href="https://buzzheavier.com" class="action-btn">
-            <span>🔥</span>
-            BuzzHeavier
-          </a>
-        </div>
-      </div>
-
-      <!-- Torrenting -->
-      <div class="category-section fade-in">
-        <div class="category-header">
-          <span class="category-icon">🏴‍☠️</span>
-          <h2 class="category-title">Torrenting</h2>
-          <span class="category-count">4</span>
-        </div>
-        <div class="actions-grid">
-          <a href="https://real-debrid.com" class="action-btn">
-            <span>⚡</span>
-            Real-Debrid
-          </a>
-          <a href="https://seedbox.chooch.net" class="action-btn">
-            <span>📦</span>
-            Seedbox
-          </a>
-          <a href="https://soulseek.chooch.net" class="action-btn">
-            <span>🎵</span>
-            Soulseek
-          </a>
-          <a href="https://steamrip.com" class="action-btn">
-            <span>🎮</span>
-            SteamRip
-          </a>
-        </div>
-      </div>
-
-      <!-- Security & Privacy -->
-      <div class="category-section fade-in">
-        <div class="category-header">
-          <span class="category-icon">🔐</span>
-          <h2 class="category-title">Security & Privacy</h2>
-          <span class="category-count">4</span>
-        </div>
-        <div class="actions-grid">
-          <a href="https://bitwarden.com" class="action-btn">
-            <span>🔐</span>
-            Bitwarden
-          </a>
-          <a href="https://proton.me/mail" class="action-btn">
-            <span>🔒</span>
-            ProtonMail
-          </a>
-          <a href="https://www.torproject.org" class="action-btn">
-            <span>🌐</span>
-            Tor Browser
-          </a>
-          <a href="https://ublockorigin.com" class="action-btn">
-            <span>🚫</span>
-            uBlock
-          </a>
-        </div>
-      </div>
-
-      <!-- Developer Tools -->
-      <div class="category-section fade-in">
-        <div class="category-header">
-          <span class="category-icon">🛠️</span>
-          <h2 class="category-title">Developer Tools</h2>
-          <span class="category-count">4</span>
-        </div>
-        <div class="actions-grid">
-          <a href="https://github.com" class="action-btn">
-            <span>🐙</span>
-            GitHub
-          </a>
-          <a href="https://gitlab.com" class="action-btn">
-            <span>🦊</span>
-            GitLab
-          </a>
-          <a href="https://vscode.dev" class="action-btn">
-            <span>💻</span>
-            VS Code
-          </a>
-          <a href="https://notion.so" class="action-btn">
-            <span>📝</span>
-            Notion
-          </a>
-        </div>
-      </div>
-
-      <!-- Research & Learning -->
-      <div class="category-section fade-in">
-        <div class="category-header">
-          <span class="category-icon">📚</span>
-          <h2 class="category-title">Research & Learning</h2>
-          <span class="category-count">4</span>
-        </div>
-        <div class="actions-grid">
-          <a href="https://libgen.is" class="action-btn">
-            <span>📚</span>
-            LibGen
-          </a>
-          <a href="https://z-lib.org" class="action-btn">
-            <span>📖</span>
-            Z-Library
-          </a>
-          <a href="https://udemy.com" class="action-btn">
-            <span>🎯</span>
-            Udemy
-          </a>
-          <a href="https://coursera.org" class="action-btn">
-            <span>🎓</span>
-            Coursera
-          </a>
-        </div>
-      </div>
-
-      <!-- Network & Tools -->
-      <div class="category-section fade-in">
-        <div class="category-header">
-          <span class="category-icon">🛠️</span>
-          <h2 class="category-title">Network & Tools</h2>
-          <span class="category-count">3</span>
-        </div>
-        <div class="actions-grid">
-          <a href="https://ipleak.net" class="action-btn">
-            <span>🌐</span>
-            IP Location
-          </a>
-          <a href="https://real-debrid.com/speedtest" class="action-btn">
-            <span>⚡</span>
-            Speedtest
-          </a>
-          <a href="https://rss.chooch.net" class="action-btn">
-            <span>📡</span>
-            RSS
-          </a>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <footer class="footer">
-    <p>&copy; 2025 Chooch.net | Your Personal Hub | Room300 Forever</p>
-  </footer>
-
-  <!-- Scripts -->
-  <script src="js/main.js"></script>
-  <script src="js/animations.js"></script>
-  <script src="js/theme-manager.js"></script>
-  
-  <!-- Matrix Rain Script -->
-  <script>
-    // Matrix Rain Class
-    class Rain extends HTMLElement {
-      #backgroundColor;
-      #canvas;
-      #ctx;
-      #drops;
-      #lastRender;
-      #rainColor;
-      #rainHeight;
-      #rainWidth;
-      
-      constructor() {
-        super();
-        this.attachShadow({mode: 'open'});
-        const template = document.getElementById('rain-template');
-        const clone = template.content.cloneNode(true);
-        this.#canvas = clone.querySelector('.rain');
-        this.#ctx = this.#canvas.getContext('2d', {alpha: false});
-        this.#renderCanvas();
-        const rerender = Rain.debounce(this.#renderCanvas, CONFIG.rainFrameRate);
-        const mq = '(prefers-color-scheme: light)';
-        window.matchMedia(mq).addEventListener('change', rerender);
-        window.addEventListener('resize', rerender);
-        this.shadowRoot.append(clone);
+        gap: var(--space-md);
       }
       
-      static cssVar(name) {
-        return getComputedStyle(document.body).getPropertyValue(name);
+      .search-container {
+        order: 3;
+        width: 100%;
       }
       
-      static debounce(fn, delay) {
-        let timeout;
-        return () => {
-          clearTimeout(timeout);
-          timeout = setTimeout(() => fn.apply(this, arguments), delay);
-        };
+      .services-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
       }
       
-      #renderCanvas = () => {
-        this.#canvas.height = window.innerHeight;
-        this.#canvas.width = window.innerWidth;
-        this.#rainWidth = Math.ceil(this.#canvas.width / CONFIG.rainColumns);
-        this.#rainHeight = this.#rainWidth * CONFIG.rainSpeed;
-        this.#backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-primary');
-        this.#rainColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-primary');
-        this.#ctx.fillStyle = this.#backgroundColor;
-        this.#ctx.fillRect(0, 0, this.#canvas.width, this.#canvas.height);
-        this.#drops = new Array(CONFIG.rainColumns).fill(0);
-        this.#lastRender = performance.now();
-        requestAnimationFrame(this.#renderRain);
-      };
-      
-      #renderRain = (timestamp) => {
-        if (timestamp - this.#lastRender >= CONFIG.rainFrameRate) {
-          this.#ctx.fillStyle = this.#backgroundColor;
-          this.#ctx.globalAlpha = CONFIG.rainFade;
-          this.#ctx.fillRect(0, 0, this.#canvas.width, this.#canvas.height);
-          for (let i = 0; i < this.#drops.length; i++) {
-            this.#ctx.fillStyle = this.#rainColor;
-            this.#ctx.globalAlpha = 1;
-            const x = i * this.#rainWidth;
-            const y = this.#drops[i] * this.#rainHeight;
-            this.#ctx.fillRect(x, y, this.#rainWidth, this.#rainHeight);
-            if (this.#drops[i] <= 4) {
-              this.#ctx.fillStyle = this.#backgroundColor;
-              this.#ctx.globalAlpha = this.#drops[i] === 4 ? 1 : 0.4;
-              const eraseY = y + this.#rainHeight;
-              const eraseHeight = this.#canvas.height - eraseY;
-              this.#ctx.fillRect(x, eraseY, this.#rainWidth, eraseHeight);
-            }
-            const reset = Math.random() > CONFIG.rainResilience;
-            if (reset || y > this.#canvas.height) this.#drops[i] = 0;
-            else this.#drops[i]++;
-          }
-          this.#lastRender = timestamp;
-        }
-        requestAnimationFrame(this.#renderRain);
-      };
+      .system-stats {
+        grid-template-columns: 1fr 1fr;
+      }
     }
-    customElements.define('rain-component', Rain);
     
-    // Search Functionality
-    class Search extends HTMLElement {
-      #dialog;
-      #form;
-      #input;
-      #suggestions;
-      
-      constructor() {
-        super();
-        this.attachShadow({mode: 'open'});
-        const template = document.getElementById('search-template');
-        const clone = template.content.cloneNode(true);
-        this.#dialog = clone.querySelector('.dialog');
-        this.#form = clone.querySelector('.form');
-        this.#input = clone.querySelector('.input');
-        this.#suggestions = clone.querySelector('.suggestions');
-        this.#form.addEventListener('submit', this.#onSubmit, false);
-        this.#input.addEventListener('input', this.#onInput);
-        this.#suggestions.addEventListener('click', this.#onSuggestionClick);
-        document.addEventListener('keydown', this.#onKeydown);
-        this.shadowRoot.append(clone);
+    @media (max-width: 480px) {
+      .system-stats {
+        grid-template-columns: 1fr;
       }
       
-      #onInput = async () => {
-        // Simplified for now - would need to implement suggestion fetching
-        this.#suggestions.innerHTML = '';
-      };
+      .services-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      }
       
-      #onKeydown = (e) => {
-        if (!this.#dialog.open) {
-          if (e.key === '/') {
-            e.preventDefault();
-            this.#dialog.show();
-            this.#input.focus();
-          }
-          return;
-        }
-        
-        if (e.key === 'Escape') {
-          this.#close();
-        }
-      };
-      
-      #onSubmit = (e) => {
-        e.preventDefault();
-        if (this.#input.value) {
-          const searchUrl = `https://www.startpage.com/sp/search?query=${encodeURIComponent(this.#input.value)}`;
-          window.location.href = searchUrl;
-        }
-        this.#close();
-      };
-      
-      #onSuggestionClick = (e) => {
-        const ref = e.target.closest('.suggestion');
-        if (!ref) return;
-        this.#input.value = ref.dataset.suggestion;
-        this.#form.dispatchEvent(new Event('submit'));
-      };
-      
-      #close() {
-        this.#input.value = '';
-        this.#input.blur();
-        this.#dialog.close();
-        this.#suggestions.innerHTML = '';
+      .service-icon {
+        width: 40px;
+        height: 40px;
+        font-size: var(--font-size-xl);
       }
     }
-    customElements.define('search-component', Search);
-  </script>
-</body>
-</html>
+    
+    /* Scrollbar styles */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-primary);
+    }
