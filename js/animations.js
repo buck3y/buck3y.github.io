@@ -8,7 +8,6 @@ class AnimationManager {
   init() {
     this.observeElements();
     this.addHoverEffects();
-    this.initParallaxEffects();
   }
 
   observeElements() {
@@ -22,27 +21,27 @@ class AnimationManager {
     }, { threshold: 0.1 });
 
     // Observe categories for animation
-    document.querySelectorAll('.category').forEach(category => {
+    document.querySelectorAll('.category-section').forEach(category => {
       observer.observe(category);
     });
   }
 
   addHoverEffects() {
-    // Add ripple effect to services
-    document.querySelectorAll('.service').forEach(service => {
-      service.addEventListener('click', (e) => {
-        this.createRippleEffect(e, service);
+    // Add ripple effect to action buttons
+    document.querySelectorAll('.action-btn').forEach(action => {
+      action.addEventListener('click', (e) => {
+        this.createRippleEffect(e, action);
       });
     });
 
-    // Add magnetic effect to services
-    document.querySelectorAll('.service').forEach(service => {
-      service.addEventListener('mousemove', (e) => {
-        this.magneticEffect(e, service);
+    // Add magnetic effect to action buttons
+    document.querySelectorAll('.action-btn').forEach(action => {
+      action.addEventListener('mousemove', (e) => {
+        this.subtleMagneticEffect(e, action);
       });
 
-      service.addEventListener('mouseleave', () => {
-        service.style.transform = 'translateY(0) scale(1)';
+      action.addEventListener('mouseleave', () => {
+        action.style.transform = 'translateY(0) scale(1)';
       });
     });
   }
@@ -72,7 +71,7 @@ class AnimationManager {
     setTimeout(() => ripple.remove(), 600);
   }
 
-  magneticEffect(event, element) {
+  subtleMagneticEffect(event, element) {
     const rect = element.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
@@ -81,22 +80,13 @@ class AnimationManager {
     const deltaX = (x - centerX) / centerX;
     const deltaY = (y - centerY) / centerY;
 
+    // Very subtle effect, just enough to be noticeable
     element.style.transform = `
-      translateY(-2px) 
-      scale(1.02) 
-      rotateY(${deltaX * 5}deg) 
-      rotateX(${-deltaY * 5}deg)
+      translateY(-1px) 
+      scale(1.01) 
+      rotateY(${deltaX * 2}deg) 
+      rotateX(${-deltaY * 2}deg)
     `;
-  }
-
-  initParallaxEffects() {
-    // Simple parallax effect for header
-    window.addEventListener('scroll', () => {
-      const header = document.querySelector('.header');
-      const scrolled = window.pageYOffset;
-      const rate = scrolled * -0.5;
-      header.style.transform = `translateY(${rate}px)`;
-    });
   }
 
   // Utility method to add custom animations
@@ -105,47 +95,6 @@ class AnimationManager {
     element.addEventListener('animationend', () => {
       element.style.animation = '';
     });
-  }
-
-  // Stagger animation for multiple elements
-  staggerAnimation(elements, animationName, delay = 100) {
-    elements.forEach((element, index) => {
-      setTimeout(() => {
-        this.addCustomAnimation(element, animationName);
-      }, index * delay);
-    });
-  }
-
-  // Scroll-triggered animations
-  initScrollAnimations() {
-    const scrollElements = document.querySelectorAll('[data-scroll]');
-    
-    scrollElements.forEach(element => {
-      element.style.opacity = '0';
-      element.style.transform = 'translateY(50px)';
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const element = entry.target;
-          const animation = element.dataset.scroll;
-          
-          element.style.opacity = '1';
-          element.style.transform = 'translateY(0)';
-          element.style.transition = 'all 0.6s ease';
-          
-          if (animation) {
-            element.classList.add(animation);
-          }
-        }
-      });
-    }, {
-      rootMargin: '-100px 0px',
-      threshold: 0.1
-    });
-
-    scrollElements.forEach(element => observer.observe(element));
   }
 }
 
