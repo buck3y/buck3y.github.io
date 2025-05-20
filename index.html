@@ -18,27 +18,186 @@
   
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+  <!-- Matrix Rain Templates and Scripts -->
+  <template id="rain-template">
+    <style>
+      canvas {
+        left: 0;
+        position: absolute;
+        top: 0;
+        z-index: -1;
+      }
+    </style>
+    <canvas class="rain" height="715" width="1294"></canvas>
+  </template>
+  
+  <script>
+    // Matrix Rain Configuration
+    const CONFIG = {
+      rainColumns: 200,
+      rainFade: 0.2,
+      rainFrameRate: 1000 / 18,
+      rainResilience: 0.8,
+      rainSpeed: 1,
+      // Search Configuration
+      commandPathDelimiter: '/',
+      commandSearchDelimiter: ' ',
+      defaultSearchTemplate: 'https://www.startpage.com/sp/search?query={}&abp=1&t=night&lui=english&cat=web&abd=1',
+      openLinksInNewTab: false,
+      suggestionLimit: 4,
+    };
+  </script>
+
+  <!-- Search Templates -->
+  <template id="search-template">
+    <style>
+      input,
+      button {
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        background: transparent;
+        border: 0;
+        display: block;
+        outline: 0;
+      }
+
+      .dialog {
+        align-items: center;
+        background: var(--bg-primary);
+        border: none;
+        display: none;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        left: 0;
+        padding: 0;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+      }
+
+      .dialog[open] {
+        display: flex;
+      }
+
+      .form {
+        width: 100%;
+      }
+
+      .input {
+        color: var(--accent-primary);
+        font-size: var(--font-size-3xl);
+        font-weight: 700;
+        padding: 0;
+        text-align: center;
+        width: 100%;
+      }
+
+      .suggestions {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: center;
+        list-style: none;
+        margin: var(--space-lg) 0 0;
+        overflow: hidden;
+        padding: 0;
+      }
+
+      .suggestion {
+        color: var(--accent-primary);
+        cursor: pointer;
+        font-size: var(--font-size-xl);
+        padding: var(--space-lg);
+        position: relative;
+        transition: all var(--transition-fast);
+        white-space: nowrap;
+        z-index: 1;
+      }
+
+      .suggestion:where(:focus, :hover) {
+        color: var(--bg-primary);
+      }
+
+      .suggestion::before {
+        background-color: var(--accent-primary);
+        bottom: var(--space-lg);
+        content: ' ';
+        left: var(--space-lg);
+        opacity: 0;
+        position: absolute;
+        right: var(--space-lg);
+        top: var(--space-lg);
+        transform: translateY(0.5em);
+        transition: all var(--transition-fast);
+        z-index: -1;
+      }
+
+      .suggestion:where(:focus, :hover)::before {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .match {
+        color: var(--text-muted);
+        transition: color var(--transition-fast);
+      }
+
+      .suggestion:where(:focus, :hover) .match {
+        color: var(--bg-primary);
+      }
+
+      @media (min-width: 700px) {
+        .suggestions {
+          flex-direction: row;
+        }
+      }
+    </style>
+    <dialog class="dialog">
+      <form autocomplete="off" class="form" method="dialog" spellcheck="false">
+        <input class="input" title="search" type="text">
+        <menu class="suggestions"></menu>
+      </form>
+    </dialog>
+  </template>
+  <template id="suggestion-template">
+    <li>
+      <button class="suggestion" type="button"></button>
+    </li>
+  </template>
+  <template id="match-template">
+    <span class="match"></span>
+  </template>
 </head>
 <body>
-<header class="header">
-  <div class="header-content">
-    <a href="/" class="logo glitch" data-text="Chooch.net">Chooch.net</a>
-    <div class="header-controls">
-      <div class="search-container">
-        <input 
-          type="text" 
-          class="search-input" 
-          placeholder="Search services..."
-          id="search-input"
-          autocomplete="off"
-        >
+  <!-- Matrix Rain Effect -->
+  <rain-component></rain-component>
+  
+  <!-- Search Component -->
+  <search-component></search-component>
+
+  <header class="header">
+    <div class="header-content">
+      <a href="/" class="logo glitch" data-text="Chooch.net">Chooch.net</a>
+      <div class="header-controls">
+        <div class="search-container">
+          <input 
+            type="text" 
+            class="search-input" 
+            placeholder="Search services..."
+            id="search-input"
+            autocomplete="off"
+          >
+        </div>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <span class="theme-icon">🌙</span>
+        </button>
       </div>
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-        <span class="theme-icon">🌙</span>
-      </button>
     </div>
-  </div>
-</header>
+  </header>
 
   <main class="main">
     <div class="status-bar">
@@ -313,5 +472,157 @@
   <script src="js/main.js"></script>
   <script src="js/animations.js"></script>
   <script src="js/theme-manager.js"></script>
+  
+  <!-- Matrix Rain Script -->
+  <script>
+    // Matrix Rain Class
+    class Rain extends HTMLElement {
+      #backgroundColor;
+      #canvas;
+      #ctx;
+      #drops;
+      #lastRender;
+      #rainColor;
+      #rainHeight;
+      #rainWidth;
+      
+      constructor() {
+        super();
+        this.attachShadow({mode: 'open'});
+        const template = document.getElementById('rain-template');
+        const clone = template.content.cloneNode(true);
+        this.#canvas = clone.querySelector('.rain');
+        this.#ctx = this.#canvas.getContext('2d', {alpha: false});
+        this.#renderCanvas();
+        const rerender = Rain.debounce(this.#renderCanvas, CONFIG.rainFrameRate);
+        const mq = '(prefers-color-scheme: light)';
+        window.matchMedia(mq).addEventListener('change', rerender);
+        window.addEventListener('resize', rerender);
+        this.shadowRoot.append(clone);
+      }
+      
+      static cssVar(name) {
+        return getComputedStyle(document.body).getPropertyValue(name);
+      }
+      
+      static debounce(fn, delay) {
+        let timeout;
+        return () => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => fn.apply(this, arguments), delay);
+        };
+      }
+      
+      #renderCanvas = () => {
+        this.#canvas.height = window.innerHeight;
+        this.#canvas.width = window.innerWidth;
+        this.#rainWidth = Math.ceil(this.#canvas.width / CONFIG.rainColumns);
+        this.#rainHeight = this.#rainWidth * CONFIG.rainSpeed;
+        this.#backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-primary');
+        this.#rainColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-primary');
+        this.#ctx.fillStyle = this.#backgroundColor;
+        this.#ctx.fillRect(0, 0, this.#canvas.width, this.#canvas.height);
+        this.#drops = new Array(CONFIG.rainColumns).fill(0);
+        this.#lastRender = performance.now();
+        requestAnimationFrame(this.#renderRain);
+      };
+      
+      #renderRain = (timestamp) => {
+        if (timestamp - this.#lastRender >= CONFIG.rainFrameRate) {
+          this.#ctx.fillStyle = this.#backgroundColor;
+          this.#ctx.globalAlpha = CONFIG.rainFade;
+          this.#ctx.fillRect(0, 0, this.#canvas.width, this.#canvas.height);
+          for (let i = 0; i < this.#drops.length; i++) {
+            this.#ctx.fillStyle = this.#rainColor;
+            this.#ctx.globalAlpha = 1;
+            const x = i * this.#rainWidth;
+            const y = this.#drops[i] * this.#rainHeight;
+            this.#ctx.fillRect(x, y, this.#rainWidth, this.#rainHeight);
+            if (this.#drops[i] <= 4) {
+              this.#ctx.fillStyle = this.#backgroundColor;
+              this.#ctx.globalAlpha = this.#drops[i] === 4 ? 1 : 0.4;
+              const eraseY = y + this.#rainHeight;
+              const eraseHeight = this.#canvas.height - eraseY;
+              this.#ctx.fillRect(x, eraseY, this.#rainWidth, eraseHeight);
+            }
+            const reset = Math.random() > CONFIG.rainResilience;
+            if (reset || y > this.#canvas.height) this.#drops[i] = 0;
+            else this.#drops[i]++;
+          }
+          this.#lastRender = timestamp;
+        }
+        requestAnimationFrame(this.#renderRain);
+      };
+    }
+    customElements.define('rain-component', Rain);
+    
+    // Search Functionality
+    class Search extends HTMLElement {
+      #dialog;
+      #form;
+      #input;
+      #suggestions;
+      
+      constructor() {
+        super();
+        this.attachShadow({mode: 'open'});
+        const template = document.getElementById('search-template');
+        const clone = template.content.cloneNode(true);
+        this.#dialog = clone.querySelector('.dialog');
+        this.#form = clone.querySelector('.form');
+        this.#input = clone.querySelector('.input');
+        this.#suggestions = clone.querySelector('.suggestions');
+        this.#form.addEventListener('submit', this.#onSubmit, false);
+        this.#input.addEventListener('input', this.#onInput);
+        this.#suggestions.addEventListener('click', this.#onSuggestionClick);
+        document.addEventListener('keydown', this.#onKeydown);
+        this.shadowRoot.append(clone);
+      }
+      
+      #onInput = async () => {
+        // Simplified for now - would need to implement suggestion fetching
+        this.#suggestions.innerHTML = '';
+      };
+      
+      #onKeydown = (e) => {
+        if (!this.#dialog.open) {
+          if (e.key === '/') {
+            e.preventDefault();
+            this.#dialog.show();
+            this.#input.focus();
+          }
+          return;
+        }
+        
+        if (e.key === 'Escape') {
+          this.#close();
+        }
+      };
+      
+      #onSubmit = (e) => {
+        e.preventDefault();
+        if (this.#input.value) {
+          const searchUrl = `https://www.startpage.com/sp/search?query=${encodeURIComponent(this.#input.value)}`;
+          window.location.href = searchUrl;
+        }
+        this.#close();
+      };
+      
+      #onSuggestionClick = (e) => {
+        const ref = e.target.closest('.suggestion');
+        if (!ref) return;
+        this.#input.value = ref.dataset.suggestion;
+        this.#form.dispatchEvent(new Event('submit'));
+      };
+      
+      #close() {
+        this.#input.value = '';
+        this.#input.blur();
+        this.#dialog.close();
+        this.#suggestions.innerHTML = '';
+      }
+    }
+    customElements.define('search-component', Search);
+  </script>
 </body>
 </html>
