@@ -122,19 +122,9 @@
       box-shadow: var(--border-glow);
     }
 
-    /* 8-bit style icons with color cycling */
+    /* Clean icons without effects */
     .key {
-      filter: hue-rotate(0deg);
-      animation: rainbow-cycle 3s linear infinite;
       transition: all var(--transition-speed);
-    }
-
-    @keyframes rainbow-cycle {
-      0% { filter: hue-rotate(0deg) brightness(1.2); }
-      25% { filter: hue-rotate(90deg) brightness(1.2); }
-      50% { filter: hue-rotate(180deg) brightness(1.2); }
-      75% { filter: hue-rotate(270deg) brightness(1.2); }
-      100% { filter: hue-rotate(360deg) brightness(1.2); }
     }
 
     html {
@@ -270,11 +260,21 @@
 
     .key {
       color: var(--color-text);
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      width: 3ch;
-      font-size: 1.8rem;
+      width: 4ch;
+      height: 3rem;
       text-shadow: 0 0 5px currentColor;
+      transition: all var(--transition-speed);
+    }
+
+    .key img {
+      width: 2.5rem;
+      height: 2.5rem;
+      object-fit: contain;
+      filter: brightness(1.2);
     }
 
     .name {
@@ -343,77 +343,95 @@
     suggestionLimit: 4,
   };
   const COMMANDS = new Map([
-    ['📬', {
+    ['tutanota', {
       name: 'Tutanota',
-      url: 'https://mail.tutanota.com'
+      url: 'https://mail.tutanota.com',
+      icon: './icons/tutanota.png'
     }],
-    ['📬 ', {
+    ['tempmail', {
       name: 'Temp Mail',
-      url: 'https://zemail.me/'
+      url: 'https://zemail.me/',
+      icon: './icons/tempmail.png'
     }],
-    ['📬  ', {
+    ['disroot', {
       name: 'Disroot',
-      url: 'https://webmail.disroot.org/'
+      url: 'https://webmail.disroot.org/',
+      icon: './icons/disroot.png'
     }],
-    ['🛜', {
+    ['rss', {
       name: 'RSS',
-      url: 'https://rss.buck3y.net'
+      url: 'https://rss.buck3y.net',
+      icon: './icons/rss.png'
     }],
-    ['📂', {
+    ['drive', {
       name: 'Drive',
-      url: 'https://drive.buck3y.net'
+      url: 'https://drive.buck3y.net',
+      icon: './icons/drive.png'
     }],
-    ['📔', {
+    ['notebook', {
       name: 'Notebook',
-      url: 'https://notebook.buck3y.net'
+      url: 'https://notebook.buck3y.net',
+      icon: './icons/notebook.png'
     }],
-    ['📺', {
+    ['jellyfin', {
       name: 'Jellyfin',
-      url: 'https://jellyfin.buck3y.net'
+      url: 'https://jellyfin.buck3y.net',
+      icon: './icons/jellyfin.png'
     }],
-    ['‍🎵 ', {
+    ['jukebox', {
       name: 'Jukebox',
-      url: 'https://jukebox.buck3y.net'
+      url: 'https://jukebox.buck3y.net',
+      icon: './icons/jukebox.png'
     }],
-    ['🎵', {
-      name: 'YT Music',
-      url: 'https://music.youtube.com'
+    ['ytmusic', {
+      name: 'YouTube Music',
+      url: 'https://music.youtube.com',
+      icon: './icons/youtube-music.png'
     }],
-    ['📺  ', {
-      name: 'Youtube',
-      url: 'https://youtube.com'
+    ['youtube', {
+      name: 'YouTube',
+      url: 'https://youtube.com',
+      icon: './icons/youtube.png'
     }],
-	['📍', {
+    ['ipleak', {
       name: 'IP Location',
-      url: 'https://ipleak.net/'
+      url: 'https://ipleak.net/',
+      icon: './icons/ipleak.png'
     }],
-    ['🪛', {
+    ['speedtest', {
       name: 'Speedtest',
-      url: 'https://real-debrid.com/speedtest'
+      url: 'https://real-debrid.com/speedtest',
+      icon: './icons/speedtest.png'
     }],
-    ['📡', {
+    ['seedbox', {
       name: 'Seedbox',
-      url: 'https://seedbox.buck3y.net'
+      url: 'https://seedbox.buck3y.net',
+      icon: './icons/seedbox.png'
     }],
-    ['📡 ', {
+    ['soulseek', {
       name: 'Soulseek',
-      url: 'https://soulseek.buck3y.net'
+      url: 'https://soulseek.buck3y.net',
+      icon: './icons/soulseek.png'
     }],
-    ['🗄️', {
-      name: 'Debrid',
-      url: 'https://real-debrid.com/'
+    ['debrid', {
+      name: 'Real-Debrid',
+      url: 'https://real-debrid.com/',
+      icon: './icons/real-debrid.png'
     }],
-     ['🗑️', {
-      name: 'Bin',
-      url: 'https://pastebin.com/'
+    ['pastebin', {
+      name: 'Pastebin',
+      url: 'https://pastebin.com/',
+      icon: './icons/pastebin.png'
     }],
-    ['📷', {
+    ['photos', {
       name: 'Photos',
-      url: 'https://photos.buck3y.net'
+      url: 'https://photos.buck3y.net',
+      icon: './icons/photos.png'
     }],
-    ['🧑‍💻', {
+    ['admin', {
       name: 'Admin',
-      url: 'https://admin.buck3y.net'
+      url: 'https://admin.buck3y.net',
+      icon: './icons/admin.png'
     }],
   ]);
 </script>
@@ -529,14 +547,36 @@
       const commandTemplate = document.getElementById('command-template');
       for (const [key, {
           name,
-          url
+          url,
+          icon
         }] of COMMANDS.entries()) {
         if (!name || !url) continue;
         const clone = commandTemplate.content.cloneNode(true);
         const command = clone.querySelector('.command');
         command.href = url;
         if (CONFIG.openLinksInNewTab) command.target = '_blank';
-        clone.querySelector('.key').innerText = key;
+        
+        // Create img element for favicon
+        const img = document.createElement('img');
+        img.src = icon;
+        img.alt = name;
+        img.style.width = '2rem';
+        img.style.height = '2rem';
+        img.style.objectFit = 'contain';
+        img.style.filter = 'brightness(1.2)';
+        
+        // Add fallback for broken images
+        img.onerror = function() {
+          this.style.display = 'none';
+          const fallback = document.createElement('span');
+          fallback.textContent = name.charAt(0).toUpperCase();
+          fallback.style.fontSize = '1.5rem';
+          fallback.style.fontWeight = 'bold';
+          fallback.style.color = 'var(--color-text)';
+          this.parentNode.appendChild(fallback);
+        };
+        
+        clone.querySelector('.key').appendChild(img);
         clone.querySelector('.name').innerText = name;
         commands.append(clone);
       }
