@@ -264,15 +264,15 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      width: 4ch;
-      height: 3rem;
+      width: 5ch;
+      height: 4rem;
       text-shadow: 0 0 5px currentColor;
       transition: all var(--transition-speed);
     }
 
     .key img {
-      width: 2.5rem;
-      height: 2.5rem;
+      width: 3rem;
+      height: 3rem;
       object-fit: contain;
       filter: brightness(1.2);
     }
@@ -560,8 +560,8 @@
         const img = document.createElement('img');
         img.src = icon;
         img.alt = name;
-        img.style.width = '2rem';
-        img.style.height = '2rem';
+        img.style.width = '3rem';
+        img.style.height = '3rem';
         img.style.objectFit = 'contain';
         img.style.filter = 'brightness(1.2)';
         
@@ -570,7 +570,7 @@
           this.style.display = 'none';
           const fallback = document.createElement('span');
           fallback.textContent = name.charAt(0).toUpperCase();
-          fallback.style.fontSize = '1.5rem';
+          fallback.style.fontSize = '2rem';
           fallback.style.fontWeight = 'bold';
           fallback.style.color = 'var(--color-text)';
           this.parentNode.appendChild(fallback);
