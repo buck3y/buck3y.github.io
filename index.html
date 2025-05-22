@@ -264,17 +264,17 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      width: 5ch;
-      height: 4rem;
+      width: 6ch;
+      height: 5rem;
       text-shadow: 0 0 5px currentColor;
       transition: all var(--transition-speed);
     }
 
     .key img {
-      width: 3rem;
-      height: 3rem;
+      width: 4rem;
+      height: 4rem;
       object-fit: contain;
-      filter: brightness(1.2);
+      filter: none;
     }
 
     .name {
@@ -560,17 +560,17 @@
         const img = document.createElement('img');
         img.src = icon;
         img.alt = name;
-        img.style.width = '3rem';
-        img.style.height = '3rem';
+        img.style.width = '4rem';
+        img.style.height = '4rem';
         img.style.objectFit = 'contain';
-        img.style.filter = 'brightness(1.2)';
+        img.style.filter = 'none';
         
         // Add fallback for broken images
         img.onerror = function() {
           this.style.display = 'none';
           const fallback = document.createElement('span');
           fallback.textContent = name.charAt(0).toUpperCase();
-          fallback.style.fontSize = '2rem';
+          fallback.style.fontSize = '2.5rem';
           fallback.style.fontWeight = 'bold';
           fallback.style.color = 'var(--color-text)';
           this.parentNode.appendChild(fallback);
