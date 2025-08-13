@@ -1,456 +1,994 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Room300 - Enhanced Dashboard</title>
-<style>
-  :root {
-    --color-background: #0a0a0a;
-    --color-primary: #00ff41;
-    --color-secondary: #9d00ff;
-    --color-accent: #ff00ff;
-    --color-text: #00ff41;
-    --color-text-dim: #00ff4180;
-    --font-family: 'Courier New', monospace;
-    --font-size-base: clamp(14px, 1.2vw, 16px);
-    --transition-speed: 300ms;
-    --glow-intensity: 0 0 20px;
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    background: var(--color-background);
-    font-family: var(--font-family);
-    font-size: var(--font-size-base);
-    color: var(--color-text);
-    overflow: hidden;
-    position: relative;
-    min-height: 100vh;
-  }
-
-  /* Main Container */
-  .container {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 2rem;
-  }
-
-  /* Logo/Title */
-  .logo {
-    font-size: clamp(2rem, 5vw, 4rem);
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    margin-bottom: 3rem;
-    position: relative;
-    animation: glitch 2s infinite;
-    text-shadow: var(--glow-intensity) var(--color-primary);
-  }
-
-  .logo::before,
-  .logo::after {
-    content: 'ROOM300';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .logo::before {
-    animation: glitch-1 0.5s infinite;
-    color: var(--color-accent);
-    z-index: -1;
-  }
-
-  .logo::after {
-    animation: glitch-2 0.5s infinite;
-    color: var(--color-secondary);
-    z-index: -2;
-  }
-
-  @keyframes glitch {
-    0%, 90%, 100% { transform: translate(0); }
-    91% { transform: translate(-2px, 2px); }
-    92% { transform: translate(2px, -2px); }
-    93% { transform: translate(-1px, 1px); }
-  }
-
-  @keyframes glitch-1 {
-    0%, 90%, 100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translate(0); }
-    20% { clip-path: polygon(0 15%, 100% 15%, 100% 30%, 0 30%); transform: translate(-2px); }
-    40% { clip-path: polygon(0 45%, 100% 45%, 100% 60%, 0 60%); transform: translate(2px); }
-    60% { clip-path: polygon(0 75%, 100% 75%, 100% 90%, 0 90%); transform: translate(-1px); }
-  }
-
-  @keyframes glitch-2 {
-    0%, 90%, 100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translate(0); }
-    25% { clip-path: polygon(0 5%, 100% 5%, 100% 20%, 0 20%); transform: translate(1px); }
-    45% { clip-path: polygon(0 35%, 100% 35%, 100% 50%, 0 50%); transform: translate(-2px); }
-    65% { clip-path: polygon(0 65%, 100% 65%, 100% 80%, 0 80%); transform: translate(2px); }
-  }
-
-  /* Search Bar */
-  .search-container {
-    position: relative;
-    width: 100%;
-    max-width: 600px;
-    margin-bottom: 3rem;
-  }
-
-  .search-input {
-    width: 100%;
-    padding: 1rem 2rem;
-    background: rgba(0, 255, 65, 0.05);
-    border: 2px solid var(--color-text-dim);
-    color: var(--color-text);
-    font-family: inherit;
-    font-size: 1.2rem;
-    outline: none;
-    transition: all var(--transition-speed);
-    border-radius: 0;
-  }
-
-  .search-input:focus {
-    border-color: var(--color-primary);
-    background: rgba(0, 255, 65, 0.1);
-    box-shadow: var(--glow-intensity) var(--color-primary),
-                inset 0 0 20px rgba(0, 255, 65, 0.1);
-  }
-
-  .search-input::placeholder {
-    color: var(--color-text-dim);
-  }
-
-  /* Commands Grid */
-  .commands-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1.5rem;
-    width: 100%;
-    max-width: 1200px;
-    animation: fadeIn 1s ease-out;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .command-card {
-    background: rgba(0, 255, 65, 0.03);
-    border: 1px solid var(--color-text-dim);
-    padding: 1.5rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all var(--transition-speed);
-    position: relative;
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .command-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
-    transition: left 0.5s;
-  }
-
-  .command-card:hover::before {
-    left: 100%;
-  }
-
-  .command-card:hover {
-    border-color: var(--color-primary);
-    background: rgba(0, 255, 65, 0.1);
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3),
-                var(--glow-intensity) var(--color-primary);
-  }
-
-  .command-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .command-name {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  /* Time Display */
-  .time-display {
-    position: fixed;
-    top: 2rem;
-    right: 2rem;
-    font-size: 1.2rem;
-    color: var(--color-text-dim);
-    font-family: inherit;
-    letter-spacing: 0.2em;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
-  }
-
-  /* Status Indicator */
-  .status-indicator {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--color-text-dim);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-  }
-
-  .status-dot {
-    width: 8px;
-    height: 8px;
-    background: var(--color-primary);
-    border-radius: 50%;
-    animation: blink 1s infinite;
-    box-shadow: var(--glow-intensity) var(--color-primary);
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .commands-grid {
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 1rem;
-    }
-    
-    .time-display {
-      font-size: 1rem;
-      top: 1rem;
-      right: 1rem;
-    }
-    
-    .logo {
-      font-size: 2rem;
-      letter-spacing: 0.2em;
-    }
-  }
-  
-  <div class="container">
-    <h1 class="logo">ROOM300</h1>
-    
-    <div class="search-container">
-      <input type="text" class="search-input" id="searchInput" placeholder="Enter command or search..." autofocus>
-    </div>
-    
-    <div class="commands-grid" id="commandsGrid">
-      <!-- Commands will be populated here -->
-    </div>
-  </div>
-  
-  <div class="time-display" id="timeDisplay"></div>
-  <div class="status-indicator">
-    <span class="status-dot"></span>
-    <span>SYSTEM ONLINE</span>
-  </div>
-
-  <script>
-    // Configuration
-    const CONFIG = {
-      commands: [
-        { icon: '📬', name: 'Tutanota', url: 'https://mail.tutanota.com' },
-        { icon: '📧', name: 'Temp Mail', url: 'https://zemail.me/' },
-        { icon: '✉️', name: 'Disroot', url: 'https://webmail.disroot.org/' },
-        { icon: '🛜', name: 'RSS', url: 'https://rss.room300.net' },
-        { icon: '📂', name: 'Drive', url: 'https://drive.room300.net' },
-        { icon: '📔', name: 'Notebook', url: 'https://notebook.room300.net' },
-        { icon: '📺', name: 'Jellyfin', url: 'https://tv.room300.net' },
-        { icon: '🎵', name: 'Jukebox', url: 'https://jukebox.room300.net' },
-        { icon: '🎶', name: 'YT Music', url: 'https://music.youtube.com' },
-        { icon: '📹', name: 'Youtube', url: 'https://youtube.com' },
-        { icon: '📍', name: 'IP Location', url: 'https://ipleak.net/' },
-        { icon: '🪛', name: 'Speedtest', url: 'https://real-debrid.com/speedtest' },
-        { icon: '📡', name: 'Seedbox', url: 'https://seedbox.room300.net' },
-        { icon: '💿', name: 'Soulseek', url: 'https://soulseek.room300.net' },
-        { icon: '🗄️', name: 'Debrid', url: 'https://real-debrid.com/' },
-        { icon: '🗑️', name: 'Bin', url: 'https://bin.room300.net' },
-        { icon: '📷', name: 'Photos', url: 'https://photos.room300.net' },
-        { icon: '🧑‍💻', name: 'Admin', url: 'https://admin.room300.net' },
-      ],
-      defaultSearchUrl: 'https://www.startpage.com/sp/search?query=',
-    };
-
-      resize() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-      }
-
-      init() {
-        const columnCount = Math.floor(this.canvas.width / this.fontSize);
-        this.columns = Array(columnCount).fill(1);
-      }
-
-      draw() {
-        this.ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chooch.net</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
-        this.ctx.fillStyle = '#00ff41';
-        this.ctx.font = `${this.fontSize}px monospace`;
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 20%, #16213e 50%, #0f3460 80%, #0a0a0a 100%);
+            background-attachment: fixed;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+        }
         
-        this.columns.forEach((y, index) => {
-          const char = this.chars[Math.floor(Math.random() * this.chars.length)];
-          const x = index * this.fontSize;
-          
-          this.ctx.fillStyle = `rgba(0, 255, 65, ${Math.random()})`;
-          this.ctx.fillText(char, x, y * this.fontSize);
-          
-          if (y * this.fontSize > this.canvas.height && Math.random() > 0.975) {
-            this.columns[index] = 0;
-          }
-          this.columns[index]++;
-        });
-      }
-
-      animate() {
-        this.draw();
-        setTimeout(() => requestAnimationFrame(() => this.animate()), CONFIG.matrixRainSpeed);
-      }
-    }
-
-    // Initialize Matrix Rain
-    const matrixCanvas = document.getElementById('matrix-rain');
-    const matrix = new MatrixRain(matrixCanvas);
-    matrix.animate();
-
-    // Populate Commands
-    function populateCommands() {
-      const grid = document.getElementById('commandsGrid');
-      CONFIG.commands.forEach(cmd => {
-        const card = document.createElement('a');
-        card.href = cmd.url;
-        card.className = 'command-card';
-        card.target = '_blank';
-        card.rel = 'noopener noreferrer';
-        card.innerHTML = `
-          <div class="command-icon">${cmd.icon}</div>
-          <div class="command-name">${cmd.name}</div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    // Search Functionality
-    const searchInput = document.getElementById('searchInput');
-    let commandsVisible = true;
-
-    searchInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        const query = searchInput.value.trim();
-        if (query) {
-          // Check if it's a URL
-          if (query.match(/^(https?:\/\/)|(www\.)/i)) {
-            window.open(query.startsWith('http') ? query : `https://${query}`, '_blank');
-          } else {
-            // Check if it matches a command
-            const command = CONFIG.commands.find(cmd => 
-              cmd.name.toLowerCase().includes(query.toLowerCase())
-            );
-            if (command) {
-              window.open(command.url, '_blank');
-            } else {
-              // Default search
-              window.open(CONFIG.defaultSearchUrl + encodeURIComponent(query), '_blank');
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(0, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .particle:nth-child(1) { width: 3px; height: 3px; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 2px; height: 2px; left: 20%; animation-delay: 1s; background: rgba(255, 0, 255, 0.3); }
+        .particle:nth-child(3) { width: 4px; height: 4px; left: 30%; animation-delay: 2s; }
+        .particle:nth-child(4) { width: 2px; height: 2px; left: 40%; animation-delay: 0.5s; background: rgba(0, 255, 0, 0.3); }
+        .particle:nth-child(5) { width: 3px; height: 3px; left: 50%; animation-delay: 1.5s; }
+        .particle:nth-child(6) { width: 2px; height: 2px; left: 60%; animation-delay: 3s; background: rgba(255, 255, 0, 0.3); }
+        .particle:nth-child(7) { width: 4px; height: 4px; left: 70%; animation-delay: 2.5s; }
+        .particle:nth-child(8) { width: 3px; height: 3px; left: 80%; animation-delay: 0.8s; background: rgba(255, 0, 255, 0.3); }
+        .particle:nth-child(9) { width: 2px; height: 2px; left: 90%; animation-delay: 1.2s; }
+        .particle:nth-child(10) { width: 3px; height: 3px; left: 85%; animation-delay: 4s; background: rgba(0, 255, 255, 0.3); }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) scale(1); opacity: 0; }
+        }
+        
+        /* Glowing grid overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridPulse 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes gridPulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.1; }
+        }
+        
+        .main-content {
+            transition: all 0.5s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .main-content.search-mode {
+            opacity: 0.2;
+            filter: blur(5px);
+            transform: scale(0.95);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            animation: headerShimmer 3s infinite;
+        }
+        
+        @keyframes headerShimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+            color: #ff00ff;
+            text-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            font-weight: 400;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .clock {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 1rem;
+            font-weight: 300;
+            color: #ffffff;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Dynamic grid layout */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        @media (min-width: 1200px) {
+            .links-grid {
+                grid-template-columns: repeat(6, 1fr);
             }
-          }
-          searchInput.value = '';
         }
-      }
-    });
-
-    searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      const cards = document.querySelectorAll('.command-card');
-      
-      cards.forEach(card => {
-        const name = card.querySelector('.command-name').textContent.toLowerCase();
-        if (query === '') {
-          card.style.display = 'flex';
-          card.style.opacity = '1';
-        } else if (name.includes(query)) {
-          card.style.display = 'flex';
-          card.style.opacity = '1';
-        } else {
-          card.style.opacity = '0.2';
+        
+        @media (max-width: 768px) {
+            .links-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.5rem;
+            }
         }
-      });
-    });
+        
+        @media (max-width: 480px) {
+            .links-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+        
+        .link-card {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 2rem 1.5rem;
+            text-decoration: none;
+            color: #ffffff;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            min-height: 140px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 100%;
+        }
+        
+        .link-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .link-card:hover {
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateY(-8px) scale(1.05);
+            border-color: rgba(0, 255, 255, 0.6);
+            box-shadow: 0 20px 60px rgba(0, 255, 255, 0.2);
+        }
+        
+        .link-card:hover::before {
+            opacity: 1;
+        }
+        
+        .link-card:hover .link-icon {
+            transform: scale(1.2) rotateY(360deg);
+            text-shadow: 0 0 20px currentColor;
+        }
+        
+        .link-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            font-size: 2rem;
+            flex-shrink: 0;
+            transition: all 0.5s ease;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Custom icon styles */
+        .link-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: #00ffff;
+            transition: all 0.3s ease;
+        }
+        
+        .link-card:hover .link-icon svg {
+            fill: #ffffff;
+        }
+        
+        .link-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.2;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .link-card:hover .link-title {
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        
+        .link-desc {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            font-weight: 300;
+            text-align: center;
+            line-height: 1.1;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .link-card:hover .link-desc {
+            opacity: 1;
+            color: #ffffff;
+        }
+        
+        .instructions {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            opacity: 0.6;
+            font-weight: 300;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: instructionsPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes instructionsPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .link-card {
+                padding: 1.5rem 1rem;
+                min-height: 120px;
+            }
+            
+            .link-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Search component templates -->
+    <template id="search-template">
+        <style>
+            input,
+            button {
+                -moz-appearance: none;
+                -webkit-appearance: none;
+                background: transparent;
+                border: 0;
+                display: block;
+                outline: 0;
+            }
 
-    // Time Display
-    function updateTime() {
-      const now = new Date();
-      const timeString = now.toLocaleTimeString('en-US', { 
-        hour12: false, 
-        hour: '2-digit', 
-        minute: '2-digit',
-        second: '2-digit'
-      });
-      document.getElementById('timeDisplay').textContent = timeString;
-    }
+            .dialog {
+                align-items: center;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(40px);
+                border: none;
+                display: none;
+                flex-direction: column;
+                height: 100%;
+                justify-content: center;
+                left: 0;
+                padding: 0;
+                top: 0;
+                width: 100%;
+                z-index: 9999;
+                position: fixed;
+            }
 
-    setInterval(updateTime, 1000);
-    updateTime();
+            .dialog[open] {
+                display: flex;
+            }
 
-    // Keyboard Navigation
-    document.addEventListener('keydown', (e) => {
-      // Focus search on any key press (except special keys)
-      if (!searchInput.matches(':focus') && e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
-        searchInput.focus();
-      }
-      
-      // Escape to clear search
-      if (e.key === 'Escape') {
-        searchInput.value = '';
-        searchInput.blur();
-        document.querySelectorAll('.command-card').forEach(card => {
-          card.style.display = 'flex';
-          card.style.opacity = '1';
-        });
-      }
-    });
+            .form {
+                width: 100%;
+                max-width: 600px;
+                padding: 0 2rem;
+            }
 
-    // Initialize
-    populateCommands();
+            .input {
+                color: #00ffff;
+                font-size: 3rem;
+                font-weight: 700;
+                padding: 1rem 0;
+                text-align: center;
+                width: 100%;
+                font-family: 'JetBrains Mono', monospace;
+                text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+                background: transparent;
+                border: none;
+                outline: none;
+            }
 
-    // Add some cyberpunk console messages
-    console.log('%c ROOM300 SYSTEM INITIALIZED ', 'background: #00ff41; color: #000; font-size: 20px; font-weight: bold; padding: 10px;');
-    console.log('%c Welcome to the Matrix ', 'color: #00ff41; font-size: 14px;');
-    console.log('%c Type to search • Enter to execute • ESC to clear ', 'color: #00ff4180; font-size: 12px;');
-  </script>
+            .input::placeholder {
+                color: rgba(0, 255, 255, 0.4);
+            }
+
+            .suggestions {
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                flex-wrap: wrap;
+                justify-content: center;
+                list-style: none;
+                margin: 2rem 0 0;
+                overflow: hidden;
+                padding: 0;
+            }
+
+            .suggestion {
+                color: #ffffff;
+                cursor: pointer;
+                font-size: 1rem;
+                padding: 1rem 2rem;
+                position: relative;
+                transition: all 0.3s ease;
+                white-space: nowrap;
+                z-index: 1;
+                background: transparent;
+                border: 1px solid rgba(0, 255, 255, 0.2);
+                border-radius: 30px;
+                margin: 0.5rem;
+                backdrop-filter: blur(20px);
+                font-family: 'JetBrains Mono', monospace;
+            }
+
+            .suggestion:where(:focus, :hover) {
+                color: #000000;
+                background: rgba(0, 255, 255, 0.9);
+                border-color: #00ffff;
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+            }
+
+            .match {
+                color: #ff00ff;
+                font-weight: 700;
+                transition: color 0.3s ease;
+            }
+
+            .suggestion:where(:focus, :hover) .match {
+                color: #000000;
+            }
+
+            @media (min-width: 700px) {
+                .suggestions {
+                    flex-direction: row;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .input {
+                    font-size: 2rem;
+                }
+            }
+        </style>
+        <dialog class="dialog">
+            <form autocomplete="off" class="form" method="dialog" spellcheck="false">
+                <input class="input" title="search" type="text" placeholder="Type to search...">
+                <menu class="suggestions"></menu>
+            </form>
+        </dialog>
+    </template>
+
+    <template id="suggestion-template">
+        <li>
+            <button class="suggestion" type="button"></button>
+        </li>
+    </template>
+
+    <template id="match-template">
+        <span class="match"></span>
+    </template>
+
+    <!-- Animated background particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    
+    <!-- Glowing grid overlay -->
+    <div class="grid-overlay"></div>
+
+    <!-- Main content -->
+    <div class="main-content" id="mainContent">
+        <div class="container">
+            <header>
+                <h1>chooch.net</h1>
+                <div class="subtitle">digital hub</div>
+                <div class="clock" id="clock"></div>
+            </header>
+            <div class="links-grid">
+                <a href="https://tutanota.com" class="link-card">
+                    <span class="link-icon">📧</span>
+                    <div class="link-title">Tutanota</div>
+                    <div class="link-desc">secure mail</div>
+                </a>
+                <a href="https://your-rss.com" class="link-card">
+                    <span class="link-icon">📡</span>
+                    <div class="link-title">RSS</div>
+                    <div class="link-desc">feeds</div>
+                </a>
+                <a href="https://your-jellyfin.com" class="link-card">
+                    <span class="link-icon">🎬</span>
+                    <div class="link-title">Jellyfin</div>
+                    <div class="link-desc">media</div>
+                </a>
+                <a href="https://youtube.com" class="link-card">
+                    <span class="link-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </span>
+                    <div class="link-title">YouTube</div>
+                    <div class="link-desc">videos</div>
+                </a>
+                <a href="https://your-seedbox.com" class="link-card">
+                    <span class="link-icon">🌱</span>
+                    <div class="link-title">Seedbox</div>
+                    <div class="link-desc">torrents</div>
+                </a>
+                <a href="https://bin.chooch.net" class="link-card">
+                    <span class="link-icon">🗂️</span>
+                    <div class="link-title">Bin</div>
+                    <div class="link-desc">storage</div>
+                </a>
+                <a href="https://zemail.me/" class="link-card">
+                    <span class="link-icon">📨</span>
+                    <div class="link-title">Temp Mail</div>
+                    <div class="link-desc">disposable</div>
+                </a>
+                <a href="https://drive.chooch.net" class="link-card">
+                    <span class="link-icon">☁️</span>
+                    <div class="link-title">Drive</div>
+                    <div class="link-desc">cloud</div>
+                </a>
+                <a href="https://your-jukebox.com" class="link-card">
+                    <span class="link-icon">🎵</span>
+                    <div class="link-title">Jukebox</div>
+                    <div class="link-desc">tunes</div>
+                </a>
+                <a href="https://iplocation.net" class="link-card">
+                    <span class="link-icon">🌍</span>
+                    <div class="link-title">IP Location</div>
+                    <div class="link-desc">geo</div>
+                </a>
+                <a href="https://your-soulseek.com" class="link-card">
+                    <span class="link-icon">🔍</span>
+                    <div class="link-title">Soulseek</div>
+                    <div class="link-desc">p2p</div>
+                </a>
+                <a href="https://photos.google.com" class="link-card">
+                    <span class="link-icon">📸</span>
+                    <div class="link-title">Photos</div>
+                    <div class="link-desc">gallery</div>
+                </a>
+                <a href="https://webmail.disroot.org/" class="link-card">
+                    <span class="link-icon">📧</span>
+                    <div class="link-title">Disroot</div>
+                    <div class="link-desc">secure mail</div>
+                </a>
+                <a href="https://your-notebook.com" class="link-card">
+                    <span class="link-icon">📝</span>
+                    <div class="link-title">Notebook</div>
+                    <div class="link-desc">notes</div>
+                </a>
+                <a href="https://music.youtube.com" class="link-card">
+                    <span class="link-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                        </svg>
+                    </span>
+                    <div class="link-title">YT Music</div>
+                    <div class="link-desc">streaming</div>
+                </a>
+                <a href="https://speedtest.net" class="link-card">
+                    <span class="link-icon">⚡</span>
+                    <div class="link-title">Speedtest</div>
+                    <div class="link-desc">network</div>
+                </a>
+                <a href="https://your-debrid.com" class="link-card">
+                    <span class="link-icon">💨</span>
+                    <div class="link-title">Debrid</div>
+                    <div class="link-desc">download</div>
+                </a>
+                <a href="https://your-admin.com" class="link-card">
+                    <span class="link-icon">⚙️</span>
+                    <div class="link-title">Admin</div>
+                    <div class="link-desc">control</div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="instructions">start typing to search</div>
+
+    <!-- Search Component -->
+    <search-component></search-component>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            commandPathDelimiter: '/',
+            commandSearchDelimiter: ' ',
+            defaultSearchTemplate: 'https://www.startpage.com/sp/search?query={}&abp=1&t=night&lui=english&cat=web&abd=1&prfe=bfc85c1d885357c455065cb1ddcee0a65c66627199470e854d8cf578fa2f6ca0deea4cb4fa181162bce2f096d76df7fe86753b93f749e81e69e6c0904008c2923dd5902389bf3777806c92e759',
+            openLinksInNewTab: false,
+            suggestionLimit: 4,
+        };
+
+        // Commands map with shortcuts
+        const COMMANDS = new Map([
+            ['📬', {
+                name: 'Tutanota',
+                url: 'https://mail.tutanota.com'
+            }],
+            ['📬 ', {
+                name: 'Temp Mail',
+                url: 'https://zemail.me/'
+            }],
+            ['📬  ', {
+                name: 'Disroot',
+                url: 'https://webmail.disroot.org/'
+            }],
+            ['🛜', {
+                name: 'RSS',
+                url: 'https://your-rss.com'
+            }],
+            ['📂', {
+                name: 'Drive',
+                url: 'https://drive.chooch.net'
+            }],
+            ['📔', {
+                name: 'Notebook',
+                url: 'https://your-notebook.com'
+            }],
+            ['📺', {
+                name: 'Jellyfin',
+                url: 'https://your-jellyfin.com'
+            }],
+            ['🎵 ', {
+                name: 'Jukebox',
+                url: 'https://your-jukebox.com'
+            }],
+            ['🎵', {
+                name: 'YT Music',
+                url: 'https://music.youtube.com'
+            }],
+            ['📺  ', {
+                name: 'Youtube',
+                url: 'https://youtube.com'
+            }],
+            ['📍', {
+                name: 'IP Location',
+                url: 'https://iplocation.net'
+            }],
+            ['🪛', {
+                name: 'Speedtest',
+                url: 'https://speedtest.net'
+            }],
+            ['📡', {
+                name: 'Seedbox',
+                url: 'https://your-seedbox.com'
+            }],
+            ['📡 ', {
+                name: 'Soulseek',
+                url: 'https://your-soulseek.com'
+            }],
+            ['🗄️', {
+                name: 'Debrid',
+                url: 'https://your-debrid.com'
+            }],
+            ['🗑️', {
+                name: 'Bin',
+                url: 'https://bin.chooch.net'
+            }],
+            ['📷', {
+                name: 'Photos',
+                url: 'https://photos.google.com'
+            }],
+            ['🧑‍💻', {
+                name: 'Admin',
+                url: 'https://your-admin.com'
+            }],
+        ]);
+
+        // Search component
+        class Search extends HTMLElement {
+            #dialog;
+            #form;
+            #input;
+            #suggestions;
+
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                
+                const template = document.getElementById('search-template');
+                const clone = template.content.cloneNode(true);
+                
+                this.#dialog = clone.querySelector('.dialog');
+                this.#form = clone.querySelector('.form');
+                this.#input = clone.querySelector('.input');
+                this.#suggestions = clone.querySelector('.suggestions');
+                
+                this.#form.addEventListener('submit', this.#onSubmit, false);
+                this.#input.addEventListener('input', this.#onInput);
+                this.#suggestions.addEventListener('click', this.#onSuggestionClick);
+                document.addEventListener('keydown', this.#onKeydown);
+                
+                this.shadowRoot.append(clone);
+            }
+
+            static #attachSearchPrefix(array, { key, splitBy }) {
+                if (!splitBy) return array;
+                return array.map((search) => `${key}${splitBy}${search}`);
+            }
+
+            static #escapeRegexCharacters(s) {
+                return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            }
+
+            static #fetchDuckDuckGoSuggestions(search) {
+                return new Promise((resolve) => {
+                    // Clean up any existing callback
+                    if (window.autocompleteCallback) {
+                        delete window.autocompleteCallback;
+                    }
+                    
+                    const timeoutId = setTimeout(() => {
+                        console.log('DuckDuckGo timeout for:', search);
+                        resolve([]);
+                    }, 5000); // 5 second timeout
+                    
+                    window.autocompleteCallback = (res) => {
+                        clearTimeout(timeoutId);
+                        console.log('DuckDuckGo response for', search, ':', res);
+                        const suggestions = [];
+                        
+                        if (res && Array.isArray(res)) {
+                            for (const item of res) {
+                                if (item && item.phrase && item.phrase !== search.toLowerCase()) {
+                                    suggestions.push(item.phrase);
+                                }
+                            }
+                        }
+                        console.log('Processed suggestions:', suggestions);
+                        resolve(suggestions);
+                    };
+                    
+                    const script = document.createElement('script');
+                    script.src = `https://duckduckgo.com/ac/?callback=autocompleteCallback&q=${encodeURIComponent(search)}`;
+                    console.log('Loading DuckDuckGo suggestions for:', search, script.src);
+                    
+                    script.onload = () => {
+                        console.log('DuckDuckGo script loaded successfully');
+                        setTimeout(() => script.remove(), 1000);
+                    };
+                    script.onerror = (error) => {
+                        console.error('DuckDuckGo script error:', error);
+                        clearTimeout(timeoutId);
+                        script.remove();
+                        resolve([]);
+                    };
+                    
+                    document.querySelector('head').appendChild(script);
+                });
+            }
+
+            static #formatSearchUrl(url, searchPath, search) {
+                if (!searchPath) return url;
+                const [baseUrl] = Search.#splitUrl(url);
+                const urlQuery = encodeURIComponent(search);
+                searchPath = searchPath.replace(/{}/g, urlQuery);
+                return baseUrl + searchPath;
+            }
+
+            static #hasProtocol(s) {
+                return /^[a-zA-Z]+:\/\//i.test(s);
+            }
+
+            static #isUrl(s) {
+                return /^((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)$/i.test(s);
+            }
+
+            static #parseQuery = (raw) => {
+                const query = raw.trim();
+                
+                if (this.#isUrl(query)) {
+                    const url = this.#hasProtocol(query) ? query : `https://${query}`;
+                    return { query, url };
+                }
+
+                if (COMMANDS.has(query)) {
+                    const { command, key, url } = COMMANDS.get(query);
+                    return command ? Search.#parseQuery(command) : { key, query, url };
+                }
+
+                let splitBy = CONFIG.commandSearchDelimiter;
+                const [searchKey, rawSearch] = query.split(new RegExp(`${splitBy}(.*)`));
+                
+                if (COMMANDS.has(searchKey)) {
+                    const { searchTemplate, url: base } = COMMANDS.get(searchKey);
+                    const search = rawSearch.trim();
+                    const url = Search.#formatSearchUrl(base, searchTemplate, search);
+                    return { key: searchKey, query, search, splitBy, url };
+                }
+
+                splitBy = CONFIG.commandPathDelimiter;
+                const [pathKey, path] = query.split(new RegExp(`${splitBy}(.*)`));
+                
+                if (COMMANDS.has(pathKey)) {
+                    const { url: base } = COMMANDS.get(pathKey);
+                    const [baseUrl] = Search.#splitUrl(base);
+                    const url = `${baseUrl}/${path}`;
+                    return { key: pathKey, path, query, splitBy, url };
+                }
+
+                const [baseUrl, rest] = Search.#splitUrl(CONFIG.defaultSearchTemplate);
+                const url = Search.#formatSearchUrl(baseUrl, rest, query);
+                return { query, search: query, url };
+            };
+
+            static #splitUrl(url) {
+                const parser = document.createElement('a');
+                parser.href = url;
+                const baseUrl = `${parser.protocol}//${parser.hostname}`;
+                const rest = `${parser.pathname}${parser.search}`;
+                return [baseUrl, rest];
+            }
+
+            #close() {
+                this.#input.value = '';
+                this.#input.blur();
+                this.#dialog.close();
+                this.#suggestions.innerHTML = '';
+            }
+
+            #execute(query) {
+                const { url } = Search.#parseQuery(query);
+                const target = CONFIG.openLinksInNewTab ? '_blank' : '_self';
+                window.open(url, target, 'noopener noreferrer');
+                this.#close();
+            }
+
+            #focusNextSuggestion(previous = false) {
+                const active = this.shadowRoot.activeElement;
+                let nextIndex;
+                
+                if (active.dataset.index) {
+                    const activeIndex = Number(active.dataset.index);
+                    nextIndex = previous ? activeIndex - 1 : activeIndex + 1;
+                } else {
+                    nextIndex = previous ? this.#suggestions.childElementCount - 1 : 0;
+                }
+                
+                const next = this.#suggestions.children[nextIndex];
+                if (next) next.querySelector('.suggestion').focus();
+                else this.#input.focus();
+            }
+
+            #onInput = async () => {
+                const oq = Search.#parseQuery(this.#input.value);
+                
+                if (!oq.query) {
+                    this.#suggestions.innerHTML = '';
+                    return;
+                }
+
+                let suggestions = COMMANDS.get(oq.query)?.suggestions ?? [];
+                
+                // Always try to get DuckDuckGo suggestions for any search term
+                if (oq.search && oq.search.length > 0) {
+                    try {
+                        const res = await Search.#fetchDuckDuckGoSuggestions(oq.search);
+                        const formatted = Search.#attachSearchPrefix(res, oq);
+                        suggestions = suggestions.concat(formatted);
+                    } catch (error) {
+                        console.log('DuckDuckGo suggestions failed:', error);
+                    }
+                } else if (oq.query.length > 1) {
+                    // For regular searches without commands, get suggestions
+                    try {
+                        const res = await Search.#fetchDuckDuckGoSuggestions(oq.query);
+                        suggestions = suggestions.concat(res);
+                    } catch (error) {
+                        console.log('DuckDuckGo suggestions failed:', error);
+                    }
+                }
+
+                const nq = Search.#parseQuery(this.#input.value);
+                if (nq.query !== oq.query) return;
+                
+                this.#renderSuggestions(suggestions, oq.query);
+            };
+
+            #onKeydown = (e) => {
+                if (!this.#dialog.open) {
+                    this.#dialog.show();
+                    this.#input.focus();
+                    requestAnimationFrame(() => {
+                        // close the search dialog before the next repaint if a character is
+                        // not produced (e.g. if you type shift, control, alt etc.)
+                        if (!this.#input.value) this.#close();
+                    });
+                    return;
+                }
+                if (e.key === 'Escape') {
+                    this.#close();
+                    return;
+                }
+                const alt = e.altKey ? 'alt-' : '';
+                const ctrl = e.ctrlKey ? 'ctrl-' : '';
+                const meta = e.metaKey ? 'meta-' : '';
+                const shift = e.shiftKey ? 'shift-' : '';
+                const modifierPrefixedKey = `${alt}${ctrl}${meta}${shift}${e.key}`;
+                if (/^(ArrowDown|Tab|ctrl-n)$/.test(modifierPrefixedKey)) {
+                    e.preventDefault();
+                    this.#focusNextSuggestion();
+                    return;
+                }
+                if (/^(ArrowUp|ctrl-p|shift-Tab)$/.test(modifierPrefixedKey)) {
+                    e.preventDefault();
+                    this.#focusNextSuggestion(true);
+                }
+            };
+
+            #onSubmit = () => {
+                this.#execute(this.#input.value);
+            };
+
+            #onSuggestionClick = (e) => {
+                const ref = e.target.closest('.suggestion');
+                if (!ref) return;
+                this.#execute(ref.dataset.suggestion);
+            };
+
+            #renderSuggestions(suggestions, query) {
+                this.#suggestions.innerHTML = '';
+                const sliced = suggestions.slice(0, CONFIG.suggestionLimit);
+                const template = document.getElementById('suggestion-template');
+                
+                for (const [index, suggestion] of sliced.entries()) {
+                    const clone = template.content.cloneNode(true);
+                    const ref = clone.querySelector('.suggestion');
+                    ref.dataset.index = index;
+                    ref.dataset.suggestion = suggestion;
+                    
+                    const escapedQuery = Search.#escapeRegexCharacters(query);
+                    const matched = suggestion.match(new RegExp(escapedQuery, 'i'));
+                    
+                    if (matched) {
+                        const template = document.getElementById('match-template');
+                        const clone = template.content.cloneNode(true);
+                        const matchRef = clone.querySelector('.match');
+                        const pre = suggestion.slice(0, matched.index);
+                        const post = suggestion.slice(matched.index + matched[0].length);
+                        
+                        matchRef.innerText = matched[0];
+                        matchRef.insertAdjacentHTML('beforebegin', pre);
+                        matchRef.insertAdjacentHTML('afterend', post);
+                        ref.append(clone);
+                    } else {
+                        ref.innerText = suggestion;
+                    }
+                    
+                    this.#suggestions.append(clone);
+                }
+            }
+        }
+
+        customElements.define('search-component', Search);
+
+        // Clock functionality
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            const dateString = now.toLocaleDateString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric'
+            });
+            document.getElementById('clock').textContent = `${timeString} · ${dateString}`;
+        }
+        
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
 </body>
 </html>
